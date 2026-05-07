@@ -22,7 +22,7 @@
       --gold:       #e8920a;
       --gold-light: #f5b830;
       --gold-dim:   #c97a08;
-      --gold-glow:  rgba(232,146,10,0.14);
+      --gold-glow:  rgba(232,146,10,0.13);
       --cream:      #ede9e0;
       --cream-2:    #f8f5ef;
       --white:      #ffffff;
@@ -31,483 +31,494 @@
       --text-muted: #6b6356;
       --text-inv:   #ddd5c5;
       --border:     #d4cfc6;
-      --border-dk:  rgba(255,255,255,0.09);
+      --border-dk:  rgba(255,255,255,0.08);
       --green:      #2a7a4e;
       --r:          10px;
       --r-lg:       16px;
+      --r-xl:       22px;
       --shadow:     0 4px 24px rgba(0,0,0,0.08);
       --shadow-lg:  0 12px 48px rgba(0,0,0,0.18);
+      --max:        1160px;
     }
 
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Instrument Sans', sans-serif;
-      color: var(--text);
-      background: var(--white);
-      line-height: 1.6;
+      color: var(--text); background: var(--white); line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── NAV ─────────────────────────────────────────────────── */
+    /* ── NAV ──────────────────────────────────────────────────── */
     .nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      background: rgba(28,31,38,0.96);
-      backdrop-filter: blur(14px);
+      background: rgba(28,31,38,0.97);
+      backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-dk);
-      transition: box-shadow 0.2s;
+      transition: box-shadow 0.25s;
     }
+    .nav.scrolled { box-shadow: 0 2px 28px rgba(0,0,0,0.5); }
     .nav-inner {
-      max-width: 1180px; margin: 0 auto;
-      padding: 0 24px; height: 64px;
-      display: flex; align-items: center; gap: 32px;
+      max-width: var(--max); margin: 0 auto;
+      padding: 0 28px; height: 62px;
+      display: flex; align-items: center; gap: 0;
     }
-    .nav-brand {
-      text-decoration: none; white-space: nowrap;
-      display: flex; align-items: center;
-    }
-    .nav-brand img { height: 38px; width: auto; display: block; }
+    .nav-brand { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; }
+    .nav-brand img { height: 34px; width: auto; display: block; }
     .nav-links {
-      display: flex; gap: 28px; list-style: none; margin: 0 auto;
+      display: flex; gap: 6px; list-style: none;
+      margin: 0 auto; padding: 0;
     }
     .nav-links a {
-      color: var(--text-inv); font-size: 0.88rem;
-      text-decoration: none; transition: color 0.15s;
-      opacity: 0.75;
+      color: var(--text-inv); font-size: 0.86rem;
+      text-decoration: none; padding: 6px 12px; border-radius: 6px;
+      opacity: 0.7; transition: opacity 0.15s, background 0.15s;
     }
-    .nav-links a:hover { color: var(--gold-light); opacity: 1; }
+    .nav-links a:hover { opacity: 1; background: rgba(255,255,255,0.06); }
     .nav-cta {
       background: var(--gold); color: var(--navy);
-      padding: 8px 20px; border-radius: 6px;
-      font-weight: 700; font-size: 0.86rem;
+      padding: 9px 22px; border-radius: 8px;
+      font-weight: 700; font-size: 0.85rem;
       text-decoration: none; white-space: nowrap;
-      transition: background 0.15s;
+      transition: background 0.15s, transform 0.1s;
       flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(232,146,10,0.3);
     }
-    .nav-cta:hover { background: var(--gold-light); }
+    .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
     .nav-toggle {
-      display: none; background: none; border: 1px solid var(--border-dk);
-      color: var(--cream); font-size: 1.2rem; cursor: pointer;
-      border-radius: 6px; padding: 4px 10px; margin-left: auto;
+      display: none; background: none;
+      border: 1px solid var(--border-dk);
+      color: var(--cream); font-size: 1.15rem;
+      cursor: pointer; border-radius: 6px;
+      padding: 5px 11px; margin-left: auto;
     }
 
     /* ── HERO ─────────────────────────────────────────────────── */
     #hero {
       background: var(--navy);
-      padding: 136px 24px 100px;
+      padding: 128px 28px 88px;
       position: relative; overflow: hidden;
     }
-    #hero::before {
+    #hero::after {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse 65% 55% at 72% 48%, rgba(232,146,10,0.08) 0%, transparent 68%);
+      background:
+        radial-gradient(ellipse 55% 50% at 75% 55%, rgba(232,146,10,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 60% at 10% 30%, rgba(232,146,10,0.04) 0%, transparent 60%);
       pointer-events: none;
     }
     .hero-inner {
-      max-width: 1180px; margin: 0 auto;
+      max-width: var(--max); margin: 0 auto;
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: 64px; align-items: center;
+      gap: 72px; align-items: center; position: relative; z-index: 1;
     }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: var(--gold-glow); border: 1px solid rgba(201,122,8,0.45);
-      color: var(--gold-light);
-      padding: 5px 14px; border-radius: 20px;
-      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em;
-      margin-bottom: 22px;
-    }
+    .hero-logo { margin-bottom: 28px; }
+    .hero-logo img { height: 68px; width: auto; }
     .hero-content h1 {
       font-family: 'Crimson Pro', serif;
-      font-size: clamp(2.4rem, 4.8vw, 3.7rem);
-      font-weight: 700; line-height: 1.13;
-      color: var(--cream); margin-bottom: 22px;
+      font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+      font-weight: 700; line-height: 1.12;
+      color: var(--cream); margin-bottom: 20px;
     }
     .hero-content h1 em { font-style: italic; color: var(--gold-light); }
     .hero-content p {
       font-size: 1.05rem; color: var(--text-inv);
-      line-height: 1.72; margin-bottom: 34px;
-      max-width: 460px; opacity: 0.85;
+      line-height: 1.72; margin-bottom: 32px;
+      max-width: 460px; opacity: 0.82;
     }
-    .hero-btns {
-      display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 18px;
-    }
-    .btn-primary {
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .btn-gold {
       background: var(--gold); color: var(--navy);
-      padding: 13px 26px; border-radius: 8px;
-      font-weight: 700; font-size: 0.94rem;
+      padding: 13px 28px; border-radius: 8px;
+      font-weight: 700; font-size: 0.95rem;
       text-decoration: none; display: inline-flex;
       align-items: center; gap: 8px;
       transition: background 0.15s, transform 0.12s;
-      box-shadow: 0 2px 12px rgba(232,146,10,0.35);
+      box-shadow: 0 3px 14px rgba(232,146,10,0.38);
     }
-    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
-    .btn-outline {
-      border: 1.5px solid rgba(255,255,255,0.18); color: var(--cream);
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn-ghost {
+      border: 1.5px solid rgba(255,255,255,0.17); color: var(--cream);
       padding: 12px 24px; border-radius: 8px;
-      font-weight: 600; font-size: 0.94rem;
+      font-weight: 600; font-size: 0.95rem;
       text-decoration: none; display: inline-flex;
-      align-items: center; gap: 8px;
+      align-items: center; gap: 7px;
       transition: border-color 0.15s, color 0.15s;
     }
-    .btn-outline:hover { border-color: var(--gold-dim); color: var(--gold-light); }
-    .hero-note {
-      font-size: 0.76rem; color: var(--text-inv); opacity: 0.42;
-      letter-spacing: 0.03em;
-    }
+    .btn-ghost:hover { border-color: var(--gold-dim); color: var(--gold-light); }
+    .hero-note { font-size: 0.75rem; color: var(--text-inv); opacity: 0.38; letter-spacing: 0.03em; }
 
-    /* Browser frame mockup */
+    /* Browser mockup */
     .browser-frame {
       background: var(--navy-3);
       border-radius: var(--r-lg);
-      border: 1px solid var(--border-dk);
-      box-shadow: 0 28px 72px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
       overflow: hidden;
     }
-    .browser-bar {
-      background: #15171d;
-      padding: 9px 12px;
+    .bbar {
+      background: #13151b;
+      padding: 9px 13px;
       display: flex; align-items: center; gap: 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
     }
     .bdots { display: flex; gap: 5px; }
     .bdots span { width: 10px; height: 10px; border-radius: 50%; }
-    .bdots span:nth-child(1) { background: #ff5f57; }
-    .bdots span:nth-child(2) { background: #febc2e; }
-    .bdots span:nth-child(3) { background: #28c840; }
+    .bdots span:nth-child(1){background:#ff5f57}
+    .bdots span:nth-child(2){background:#febc2e}
+    .bdots span:nth-child(3){background:#28c840}
     .burl {
-      flex: 1; background: rgba(255,255,255,0.05);
+      flex:1; background: rgba(255,255,255,0.05);
       border-radius: 4px; padding: 3px 10px;
-      font-size: 0.68rem; color: rgba(221,213,197,0.35);
-      font-family: monospace;
+      font-size: 0.67rem; color: rgba(221,213,197,0.3); font-family: monospace;
     }
-    .mock-nav {
-      background: #13151a;
+    .mnav {
+      background: #12141a;
       padding: 7px 11px;
       display: flex; align-items: center; gap: 8px;
       border-bottom: 1px solid rgba(255,255,255,0.04);
     }
-    .mock-logo {
-      font-family: 'Crimson Pro', serif;
-      font-size: 0.82rem; font-weight: 700; color: var(--gold-light);
-    }
-    .mock-tabs { display: flex; gap: 2px; margin-left: 6px; }
-    .mtab {
-      padding: 2px 7px; border-radius: 4px;
-      font-size: 0.6rem; color: rgba(221,213,197,0.38);
-    }
-    .mtab.on {
-      background: rgba(232,146,10,0.11); color: var(--gold-light);
-    }
-    .mock-body { padding: 8px 10px; }
-    .mpills { display: flex; gap: 5px; margin-bottom: 8px; }
-    .mpill {
-      padding: 2px 7px; border-radius: 10px; font-size: 0.6rem;
-      border: 1px solid rgba(255,255,255,0.08); color: rgba(221,213,197,0.42);
-    }
-    .mpill.on {
-      background: rgba(232,146,10,0.1);
-      border-color: rgba(201,122,8,0.5); color: var(--gold-light);
-    }
-    .mt { width: 100%; border-collapse: collapse; }
-    .mt th {
-      font-size: 0.57rem; text-align: left; padding: 3px 5px;
-      color: rgba(221,213,197,0.3); text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .mt td {
-      font-size: 0.63rem; padding: 4px 5px;
-      color: rgba(221,213,197,0.68);
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-    }
-    .mt td:last-child { color: var(--gold-light); }
-    .mbadge {
-      display: inline-block; padding: 1px 5px; border-radius: 3px; font-size: 0.57rem;
-    }
-    .mbadge.r { background: rgba(42,122,78,0.22); color: #4ade80; }
-    .mbadge.b { background: rgba(232,146,10,0.16); color: var(--gold-light); }
+    .mlogo { font-family:'Crimson Pro',serif; font-size:0.8rem; font-weight:700; color:var(--gold-light); }
+    .mtabs { display:flex; gap:2px; margin-left:6px; }
+    .mtab { padding:2px 7px; border-radius:4px; font-size:0.59rem; color:rgba(221,213,197,0.36); }
+    .mtab.on { background:rgba(232,146,10,0.1); color:var(--gold-light); }
+    .mbody { padding:9px 11px; }
+    .mpills { display:flex; gap:5px; margin-bottom:8px; }
+    .mpill { padding:2px 7px; border-radius:10px; font-size:0.59rem; border:1px solid rgba(255,255,255,0.07); color:rgba(221,213,197,0.4); }
+    .mpill.on { background:rgba(232,146,10,0.09); border-color:rgba(201,122,8,0.45); color:var(--gold-light); }
+    .mt { width:100%; border-collapse:collapse; }
+    .mt th { font-size:0.56rem; text-align:left; padding:3px 5px; color:rgba(221,213,197,0.28); text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid rgba(255,255,255,0.05); }
+    .mt td { font-size:0.62rem; padding:4px 5px; color:rgba(221,213,197,0.66); border-bottom:1px solid rgba(255,255,255,0.03); }
+    .mt td:last-child { color:var(--gold-light); }
+    .mbadge { display:inline-block; padding:1px 5px; border-radius:3px; font-size:0.56rem; }
+    .mbadge.r { background:rgba(42,122,78,0.22); color:#4ade80; }
+    .mbadge.b { background:rgba(232,146,10,0.15); color:var(--gold-light); }
 
-    /* ── STATS ───────────────────────────────────────────────── */
-    #stats {
+    /* ── TRUST STRIP ──────────────────────────────────────────── */
+    #trust {
       background: var(--cream-2);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      padding: 26px 24px;
+      padding: 22px 28px;
     }
-    .stats-inner {
-      max-width: 1180px; margin: 0 auto;
+    .trust-inner {
+      max-width: var(--max); margin: 0 auto;
       display: flex; align-items: center; justify-content: center;
-      gap: 44px; flex-wrap: wrap;
+      gap: 40px; flex-wrap: wrap;
     }
-    .stat-item { text-align: center; }
-    .stat-val {
-      font-family: 'Crimson Pro', serif;
-      font-size: 1.75rem; font-weight: 700;
-      color: var(--gold-dim); line-height: 1;
-    }
-    .stat-lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
-    .stat-div { width: 1px; height: 36px; background: var(--border); }
+    .trust-item { display: flex; align-items: center; gap: 8px; }
+    .trust-item svg { width:16px; height:16px; stroke:var(--gold-dim); flex-shrink:0; }
+    .trust-item span { font-size: 0.83rem; color: var(--text-muted); font-weight: 600; }
+    .trust-div { width:1px; height:24px; background:var(--border); }
 
-    /* ── SECTION SHARED ──────────────────────────────────────── */
+    /* ── SECTION SHARED ───────────────────────────────────────── */
+    .wrap { max-width: var(--max); margin: 0 auto; }
     .s-label {
-      font-size: 0.72rem; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--gold-dim); margin-bottom: 10px;
+      font-size: 0.71rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gold-dim); margin-bottom: 10px;
     }
     .s-title {
       font-family: 'Crimson Pro', serif;
-      font-size: clamp(1.8rem, 3.2vw, 2.55rem);
-      font-weight: 700; line-height: 1.2;
-      color: var(--text); margin-bottom: 14px;
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 700; line-height: 1.2; color: var(--text); margin-bottom: 14px;
     }
-    .s-sub {
-      font-size: 1rem; color: var(--text-muted);
-      line-height: 1.7; max-width: 540px;
-    }
-    .s-head { max-width: 1180px; margin: 0 auto; margin-bottom: 52px; }
+    .s-sub { font-size: 0.97rem; color: var(--text-muted); line-height: 1.72; max-width: 540px; }
+    .s-head { margin-bottom: 52px; }
+    .s-head.center { text-align: center; }
+    .s-head.center .s-sub { margin: 0 auto; }
 
-    /* ── FEATURES ────────────────────────────────────────────── */
-    #features { padding: 96px 24px; background: var(--white); }
+    /* ── FEATURES ─────────────────────────────────────────────── */
+    #features { padding: 96px 28px; background: var(--white); }
     .feat-grid {
-      max-width: 1180px; margin: 0 auto;
-      display: grid; grid-template-columns: repeat(3,1fr); gap: 24px;
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 22px;
     }
     .feat-card {
-      padding: 28px; background: var(--cream-2);
+      padding: 26px; background: var(--cream-2);
       border: 1px solid var(--border); border-radius: var(--r-lg);
       transition: box-shadow 0.2s, transform 0.2s;
     }
     .feat-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
     .feat-icon {
-      width: 44px; height: 44px;
-      background: var(--gold-glow); border: 1px solid rgba(201,122,8,0.3);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 16px;
+      width: 42px; height: 42px;
+      background: var(--gold-glow); border: 1px solid rgba(201,122,8,0.28);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 15px;
     }
-    .feat-icon svg { width: 21px; height: 21px; stroke: var(--gold); }
-    .feat-card h3 { font-size: 0.97rem; font-weight: 700; margin-bottom: 8px; }
-    .feat-card p { font-size: 0.86rem; color: var(--text-muted); line-height: 1.65; }
+    .feat-icon svg { width: 20px; height: 20px; stroke: var(--gold); }
+    .feat-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
+    .feat-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.65; }
 
-    /* ── SCREENSHOTS ─────────────────────────────────────────── */
-    #screenshots { background: var(--navy); padding: 96px 24px; }
+    /* ── SCREENSHOTS ──────────────────────────────────────────── */
+    #screenshots { background: var(--navy); padding: 96px 28px; }
     #screenshots .s-label { color: var(--gold-dim); }
     #screenshots .s-title { color: var(--cream); }
-    #screenshots .s-sub { color: var(--text-inv); opacity: 0.65; }
+    #screenshots .s-sub { color: var(--text-inv); opacity: 0.62; }
     .sc-grid {
-      max-width: 1180px; margin: 0 auto;
       display: grid; grid-template-columns: 1.25fr 1fr;
       gap: 24px; align-items: start;
     }
-    .sc-label {
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.07em;
-      text-transform: uppercase; color: var(--gold-dim); margin-bottom: 10px;
-    }
-    .sc-desc {
-      font-size: 0.83rem; color: var(--text-inv);
-      opacity: 0.55; margin-top: 10px; line-height: 1.5;
-    }
-    .sc-side { display: flex; flex-direction: column; gap: 24px; }
+    .sc-label { font-size:0.7rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:9px; }
+    .sc-desc { font-size:0.82rem; color:var(--text-inv); opacity:0.52; margin-top:10px; line-height:1.5; }
+    .sc-side { display:flex; flex-direction:column; gap:22px; }
 
-    /* ── WHO ─────────────────────────────────────────────────── */
-    #who {
-      background: var(--cream-2); padding: 96px 24px;
+    /* ── PRICING ──────────────────────────────────────────────── */
+    #pricing {
+      padding: 96px 28px;
+      background: var(--cream-2);
       border-top: 1px solid var(--border);
     }
+
+    .price-toggle {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 50px; padding: 5px 5px 5px 16px;
+      margin-top: 28px;
+    }
+    .pt-lbl { font-size: 0.83rem; font-weight: 600; color: var(--text-muted); }
+    .pt-lbl.active { color: var(--text); }
+    .pt-switch {
+      position: relative; width: 44px; height: 24px;
+      background: var(--border); border: none; border-radius: 12px;
+      cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+    }
+    .pt-switch.on { background: var(--gold); }
+    .pt-switch::after {
+      content: ''; position: absolute;
+      top: 3px; left: 3px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--white); transition: transform 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .pt-switch.on::after { transform: translateX(20px); }
+    .pt-save {
+      background: var(--gold); color: var(--navy);
+      font-size: 0.68rem; font-weight: 700;
+      padding: 3px 9px; border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    .price-cards {
+      max-width: 860px; margin: 48px auto 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
+    }
+    .price-card {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: var(--r-xl); padding: 36px;
+      display: flex; flex-direction: column;
+      transition: box-shadow 0.2s;
+    }
+    .price-card:hover { box-shadow: var(--shadow-lg); }
+    .price-card.featured {
+      background: var(--navy);
+      border-color: var(--gold-dim);
+      box-shadow: 0 8px 36px rgba(232,146,10,0.18);
+      position: relative;
+    }
+    .price-badge {
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--gold); color: var(--navy);
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;
+      padding: 4px 16px; border-radius: 10px; white-space: nowrap;
+    }
+    .price-name { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; }
+    .price-card.featured .price-name { color: var(--gold-dim); }
+    .price-amount {
+      font-family: 'Crimson Pro', serif;
+      font-size: 3rem; font-weight: 700; line-height: 1;
+      color: var(--text);
+    }
+    .price-card.featured .price-amount { color: var(--cream); }
+    .price-period { font-size: 0.88rem; color: var(--text-muted); margin-left: 2px; }
+    .price-card.featured .price-period { color: var(--text-inv); opacity: 0.6; }
+    .price-annual-note { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; min-height: 1.2em; }
+    .price-card.featured .price-annual-note { color: var(--text-inv); opacity: 0.5; }
+    .price-desc { font-size: 0.88rem; color: var(--text-muted); margin: 16px 0 22px; line-height: 1.55; }
+    .price-card.featured .price-desc { color: var(--text-inv); opacity: 0.65; }
+    .price-feats { list-style: none; margin-bottom: 28px; flex: 1; }
+    .price-feats li {
+      font-size: 0.86rem; padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+      color: var(--text);
+    }
+    .price-card.featured .price-feats li { border-bottom-color: rgba(255,255,255,0.07); color: var(--text-inv); }
+    .price-feats li:last-child { border-bottom: none; }
+    .pcheck { color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .pcross { color: var(--border); flex-shrink: 0; }
+    .price-card.featured .pcross { color: rgba(255,255,255,0.2); }
+    .price-cta {
+      display: block; text-align: center;
+      padding: 13px; border-radius: 8px;
+      font-weight: 700; font-size: 0.94rem;
+      text-decoration: none; transition: background 0.15s, transform 0.1s;
+      margin-bottom: 10px;
+    }
+    .price-cta.solid { background: var(--gold); color: var(--navy); box-shadow: 0 2px 12px rgba(232,146,10,0.35); }
+    .price-cta.solid:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .price-cta.outline { background: transparent; color: var(--text); border: 2px solid var(--border); }
+    .price-cta.outline:hover { border-color: var(--gold-dim); color: var(--gold-dim); }
+    .price-trial { font-size: 0.73rem; text-align: center; color: var(--text-inv); opacity: 0.45; }
+
+    /* ── WHO ──────────────────────────────────────────────────── */
+    #who { background: var(--white); padding: 96px 28px; border-top: 1px solid var(--border); }
     .who-inner {
-      max-width: 1180px; margin: 0 auto;
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 80px; align-items: center;
     }
     .who-cards { display: flex; flex-direction: column; gap: 16px; }
     .who-card {
-      background: var(--white); border: 1px solid var(--border);
+      background: var(--cream-2); border: 1px solid var(--border);
       border-radius: var(--r); padding: 20px 22px;
       display: flex; gap: 16px; align-items: flex-start;
       transition: box-shadow 0.2s;
     }
     .who-card:hover { box-shadow: var(--shadow); }
-    .who-icon { font-size: 1.6rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
-    .who-card h4 { font-size: 0.94rem; font-weight: 700; margin-bottom: 5px; }
+    .who-icon { font-size: 1.55rem; flex-shrink: 0; line-height: 1; margin-top: 1px; }
+    .who-card h4 { font-size: 0.93rem; font-weight: 700; margin-bottom: 5px; }
     .who-card p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.55; }
 
-    /* ── DOWNLOAD ────────────────────────────────────────────── */
-    #download {
-      background: linear-gradient(135deg, #fff9ea 0%, var(--cream-2) 100%);
-      border-top: 1px solid #e8d9aa; border-bottom: 1px solid #e8d9aa;
-      padding: 80px 24px;
+    /* ── FAQ ──────────────────────────────────────────────────── */
+    #faq { background: var(--cream-2); padding: 80px 28px; border-top: 1px solid var(--border); }
+    .faq-grid {
+      max-width: 760px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
     }
-    .dl-wrap { max-width: 860px; margin: 0 auto; text-align: center; }
-    .dl-options {
-      display: flex; gap: 20px; justify-content: center;
-      flex-wrap: wrap; margin-top: 40px;
+    .faq-item {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 22px 24px;
     }
-    .dl-card {
-      background: var(--white); border: 2px solid var(--border);
-      border-radius: var(--r-lg); padding: 28px 30px;
-      min-width: 190px; text-align: center;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      text-decoration: none; color: inherit;
-    }
-    .dl-card:hover { border-color: var(--gold-dim); box-shadow: 0 4px 20px rgba(232,146,10,0.13); }
-    .dl-card.featured { border-color: var(--gold-dim); background: var(--navy); }
-    .dl-icon { font-size: 2rem; margin-bottom: 10px; }
-    .dl-card h3 { font-size: 0.93rem; font-weight: 700; margin-bottom: 5px; }
-    .dl-card.featured h3 { color: var(--cream); }
-    .dl-card p { font-size: 0.76rem; color: var(--text-muted); line-height: 1.5; }
-    .dl-card.featured p { color: rgba(221,213,197,0.5); }
-    .dl-badge {
-      display: inline-block; margin-top: 10px;
-      padding: 2px 10px; border-radius: 10px;
-      font-size: 0.64rem; font-weight: 700; letter-spacing: 0.04em;
-    }
-    .dl-badge.live { background: var(--gold); color: var(--navy); }
-    .dl-badge.soon { background: rgba(255,255,255,0.1); color: rgba(221,213,197,0.5); }
-    .dl-badge.planned { background: var(--border); color: var(--text-muted); }
+    .faq-item h4 { font-size: 0.92rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .faq-item p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }
 
-    /* ── FORMS ───────────────────────────────────────────────── */
-    .form-section { padding: 96px 24px; }
+    /* ── FORMS ────────────────────────────────────────────────── */
+    .form-section { padding: 96px 28px; }
     .form-section.dark { background: var(--navy); }
     .form-section.light { background: var(--white); border-top: 1px solid var(--border); }
-    .form-head { max-width: 1180px; margin: 0 auto 48px; text-align: center; }
     .form-section.dark .s-title { color: var(--cream); }
-    .form-section.dark .s-sub { color: var(--text-inv); opacity: 0.65; }
+    .form-section.dark .s-sub { color: var(--text-inv); opacity: 0.62; }
     .form-section.dark .s-label { color: var(--gold-dim); }
-    .form-wrap { max-width: 560px; margin: 0 auto; }
-    .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .frow { margin-bottom: 16px; }
-    .frow label {
-      display: block; font-size: 0.8rem; font-weight: 600;
-      margin-bottom: 6px;
-    }
-    .form-section.dark .frow label { color: var(--text-inv); }
+    .form-wrap { max-width: 540px; margin: 0 auto; }
+    .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .frow { margin-bottom: 14px; }
+    .frow label { display:block; font-size:0.79rem; font-weight:600; margin-bottom:5px; }
+    .form-section.dark .frow label { color: var(--text-inv); opacity:0.8; }
     .form-section.light .frow label { color: var(--text-mid); }
     .frow input, .frow textarea, .frow select {
-      width: 100%; padding: 10px 13px;
-      border-radius: 6px; font-family: 'Instrument Sans', sans-serif;
-      font-size: 0.88rem; transition: border-color 0.15s; outline: none;
+      width:100%; padding:10px 13px; border-radius:6px;
+      font-family:'Instrument Sans',sans-serif;
+      font-size:0.87rem; outline:none; transition:border-color 0.15s;
     }
     .form-section.dark .frow input,
     .form-section.dark .frow textarea,
     .form-section.dark .frow select {
-      background: var(--navy-2); border: 1px solid rgba(255,255,255,0.11);
-      color: var(--cream);
+      background:var(--navy-2); border:1px solid rgba(255,255,255,0.1); color:var(--cream);
     }
     .form-section.dark .frow input:focus,
     .form-section.dark .frow textarea:focus,
-    .form-section.dark .frow select:focus { border-color: var(--gold-dim); }
-    .form-section.dark .frow select option { background: var(--navy); }
+    .form-section.dark .frow select:focus { border-color:var(--gold-dim); }
+    .form-section.dark .frow select option { background:var(--navy); }
     .form-section.light .frow input,
     .form-section.light .frow textarea {
-      background: var(--cream-2); border: 1px solid var(--border); color: var(--text);
+      background:var(--cream-2); border:1px solid var(--border); color:var(--text);
     }
     .form-section.light .frow input:focus,
-    .form-section.light .frow textarea:focus { border-color: var(--gold-dim); }
-    .frow textarea { resize: vertical; min-height: 110px; }
+    .form-section.light .frow textarea:focus { border-color:var(--gold-dim); }
+    .frow textarea { resize:vertical; min-height:108px; }
     .form-submit {
-      width: 100%; padding: 13px;
-      background: var(--gold); color: var(--navy);
-      border: none; border-radius: 8px;
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: 0.97rem; font-weight: 700;
-      cursor: pointer; transition: background 0.15s;
-      margin-top: 4px;
+      width:100%; padding:13px;
+      background:var(--gold); color:var(--navy);
+      border:none; border-radius:8px;
+      font-family:'Instrument Sans',sans-serif;
+      font-size:0.96rem; font-weight:700;
+      cursor:pointer; transition:background 0.15s;
+      box-shadow: 0 2px 12px rgba(232,146,10,0.3);
     }
-    .form-submit:hover { background: var(--gold-light); }
-    .form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-    .form-success {
-      display: none; text-align: center; padding: 40px 20px;
-    }
-    .form-success .check-icon { font-size: 2.8rem; margin-bottom: 14px; }
-    .form-success h3 {
-      font-family: 'Crimson Pro', serif;
-      font-size: 1.55rem; margin-bottom: 8px;
-    }
-    .form-section.dark .form-success h3 { color: var(--cream); }
-    .form-section.dark .form-success p { color: var(--text-inv); opacity: 0.65; }
-    .form-section.light .form-success h3 { color: var(--text); }
-    .form-section.light .form-success p { color: var(--text-muted); }
+    .form-submit:hover { background:var(--gold-light); }
+    .form-submit:disabled { opacity:0.55; cursor:not-allowed; }
+    .form-success { display:none; text-align:center; padding:40px 20px; }
+    .form-success .ok-icon { font-size:2.6rem; margin-bottom:13px; }
+    .form-success h3 { font-family:'Crimson Pro',serif; font-size:1.5rem; margin-bottom:8px; }
+    .form-section.dark .form-success h3 { color:var(--cream); }
+    .form-section.dark .form-success p { color:var(--text-inv); opacity:0.62; }
+    .form-section.light .form-success h3 { color:var(--text); }
+    .form-section.light .form-success p { color:var(--text-muted); }
 
-    /* ── FOOTER ──────────────────────────────────────────────── */
+    /* ── FOOTER ───────────────────────────────────────────────── */
     footer {
       background: var(--navy);
       border-top: 1px solid var(--border-dk);
-      padding: 52px 24px 28px;
+      padding: 52px 28px 28px;
     }
     .foot-inner {
-      max-width: 1180px; margin: 0 auto;
+      max-width: var(--max); margin: 0 auto;
       display: flex; justify-content: space-between;
       align-items: flex-start; gap: 40px; flex-wrap: wrap;
     }
-    .foot-brand { margin-bottom: 10px; }
-    .foot-brand img { height: 56px; width: auto; display: block; }
-    .foot-tag { font-size: 0.8rem; color: var(--text-inv); opacity: 0.42; }
+    .foot-brand img { height: 52px; width: auto; display: block; margin-bottom: 8px; }
+    .foot-tag { font-size: 0.78rem; color: var(--text-inv); opacity: 0.38; }
     .foot-links { display: flex; gap: 48px; flex-wrap: wrap; }
-    .foot-col h4 {
-      font-size: 0.7rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.09em;
-      color: var(--gold-dim); margin-bottom: 14px;
-    }
+    .foot-col h4 { font-size: 0.69rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--gold-dim); margin-bottom: 14px; }
     .foot-col ul { list-style: none; }
     .foot-col li { margin-bottom: 8px; }
-    .foot-col a {
-      font-size: 0.83rem; color: var(--text-inv);
-      opacity: 0.55; text-decoration: none; transition: opacity 0.15s;
-    }
+    .foot-col a { font-size: 0.82rem; color: var(--text-inv); opacity: 0.5; text-decoration: none; transition: opacity 0.15s; }
     .foot-col a:hover { opacity: 1; }
     .foot-bottom {
-      max-width: 1180px; margin: 28px auto 0;
+      max-width: var(--max); margin: 26px auto 0;
       padding-top: 22px; border-top: 1px solid var(--border-dk);
       display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.76rem; color: var(--text-inv); opacity: 0.35;
+      font-size: 0.74rem; color: var(--text-inv); opacity: 0.32;
       flex-wrap: wrap; gap: 8px;
     }
     .foot-bottom a { color: inherit; text-decoration: none; }
     .foot-bottom a:hover { opacity: 1; }
 
-    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    /* ── RESPONSIVE ───────────────────────────────────────────── */
     @media (max-width: 960px) {
       .hero-inner { grid-template-columns: 1fr; }
       .hero-visual { display: none; }
       .feat-grid { grid-template-columns: repeat(2,1fr); }
       .sc-grid { grid-template-columns: 1fr; }
       .who-inner { grid-template-columns: 1fr; gap: 40px; }
+      .price-cards { grid-template-columns: 1fr; max-width: 420px; }
+      .faq-grid { grid-template-columns: 1fr; }
       .nav-links { display: none; }
       .nav-toggle { display: block; }
-      .stats-inner { gap: 20px; }
-      .stat-div { display: none; }
+      .trust-div { display: none; }
       .form-2col { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
       .feat-grid { grid-template-columns: 1fr; }
       .hero-btns { flex-direction: column; align-items: flex-start; }
-      .btn-primary, .btn-outline { justify-content: center; }
       .foot-inner { flex-direction: column; }
       .foot-bottom { flex-direction: column; text-align: center; }
+      #hero { padding: 110px 20px 72px; }
     }
-
-    /* Mobile nav open state */
     .nav.open .nav-links {
       display: flex; flex-direction: column;
-      position: absolute; top: 64px; left: 0; right: 0;
-      background: var(--navy-2);
-      border-bottom: 1px solid var(--border-dk);
-      padding: 18px 24px; gap: 18px; z-index: 999;
+      position: absolute; top: 62px; left: 0; right: 0;
+      background: var(--navy-2); border-bottom: 1px solid var(--border-dk);
+      padding: 18px 24px; gap: 6px; z-index: 999;
     }
+    .nav.open .nav-links a { padding: 10px 14px; opacity: 1; }
   </style>
 </head>
 <body>
 
-<!-- ── NAV ─────────────────────────────────────────────────────── -->
+<!-- ── NAV ──────────────────────────────────────────────────────── -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
-    <a href="#" class="nav-brand"><img src="logo-banner.png" alt="ModelCollectr"></a>
+    <a href="#" class="nav-brand">
+      <img src="logo-badge.png" alt="ModelCollectr">
+    </a>
     <ul class="nav-links" id="nav-links">
       <li><a href="#features">Features</a></li>
       <li><a href="#screenshots">Screenshots</a></li>
-      <li><a href="#download">Download</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <a href="#access" class="nav-cta">Get Access</a>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+    <a href="#access" class="nav-cta">Start Free Trial</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu">&#9776;</button>
   </div>
 </nav>
 
@@ -515,34 +526,33 @@
 <section id="hero">
   <div class="hero-inner">
     <div class="hero-content">
-      <img src="logo-badge.png" alt="ModelCollectr" style="height:110px;width:auto;margin-bottom:24px;display:block">
+      <div class="hero-logo">
+        <img src="logo-banner.png" alt="ModelCollectr">
+      </div>
       <h1>Every Model.<br><em>Every Detail.</em><br>Always at Your Fingertips.</h1>
       <p>The professional catalogue app for serious model collectors. Organise trains, buses, trams, cars and more — with cloud sync, insurance-ready reports, and everything you need to manage a world-class collection.</p>
       <div class="hero-btns">
-        <a href="#download" class="btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download for Windows
-        </a>
-        <a href="#access" class="btn-outline">Request Access &#8594;</a>
+        <a href="#access" class="btn-gold">Start Free Trial &rarr;</a>
+        <a href="#features" class="btn-ghost">See Features</a>
       </div>
-      <p class="hero-note">Cloud sync included &middot; Works on any device &middot; One-time purchase</p>
+      <p class="hero-note">14-day free trial &middot; No credit card required &middot; Cancel anytime</p>
     </div>
     <div class="hero-visual">
       <div class="browser-frame">
-        <div class="browser-bar">
+        <div class="bbar">
           <div class="bdots"><span></span><span></span><span></span></div>
           <div class="burl">modelcollectr.co.uk/app</div>
         </div>
-        <div class="mock-nav">
-          <span class="mock-logo">ModelCollectr</span>
-          <div class="mock-tabs">
+        <div class="mnav">
+          <span class="mlogo">ModelCollectr</span>
+          <div class="mtabs">
             <span class="mtab">&#127968;</span>
             <span class="mtab on">&#128203; Stock</span>
             <span class="mtab">&#128202; Reports</span>
             <span class="mtab">&#9881;</span>
           </div>
         </div>
-        <div class="mock-body">
+        <div class="mbody">
           <div class="mpills">
             <span class="mpill on">&#128642; Trains</span>
             <span class="mpill">&#128652; Buses</span>
@@ -565,254 +575,285 @@
   </div>
 </section>
 
-<!-- ── STATS ─────────────────────────────────────────────────────── -->
-<div id="stats">
-  <div class="stats-inner">
-    <div class="stat-item"><div class="stat-val">4+</div><div class="stat-lbl">Collection Types</div></div>
-    <div class="stat-div"></div>
-    <div class="stat-item"><div class="stat-val">&#8734;</div><div class="stat-lbl">Items Supported</div></div>
-    <div class="stat-div"></div>
-    <div class="stat-item"><div class="stat-val">&#9729;</div><div class="stat-lbl">Cloud Sync</div></div>
-    <div class="stat-div"></div>
-    <div class="stat-item"><div class="stat-val">PDF</div><div class="stat-lbl">Insurance Reports</div></div>
-    <div class="stat-div"></div>
-    <div class="stat-item"><div class="stat-val">1&times;</div><div class="stat-lbl">One-Time Purchase</div></div>
+<!-- ── TRUST STRIP ───────────────────────────────────────────────── -->
+<div id="trust">
+  <div class="trust-inner">
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      <span>4+ Collection Types</span>
+    </div>
+    <div class="trust-div"></div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+      <span>Cloud Sync Included</span>
+    </div>
+    <div class="trust-div"></div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+      <span>Insurance Reports</span>
+    </div>
+    <div class="trust-div"></div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>Your Data, Secured</span>
+    </div>
+    <div class="trust-div"></div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      <span>Custom Fields &amp; Lists</span>
+    </div>
   </div>
 </div>
 
 <!-- ── FEATURES ──────────────────────────────────────────────────── -->
 <section id="features">
-  <div class="s-head">
-    <div class="s-label">Features</div>
-    <h2 class="s-title">Everything a serious collector needs</h2>
-    <p class="s-sub">Built from the ground up for model collectors — not a spreadsheet, not a generic inventory tool. Every feature designed around how you actually work.</p>
-  </div>
-  <div class="feat-grid">
-
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-      </div>
-      <h3>Multi-Collection Catalogue</h3>
-      <p>Organise trains, buses, trams and cars in one place. Add custom collection types for anything that doesn't fit the mould — die-cast, aircraft, ships and more.</p>
+  <div class="wrap">
+    <div class="s-head">
+      <div class="s-label">Features</div>
+      <h2 class="s-title">Everything a serious collector needs</h2>
+      <p class="s-sub">Built from the ground up for model collectors — not a spreadsheet, not a generic inventory tool. Every feature designed around how you actually work.</p>
     </div>
+    <div class="feat-grid">
 
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <h3>Multi-Collection Catalogue</h3>
+        <p>Organise trains, buses, trams and cars in one place. Add custom collection types for anything else — die-cast, aircraft, ships and beyond.</p>
       </div>
-      <h3>Insurance-Ready Reports</h3>
-      <p>Generate a clean, printable itemised valuation list with total replacement value — designed to hand straight to your insurer without any extra work.</p>
-    </div>
 
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
+        <h3>Insurance-Ready Reports</h3>
+        <p>Generate a clean, printable itemised valuation list with total replacement value — designed to hand straight to your insurer.</p>
       </div>
-      <h3>Cloud Sync</h3>
-      <p>Your collection syncs automatically across all your devices. Access it at home, at a show, or anywhere with a browser — always up to date.</p>
-    </div>
 
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg></div>
+        <h3>Cloud Sync</h3>
+        <p>Your collection syncs automatically across all your devices. Access it at home, at a show, or anywhere with a browser — always up to date.</p>
       </div>
-      <h3>Location Tracking</h3>
-      <p>Record exactly where every model lives — down to the shelf and box number. Never spend an afternoon searching the loft again.</p>
-    </div>
 
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h3>Location Tracking</h3>
+        <p>Record exactly where every model lives — down to the shelf and box number. Never spend an afternoon searching the loft again.</p>
       </div>
-      <h3>Custom Fields</h3>
-      <p>Add your own fields and managed dropdown lists for anything unique to your collection — livery, gauge, limited edition number, previous owner and more.</p>
-    </div>
 
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+        <h3>Custom Fields</h3>
+        <p>Add your own fields and managed dropdown lists for anything unique to your collection — livery, gauge, limited edition number and more.</p>
       </div>
-      <h3>Smart Stock View</h3>
-      <p>Filter by make, condition, location or value. Sort any column. Search your entire catalogue in seconds. Export to CSV for your own records.</p>
-    </div>
 
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg></div>
+        <h3>Smart Stock View</h3>
+        <p>Filter by make, condition, location or value. Sort any column. Search your entire catalogue in seconds and export to CSV.</p>
+      </div>
+
+    </div>
   </div>
 </section>
 
 <!-- ── SCREENSHOTS ────────────────────────────────────────────────── -->
 <section id="screenshots">
-  <div class="s-head">
-    <div class="s-label">Screenshots</div>
-    <h2 class="s-title">See it in action</h2>
-    <p class="s-sub">A clean, purpose-built interface designed for collectors — not a generic template bolted together.</p>
-  </div>
-  <div class="sc-grid">
-    <!-- Main: Stock view -->
-    <div>
-      <div class="sc-label">Stock View</div>
-      <div class="browser-frame">
-        <div class="browser-bar">
-          <div class="bdots"><span></span><span></span><span></span></div>
-          <div class="burl">modelcollectr.co.uk/app</div>
-        </div>
-        <div class="mock-body" style="padding:10px 12px">
-          <div class="mpills" style="margin-bottom:10px">
-            <span class="mpill on">&#128642; Trains</span>
-            <span class="mpill">&#128652; Buses</span>
-            <span class="mpill">&#128651; Trams</span>
-          </div>
-          <table class="mt" style="font-size:0.67rem">
-            <thead><tr><th>Make</th><th>Cat No</th><th>Name</th><th>Cond.</th><th>Location</th><th>Value</th></tr></thead>
-            <tbody>
-              <tr><td>Hornby</td><td>R3940</td><td>Flying Scotsman</td><td><span class="mbadge r">Runs</span></td><td>Shelf A/1</td><td>£449</td></tr>
-              <tr><td>Bachmann</td><td>31-075</td><td>Class 37 Diesel</td><td><span class="mbadge b">Boxed</span></td><td>Shelf A/2</td><td>£385</td></tr>
-              <tr><td>Hornby</td><td>R3560</td><td>Tornado A1</td><td><span class="mbadge r">Runs</span></td><td>Cabinet 2</td><td>£359</td></tr>
-              <tr><td>Hornby</td><td>R3812</td><td>Britannia</td><td><span class="mbadge r">Runs</span></td><td>Shelf B/1</td><td>£299</td></tr>
-              <tr><td>Dapol</td><td>2S-001</td><td>Castle Class</td><td><span class="mbadge b">Boxed</span></td><td>Shelf B/3</td><td>£195</td></tr>
-              <tr><td>Farish</td><td>372-475</td><td>Class 158</td><td><span class="mbadge r">Runs</span></td><td>Cabinet 2</td><td>£128</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <p class="sc-desc">Filter by collection type, sort any column, and see all your key details — make, catalogue number, condition, location and value — at a glance.</p>
+  <div class="wrap">
+    <div class="s-head">
+      <div class="s-label">Screenshots</div>
+      <h2 class="s-title">See it in action</h2>
+      <p class="s-sub">A clean, purpose-built interface designed for collectors — not a generic template.</p>
     </div>
-
-    <!-- Side: Item detail + Insurance report -->
-    <div class="sc-side">
+    <div class="sc-grid">
       <div>
-        <div class="sc-label">Item Detail</div>
+        <div class="sc-label">Stock View</div>
         <div class="browser-frame">
-          <div class="browser-bar">
-            <div class="bdots"><span></span><span></span><span></span></div>
-            <div class="burl">modelcollectr.co.uk/app</div>
-          </div>
-          <div class="mock-body">
-            <div style="font-family:'Crimson Pro',serif;font-size:0.9rem;color:var(--gold-light);margin-bottom:10px;font-weight:600">Flying Scotsman</div>
-            <div style="display:grid;gap:6px">
-              <div style="display:flex;gap:8px;align-items:center">
-                <span style="font-size:0.58rem;color:rgba(221,213,197,0.35);width:76px;flex-shrink:0">Model Maker</span>
-                <div style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:4px;padding:3px 7px;font-size:0.63rem;color:rgba(221,213,197,0.78)">Hornby</div>
-              </div>
-              <div style="display:flex;gap:8px;align-items:center">
-                <span style="font-size:0.58rem;color:rgba(221,213,197,0.35);width:76px;flex-shrink:0">Catalogue No</span>
-                <div style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:4px;padding:3px 7px;font-size:0.63rem;color:rgba(221,213,197,0.78)">R3940</div>
-              </div>
-              <div style="display:flex;gap:8px;align-items:center">
-                <span style="font-size:0.58rem;color:rgba(221,213,197,0.35);width:76px;flex-shrink:0">Location</span>
-                <div style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:4px;padding:3px 7px;font-size:0.63rem;color:rgba(221,213,197,0.78)">Shelf A / Box 1</div>
-              </div>
-              <div style="display:flex;gap:8px;align-items:center">
-                <span style="font-size:0.58rem;color:rgba(221,213,197,0.35);width:76px;flex-shrink:0">Valuation</span>
-                <div style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:4px;padding:3px 7px;font-size:0.63rem;color:var(--gold-light);font-weight:600">£449.00</div>
-              </div>
-              <div style="display:flex;gap:8px;align-items:center;margin-top:2px">
-                <span style="font-size:0.58rem;color:rgba(221,213,197,0.35);width:76px;flex-shrink:0">Condition</span>
-                <div style="display:flex;gap:5px">
-                  <span style="background:rgba(42,122,78,0.28);color:#4ade80;padding:2px 8px;border-radius:4px;font-size:0.58rem;font-weight:700">Runs ✓</span>
-                  <span style="background:rgba(232,146,10,0.15);color:var(--gold-light);padding:2px 8px;border-radius:4px;font-size:0.58rem;font-weight:700">Boxed ✓</span>
-                </div>
-              </div>
+          <div class="bbar"><div class="bdots"><span></span><span></span><span></span></div><div class="burl">modelcollectr.co.uk/app</div></div>
+          <div class="mbody" style="padding:10px 12px">
+            <div class="mpills" style="margin-bottom:10px">
+              <span class="mpill on">&#128642; Trains</span>
+              <span class="mpill">&#128652; Buses</span>
+              <span class="mpill">&#128651; Trams</span>
             </div>
-          </div>
-        </div>
-        <p class="sc-desc">Full item records with make, catalogue number, location, condition and valuation. Custom fields for anything specific to your collection.</p>
-      </div>
-
-      <div>
-        <div class="sc-label">Insurance Report</div>
-        <div class="browser-frame">
-          <div class="browser-bar">
-            <div class="bdots"><span></span><span></span><span></span></div>
-            <div class="burl">modelcollectr.co.uk/app</div>
-          </div>
-          <div class="mock-body">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-              <span style="font-size:0.73rem;font-weight:700;color:var(--cream)">Insurance Report</span>
-              <span style="font-size:0.58rem;background:var(--gold-dim);color:var(--navy);padding:2px 8px;border-radius:4px;font-weight:700">&#128424; Print</span>
-            </div>
-            <div style="background:rgba(42,122,78,0.1);border:1px solid rgba(42,122,78,0.22);border-radius:6px;padding:8px 10px;margin-bottom:8px;display:flex;gap:12px;align-items:center">
-              <div>
-                <div style="font-family:'Crimson Pro',serif;font-size:1.1rem;font-weight:700;color:#4ade80">£2,814</div>
-                <div style="font-size:0.56rem;color:rgba(221,213,197,0.4)">Total replacement value</div>
-              </div>
-              <div style="font-size:0.58rem;color:rgba(221,213,197,0.55);line-height:1.4">&#10003; Ensure your insurance covers collectibles at replacement value.</div>
-            </div>
-            <table class="mt" style="font-size:0.6rem">
-              <thead><tr><th>Make</th><th>Cat No</th><th>Name</th><th>Value</th></tr></thead>
+            <table class="mt" style="font-size:0.67rem">
+              <thead><tr><th>Make</th><th>Cat No</th><th>Name</th><th>Cond.</th><th>Location</th><th>Value</th></tr></thead>
               <tbody>
-                <tr><td>Hornby</td><td>R3940</td><td>Flying Scotsman</td><td>£449</td></tr>
-                <tr><td>Bachmann</td><td>31-075</td><td>Class 37</td><td>£385</td></tr>
-                <tr><td>Hornby</td><td>R3560</td><td>Tornado A1</td><td>£359</td></tr>
-                <tr><td>Hornby</td><td>R3812</td><td>Britannia</td><td>£299</td></tr>
+                <tr><td>Hornby</td><td>R3940</td><td>Flying Scotsman</td><td><span class="mbadge r">Runs</span></td><td>Shelf A/1</td><td>£449</td></tr>
+                <tr><td>Bachmann</td><td>31-075</td><td>Class 37 Diesel</td><td><span class="mbadge b">Boxed</span></td><td>Shelf A/2</td><td>£385</td></tr>
+                <tr><td>Hornby</td><td>R3560</td><td>Tornado A1</td><td><span class="mbadge r">Runs</span></td><td>Cabinet 2</td><td>£359</td></tr>
+                <tr><td>Hornby</td><td>R3812</td><td>Britannia</td><td><span class="mbadge r">Runs</span></td><td>Shelf B/1</td><td>£299</td></tr>
+                <tr><td>Dapol</td><td>2S-001</td><td>Castle Class</td><td><span class="mbadge b">Boxed</span></td><td>Shelf B/3</td><td>£195</td></tr>
+                <tr><td>Farish</td><td>372-475</td><td>Class 158</td><td><span class="mbadge r">Runs</span></td><td>Cabinet 2</td><td>£128</td></tr>
               </tbody>
             </table>
           </div>
         </div>
-        <p class="sc-desc">Print-ready insurance valuation sorted by value, with total replacement value and guidance included.</p>
+        <p class="sc-desc">Filter by collection type, sort any column, and see make, cat no, condition, location and value at a glance.</p>
       </div>
+      <div class="sc-side">
+        <div>
+          <div class="sc-label">Item Detail</div>
+          <div class="browser-frame">
+            <div class="bbar"><div class="bdots"><span></span><span></span><span></span></div><div class="burl">modelcollectr.co.uk/app</div></div>
+            <div class="mbody">
+              <div style="font-family:'Crimson Pro',serif;font-size:0.88rem;color:var(--gold-light);margin-bottom:10px;font-weight:600">Flying Scotsman</div>
+              <div style="display:grid;gap:6px">
+                <div style="display:flex;gap:8px;align-items:center"><span style="font-size:0.57rem;color:rgba(221,213,197,0.32);width:74px;flex-shrink:0">Model Maker</span><div style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:4px;padding:3px 7px;font-size:0.62rem;color:rgba(221,213,197,0.76)">Hornby</div></div>
+                <div style="display:flex;gap:8px;align-items:center"><span style="font-size:0.57rem;color:rgba(221,213,197,0.32);width:74px;flex-shrink:0">Catalogue No</span><div style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:4px;padding:3px 7px;font-size:0.62rem;color:rgba(221,213,197,0.76)">R3940</div></div>
+                <div style="display:flex;gap:8px;align-items:center"><span style="font-size:0.57rem;color:rgba(221,213,197,0.32);width:74px;flex-shrink:0">Location</span><div style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:4px;padding:3px 7px;font-size:0.62rem;color:rgba(221,213,197,0.76)">Shelf A / Box 1</div></div>
+                <div style="display:flex;gap:8px;align-items:center"><span style="font-size:0.57rem;color:rgba(221,213,197,0.32);width:74px;flex-shrink:0">Valuation</span><div style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:4px;padding:3px 7px;font-size:0.62rem;color:var(--gold-light);font-weight:600">£449.00</div></div>
+                <div style="display:flex;gap:8px;align-items:center;margin-top:2px"><span style="font-size:0.57rem;color:rgba(221,213,197,0.32);width:74px;flex-shrink:0">Condition</span><div style="display:flex;gap:5px"><span style="background:rgba(42,122,78,0.26);color:#4ade80;padding:2px 8px;border-radius:4px;font-size:0.57rem;font-weight:700">Runs ✓</span><span style="background:rgba(232,146,10,0.14);color:var(--gold-light);padding:2px 8px;border-radius:4px;font-size:0.57rem;font-weight:700">Boxed ✓</span></div></div>
+              </div>
+            </div>
+          </div>
+          <p class="sc-desc">Full records with make, cat no, location, condition and valuation. Custom fields for anything specific to your collection.</p>
+        </div>
+        <div>
+          <div class="sc-label">Insurance Report</div>
+          <div class="browser-frame">
+            <div class="bbar"><div class="bdots"><span></span><span></span><span></span></div><div class="burl">modelcollectr.co.uk/app</div></div>
+            <div class="mbody">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-size:0.72rem;font-weight:700;color:var(--cream)">Insurance Report</span><span style="font-size:0.57rem;background:var(--gold-dim);color:var(--navy);padding:2px 8px;border-radius:4px;font-weight:700">&#128424; Print</span></div>
+              <div style="background:rgba(42,122,78,0.1);border:1px solid rgba(42,122,78,0.2);border-radius:6px;padding:8px 10px;margin-bottom:8px;display:flex;gap:12px;align-items:center">
+                <div><div style="font-family:'Crimson Pro',serif;font-size:1.05rem;font-weight:700;color:#4ade80">£2,814</div><div style="font-size:0.55rem;color:rgba(221,213,197,0.38)">Total replacement value</div></div>
+                <div style="font-size:0.57rem;color:rgba(221,213,197,0.52);line-height:1.4">&#10003; Ensure your insurance covers collectibles at replacement value.</div>
+              </div>
+              <table class="mt" style="font-size:0.59rem">
+                <thead><tr><th>Make</th><th>Cat No</th><th>Name</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td>Hornby</td><td>R3940</td><td>Flying Scotsman</td><td>£449</td></tr>
+                  <tr><td>Bachmann</td><td>31-075</td><td>Class 37</td><td>£385</td></tr>
+                  <tr><td>Hornby</td><td>R3560</td><td>Tornado A1</td><td>£359</td></tr>
+                  <tr><td>Hornby</td><td>R3812</td><td>Britannia</td><td>£299</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="sc-desc">Print-ready valuation sorted by value, with total replacement value and insurer guidance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ────────────────────────────────────────────────────── -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="s-head center">
+      <div class="s-label">Pricing</div>
+      <h2 class="s-title">Simple, transparent pricing</h2>
+      <p class="s-sub">Start free, upgrade when you&rsquo;re ready. No hidden fees, cancel anytime.</p>
+      <div class="price-toggle">
+        <span class="pt-lbl active" id="lbl-monthly">Monthly</span>
+        <button class="pt-switch" id="pt-switch" onclick="togglePricing()" aria-label="Toggle annual billing"></button>
+        <span class="pt-lbl" id="lbl-annual">Annual</span>
+        <span class="pt-save">Save 33%</span>
+      </div>
+    </div>
+    <div class="price-cards">
+
+      <!-- Free -->
+      <div class="price-card">
+        <div class="price-name">Starter</div>
+        <div><span class="price-amount">Free</span></div>
+        <div class="price-annual-note">&nbsp;</div>
+        <p class="price-desc">Try ModelCollectr with no commitment and no credit card.</p>
+        <ul class="price-feats">
+          <li><span class="pcheck">&#10003;</span> Up to 30 items</li>
+          <li><span class="pcheck">&#10003;</span> All collection types</li>
+          <li><span class="pcheck">&#10003;</span> Core fields</li>
+          <li><span class="pcross">&#10005;</span> Cloud sync</li>
+          <li><span class="pcross">&#10005;</span> Insurance reports</li>
+          <li><span class="pcross">&#10005;</span> Custom fields</li>
+          <li><span class="pcross">&#10005;</span> CSV export</li>
+        </ul>
+        <a href="#access" class="price-cta outline">Get Started Free</a>
+      </div>
+
+      <!-- Pro -->
+      <div class="price-card featured">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-name">Pro</div>
+        <div>
+          <span class="price-amount" id="price-val">£4.99</span><span class="price-period">/month</span>
+        </div>
+        <div class="price-annual-note" id="price-note">&nbsp;</div>
+        <p class="price-desc">Everything you need for a serious, properly managed collection.</p>
+        <ul class="price-feats">
+          <li><span class="pcheck">&#10003;</span> Unlimited items</li>
+          <li><span class="pcheck">&#10003;</span> All collection types + custom</li>
+          <li><span class="pcheck">&#10003;</span> Cloud sync across all devices</li>
+          <li><span class="pcheck">&#10003;</span> Insurance valuation reports</li>
+          <li><span class="pcheck">&#10003;</span> Custom fields &amp; dropdown lists</li>
+          <li><span class="pcheck">&#10003;</span> CSV export</li>
+          <li><span class="pcheck">&#10003;</span> Priority support</li>
+        </ul>
+        <a href="#access" class="price-cta solid">Start 14-Day Free Trial</a>
+        <p class="price-trial">No credit card required</p>
+      </div>
+
     </div>
   </div>
 </section>
 
 <!-- ── WHO IT'S FOR ───────────────────────────────────────────────── -->
 <section id="who">
-  <div class="who-inner">
-    <div>
-      <div class="s-label">Who It&rsquo;s For</div>
-      <h2 class="s-title">Built for the serious collector</h2>
-      <p class="s-sub">Whether you have 50 models or 5,000, ModelCollectr gives you the structure to manage your collection properly — not in a spreadsheet, not in a notes app.</p>
-    </div>
-    <div class="who-cards">
-      <div class="who-card">
-        <div class="who-icon">&#128642;</div>
-        <div>
-          <h4>The Dedicated Collector</h4>
-          <p>You&rsquo;ve spent years building a collection worth thousands. You need a proper record — what you have, what it&rsquo;s worth, and exactly where it is.</p>
-        </div>
+  <div class="wrap">
+    <div class="who-inner">
+      <div>
+        <div class="s-label">Who It&rsquo;s For</div>
+        <h2 class="s-title">Built for the serious collector</h2>
+        <p class="s-sub">Whether you have 50 models or 5,000, ModelCollectr gives you the structure to manage your collection properly — not in a spreadsheet, not in a notes app.</p>
       </div>
-      <div class="who-card">
-        <div class="who-icon">&#128737;&#65039;</div>
-        <div>
-          <h4>The Insured Owner</h4>
-          <p>Your insurer needs an itemised list. ModelCollectr generates a clean, printable valuation report in seconds — ready to hand over.</p>
+      <div class="who-cards">
+        <div class="who-card">
+          <div class="who-icon">&#128642;</div>
+          <div>
+            <h4>The Dedicated Collector</h4>
+            <p>You&rsquo;ve spent years building a collection worth thousands. You need a proper record — what you have, what it&rsquo;s worth, and exactly where it is.</p>
+          </div>
         </div>
-      </div>
-      <div class="who-card">
-        <div class="who-icon">&#128106;</div>
-        <div>
-          <h4>The Family Custodian</h4>
-          <p>Inheriting or managing a family collection? Keep a clear, shared record that everyone can access from any device, anywhere.</p>
+        <div class="who-card">
+          <div class="who-icon">&#128737;&#65039;</div>
+          <div>
+            <h4>The Insured Owner</h4>
+            <p>Your insurer needs an itemised list. ModelCollectr generates a clean, printable valuation report in seconds — ready to hand over.</p>
+          </div>
+        </div>
+        <div class="who-card">
+          <div class="who-icon">&#128106;</div>
+          <div>
+            <h4>The Family Custodian</h4>
+            <p>Inheriting or managing a family collection? Keep a clear, shared record that everyone can access from any device, anywhere.</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── DOWNLOAD ───────────────────────────────────────────────────── -->
-<section id="download">
-  <div class="dl-wrap">
-    <div class="s-label" style="text-align:center">Download</div>
-    <h2 class="s-title" style="text-align:center">Choose how you access ModelCollectr</h2>
-    <p class="s-sub" style="text-align:center;margin:12px auto 0;max-width:500px">Available as a web app today, with a native Windows desktop app coming soon.</p>
-    <div class="dl-options">
-      <a href="#access" class="dl-card featured">
-        <div class="dl-icon">&#127760;</div>
-        <h3>Web App</h3>
-        <p>Works in any browser.<br>Cloud sync included.</p>
-        <span class="dl-badge live">Available Now</span>
-      </a>
-      <div class="dl-card" style="opacity:0.72;cursor:default">
-        <div class="dl-icon">&#128421;&#65039;</div>
-        <h3>Windows App</h3>
-        <p>Desktop installer.<br>Works offline too.</p>
-        <span class="dl-badge soon">Coming Soon</span>
+<!-- ── FAQ ───────────────────────────────────────────────────────── -->
+<section id="faq">
+  <div class="wrap">
+    <div class="s-head center">
+      <div class="s-label">FAQ</div>
+      <h2 class="s-title">Common questions</h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h4>Is there really a free trial?</h4>
+        <p>Yes — 14 days, no credit card required. You get full access to every Pro feature so you can properly evaluate ModelCollectr before committing.</p>
       </div>
-      <div class="dl-card" style="opacity:0.52;cursor:default">
-        <div class="dl-icon">&#128241;</div>
-        <h3>Mobile App</h3>
-        <p>iOS &amp; Android.<br>On the roadmap.</p>
-        <span class="dl-badge planned">Planned</span>
+      <div class="faq-item">
+        <h4>What does cloud sync mean?</h4>
+        <p>Your catalogue is saved to our secure servers automatically. You can access it from any browser — home PC, laptop, tablet — and it&rsquo;s always up to date.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Can I cancel anytime?</h4>
+        <p>Yes, completely. Cancel with one click and you won&rsquo;t be charged again. Your data remains accessible until the end of your billing period.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Is my collection data safe?</h4>
+        <p>Your data is encrypted in transit and at rest, automatically backed up, and never shared or sold. You can export a full backup of your data at any time.</p>
       </div>
     </div>
   </div>
@@ -820,23 +861,19 @@
 
 <!-- ── REQUEST ACCESS ─────────────────────────────────────────────── -->
 <section id="access" class="form-section dark">
-  <div class="form-head">
-    <div class="s-label">Early Access</div>
-    <h2 class="s-title">Join the early access programme</h2>
-    <p class="s-sub" style="margin:12px auto 0">We&rsquo;re opening ModelCollectr to a limited number of collectors. Tell us about your collection and we&rsquo;ll be in touch.</p>
+  <div class="wrap">
+    <div class="s-head center">
+      <div class="s-label">Get Started</div>
+      <h2 class="s-title">Start your free trial today</h2>
+      <p class="s-sub" style="margin:12px auto 0">Tell us about your collection and we&rsquo;ll get you set up. No credit card, no commitment.</p>
+    </div>
   </div>
   <div class="form-wrap">
     <div id="access-wrap">
       <form id="access-form" onsubmit="handleForm(event,'access-form','access-wrap','access-ok')">
         <div class="form-2col">
-          <div class="frow">
-            <label for="a-name">Your Name</label>
-            <input type="text" id="a-name" name="name" placeholder="John Smith" required>
-          </div>
-          <div class="frow">
-            <label for="a-email">Email Address</label>
-            <input type="email" id="a-email" name="email" placeholder="john@example.com" required>
-          </div>
+          <div class="frow"><label for="a-name">Your Name</label><input type="text" id="a-name" name="name" placeholder="John Smith" required></div>
+          <div class="frow"><label for="a-email">Email Address</label><input type="email" id="a-email" name="email" placeholder="john@example.com" required></div>
         </div>
         <div class="frow">
           <label for="a-size">Collection Size</label>
@@ -848,54 +885,44 @@
             <option>500+ items</option>
           </select>
         </div>
+        <div class="frow"><label for="a-types">What do you collect?</label><input type="text" id="a-types" name="collection_types" placeholder="e.g. OO gauge trains, die-cast buses..."></div>
         <div class="frow">
-          <label for="a-types">What do you collect?</label>
-          <input type="text" id="a-types" name="collection_types" placeholder="e.g. OO gauge trains, die-cast buses, trams...">
+          <label for="a-msg">Anything else? <span style="font-weight:400;opacity:0.45">(optional)</span></label>
+          <textarea id="a-msg" name="message" placeholder="What you currently use, what you&#39;re looking for..."></textarea>
         </div>
-        <div class="frow">
-          <label for="a-msg">Anything else to tell us? <span style="font-weight:400;opacity:0.5">(optional)</span></label>
-          <textarea id="a-msg" name="message" placeholder="Tell us about your collection, what you currently use to catalogue it, or what you&#39;re looking for..."></textarea>
-        </div>
-        <button type="submit" class="form-submit">Request Early Access &#8594;</button>
+        <button type="submit" class="form-submit">Request Access &rarr;</button>
       </form>
     </div>
     <div class="form-success" id="access-ok">
-      <div class="check-icon">&#9989;</div>
-      <h3>Request received!</h3>
-      <p>Thanks for your interest. We&rsquo;ll be in touch soon with your access details.</p>
+      <div class="ok-icon">&#9989;</div>
+      <h3>You&rsquo;re on the list!</h3>
+      <p>Thanks for your interest — we&rsquo;ll be in touch shortly with your access details.</p>
     </div>
   </div>
 </section>
 
 <!-- ── CONTACT ────────────────────────────────────────────────────── -->
 <section id="contact" class="form-section light">
-  <div class="form-head">
-    <div class="s-label">Contact</div>
-    <h2 class="s-title">Get in touch</h2>
-    <p class="s-sub" style="margin:12px auto 0">Questions about ModelCollectr? We&rsquo;d love to hear from you.</p>
+  <div class="wrap">
+    <div class="s-head center">
+      <div class="s-label">Contact</div>
+      <h2 class="s-title">Get in touch</h2>
+      <p class="s-sub" style="margin:12px auto 0">Questions about ModelCollectr? We&rsquo;d love to hear from you.</p>
+    </div>
   </div>
   <div class="form-wrap">
     <div id="contact-wrap">
       <form id="contact-form" onsubmit="handleForm(event,'contact-form','contact-wrap','contact-ok')">
         <div class="form-2col">
-          <div class="frow">
-            <label for="c-name">Name</label>
-            <input type="text" id="c-name" name="name" placeholder="John Smith" required>
-          </div>
-          <div class="frow">
-            <label for="c-email">Email</label>
-            <input type="email" id="c-email" name="email" placeholder="john@example.com" required>
-          </div>
+          <div class="frow"><label for="c-name">Name</label><input type="text" id="c-name" name="name" placeholder="John Smith" required></div>
+          <div class="frow"><label for="c-email">Email</label><input type="email" id="c-email" name="email" placeholder="john@example.com" required></div>
         </div>
-        <div class="frow">
-          <label for="c-msg">Message</label>
-          <textarea id="c-msg" name="message" placeholder="Your message..." style="min-height:130px" required></textarea>
-        </div>
+        <div class="frow"><label for="c-msg">Message</label><textarea id="c-msg" name="message" placeholder="Your message..." style="min-height:130px" required></textarea></div>
         <button type="submit" class="form-submit">Send Message</button>
       </form>
     </div>
     <div class="form-success" id="contact-ok">
-      <div class="check-icon">&#9989;</div>
+      <div class="ok-icon">&#9989;</div>
       <h3>Message sent!</h3>
       <p>Thanks for getting in touch. We&rsquo;ll get back to you as soon as possible.</p>
     </div>
@@ -915,13 +942,14 @@
         <ul>
           <li><a href="#features">Features</a></li>
           <li><a href="#screenshots">Screenshots</a></li>
-          <li><a href="#download">Download</a></li>
-          <li><a href="#access">Early Access</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#access">Free Trial</a></li>
         </ul>
       </div>
       <div class="foot-col">
         <h4>Support</h4>
         <ul>
+          <li><a href="#faq">FAQ</a></li>
           <li><a href="#contact">Contact Us</a></li>
           <li><a href="mailto:chrisbaldwin984@gmail.com">Email Direct</a></li>
         </ul>
@@ -941,49 +969,48 @@
 </footer>
 
 <script>
-  // ── Mobile nav ──────────────────────────────────────────────────
+  // ── Nav ─────────────────────────────────────────────────────────
+  var nav = document.getElementById('nav');
   document.getElementById('nav-toggle').addEventListener('click', function() {
-    document.getElementById('nav').classList.toggle('open');
+    nav.classList.toggle('open');
   });
   document.querySelectorAll('#nav-links a').forEach(function(a) {
-    a.addEventListener('click', function() {
-      document.getElementById('nav').classList.remove('open');
-    });
+    a.addEventListener('click', function() { nav.classList.remove('open'); });
   });
-
-  // ── Nav shadow on scroll ────────────────────────────────────────
   window.addEventListener('scroll', function() {
-    document.getElementById('nav').style.boxShadow =
-      window.scrollY > 20 ? '0 2px 24px rgba(0,0,0,0.45)' : 'none';
+    nav.classList.toggle('scrolled', window.scrollY > 20);
   }, { passive: true });
 
-  // ── Form submission ─────────────────────────────────────────────
-  // TODO: Create a free form at https://formspree.io and replace
-  //       FORMSPREE_FORM_ID below with your actual form ID (e.g. "xyzabcde")
-  var FORMSPREE_ID = 'xojrnnbe';
+  // ── Pricing toggle ───────────────────────────────────────────────
+  var annual = false;
+  function togglePricing() {
+    annual = !annual;
+    document.getElementById('pt-switch').classList.toggle('on', annual);
+    document.getElementById('lbl-monthly').classList.toggle('active', !annual);
+    document.getElementById('lbl-annual').classList.toggle('active', annual);
+    document.getElementById('price-val').textContent = annual ? '£3.33' : '£4.99';
+    document.getElementById('price-note').textContent = annual ? 'Billed as £39.99/year' : ' ';
+  }
 
+  // ── Forms ────────────────────────────────────────────────────────
+  var FORMSPREE_ID = 'xojrnnbe';
   async function handleForm(e, formId, wrapId, successId) {
     e.preventDefault();
     var form = document.getElementById(formId);
     var btn = form.querySelector('.form-submit');
-    var orig = btn.textContent;
     btn.textContent = 'Sending…';
     btn.disabled = true;
-
     try {
       var res = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
-        method: 'POST',
-        body: new FormData(form),
+        method: 'POST', body: new FormData(form),
         headers: { Accept: 'application/json' }
       });
       if (res.ok) {
         document.getElementById(wrapId).style.display = 'none';
         document.getElementById(successId).style.display = 'block';
-      } else {
-        throw new Error('failed');
-      }
+      } else { throw new Error(); }
     } catch (_) {
-      btn.textContent = 'Failed — email us at chrisbaldwin984@gmail.com';
+      btn.textContent = 'Failed — email chrisbaldwin984@gmail.com';
       btn.disabled = false;
       btn.style.background = '#9a2020';
       btn.style.color = '#fff';
