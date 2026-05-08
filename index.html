@@ -272,34 +272,6 @@
       border-top: 1px solid var(--border);
     }
 
-    .price-toggle {
-      display: inline-flex; align-items: center; gap: 12px;
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 50px; padding: 5px 5px 5px 16px;
-      margin-top: 28px;
-    }
-    .pt-lbl { font-size: 0.83rem; font-weight: 600; color: var(--text-muted); }
-    .pt-lbl.active { color: var(--text); }
-    .pt-switch {
-      position: relative; width: 44px; height: 24px;
-      background: var(--border); border: none; border-radius: 12px;
-      cursor: pointer; transition: background 0.2s; flex-shrink: 0;
-    }
-    .pt-switch.on { background: var(--gold); }
-    .pt-switch::after {
-      content: ''; position: absolute;
-      top: 3px; left: 3px;
-      width: 18px; height: 18px; border-radius: 50%;
-      background: var(--white); transition: transform 0.2s;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
-    .pt-switch.on::after { transform: translateX(20px); }
-    .pt-save {
-      background: var(--gold); color: var(--navy);
-      font-size: 0.68rem; font-weight: 700;
-      padding: 3px 9px; border-radius: 10px;
-      white-space: nowrap;
-    }
 
     .price-cards {
       max-width: 860px; margin: 48px auto 0;
@@ -335,8 +307,6 @@
     .price-card.featured .price-amount { color: var(--cream); }
     .price-period { font-size: 0.88rem; color: var(--text-muted); margin-left: 2px; }
     .price-card.featured .price-period { color: var(--text-inv); opacity: 0.6; }
-    .price-annual-note { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; min-height: 1.2em; }
-    .price-card.featured .price-annual-note { color: var(--text-inv); opacity: 0.5; }
     .price-desc { font-size: 0.88rem; color: var(--text-muted); margin: 16px 0 22px; line-height: 1.55; }
     .price-card.featured .price-desc { color: var(--text-inv); opacity: 0.65; }
     .price-feats { list-style: none; margin-bottom: 28px; flex: 1; }
@@ -559,7 +529,7 @@
       <li><a href="#faq">FAQ</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <a href="#access" class="nav-cta">Start Free Trial</a>
+    <a href="https://buy.stripe.com/eVqbJ12kyfY37Nu2py7N604" class="nav-cta" target="_blank" rel="noopener">Get Pro — £19.99/yr</a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Menu">&#9776;</button>
   </div>
 </nav>
@@ -574,10 +544,10 @@
       <h1>Every Model.<br><em>Every Detail.</em><br>Always at Your Fingertips.</h1>
       <p>The professional catalogue app for serious model collectors. Organise trains, buses, trams, cars and more — with insurance-ready reports, custom fields, and everything you need to manage a world-class collection.</p>
       <div class="hero-btns">
-        <a href="#access" class="btn-gold">Start Free Trial &rarr;</a>
+        <a href="https://buy.stripe.com/eVqbJ12kyfY37Nu2py7N604" class="btn-gold" target="_blank" rel="noopener">Get Pro — £19.99/yr &rarr;</a>
         <a href="#features" class="btn-ghost">See Features</a>
       </div>
-      <p class="hero-note">14-day free trial &middot; No credit card required &middot; Cancel anytime</p>
+      <p class="hero-note">£19.99/year &middot; 14-day free trial &middot; Cancel anytime</p>
     </div>
     <div class="hero-visual">
       <div class="browser-frame">
@@ -783,13 +753,8 @@
     <div class="s-head center">
       <div class="s-label">Pricing</div>
       <h2 class="s-title">Simple, transparent pricing</h2>
-      <p class="s-sub">Start free, upgrade when you&rsquo;re ready. No hidden fees, cancel anytime.</p>
-      <div class="price-toggle">
-        <span class="pt-lbl active" id="lbl-monthly">Monthly</span>
-        <button class="pt-switch" id="pt-switch" onclick="togglePricing()" aria-label="Toggle annual billing"></button>
-        <span class="pt-lbl" id="lbl-annual">Annual</span>
-        <span class="pt-save">Save 33%</span>
-      </div>
+      <p class="s-sub">One simple price. Everything included. Cancel anytime.</p>
+
     </div>
     <div class="price-cards">
 
@@ -797,7 +762,6 @@
       <div class="price-card">
         <div class="price-name">Starter</div>
         <div><span class="price-amount">Free</span></div>
-        <div class="price-annual-note">&nbsp;</div>
         <p class="price-desc">Try ModelCollectr with no commitment and no credit card.</p>
         <ul class="price-feats">
           <li><span class="pcheck">&#10003;</span> Up to 30 items</li>
@@ -816,9 +780,8 @@
         <div class="price-badge">Most Popular</div>
         <div class="price-name">Pro</div>
         <div>
-          <span class="price-amount" id="price-val">£4.99</span><span class="price-period">/month</span>
+          <span class="price-amount">£19.99</span><span class="price-period">/year</span>
         </div>
-        <div class="price-annual-note" id="price-note">&nbsp;</div>
         <p class="price-desc">Everything you need for a serious, properly managed collection.</p>
         <ul class="price-feats">
           <li><span class="pcheck">&#10003;</span> Unlimited items</li>
@@ -829,8 +792,8 @@
           <li><span class="pcheck">&#10003;</span> CSV export</li>
           <li><span class="pcheck">&#10003;</span> Priority support</li>
         </ul>
-        <a href="#access" class="price-cta solid">Start 14-Day Free Trial</a>
-        <p class="price-trial">No credit card required</p>
+        <a href="https://buy.stripe.com/eVqbJ12kyfY37Nu2py7N604" class="price-cta solid" target="_blank" rel="noopener">Get Pro &rarr;</a>
+        <p class="price-trial">14-day free trial &middot; No credit card required</p>
       </div>
 
     </div>
@@ -1021,17 +984,6 @@
   window.addEventListener('scroll', function() {
     nav.classList.toggle('scrolled', window.scrollY > 20);
   }, { passive: true });
-
-  // ── Pricing toggle ───────────────────────────────────────────────
-  var annual = false;
-  function togglePricing() {
-    annual = !annual;
-    document.getElementById('pt-switch').classList.toggle('on', annual);
-    document.getElementById('lbl-monthly').classList.toggle('active', !annual);
-    document.getElementById('lbl-annual').classList.toggle('active', annual);
-    document.getElementById('price-val').textContent = annual ? '£1.67' : '£4.99';
-    document.getElementById('price-note').textContent = annual ? 'Billed as £19.99/year — save 67%' : ' ';
-  }
 
   // ── Forms ────────────────────────────────────────────────────────
   var FORMSPREE_ID = 'xojrnnbe';
