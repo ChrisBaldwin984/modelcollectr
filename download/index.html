@@ -207,7 +207,8 @@
   </div>
 
   <script>
-    const API = 'https://api.github.com/repos/ChrisBaldwin984/modelcollectr/releases/latest';
+    // Use /releases (list) not /releases/latest — latest skips pre-releases
+    const API = 'https://api.github.com/repos/ChrisBaldwin984/modelcollectr/releases?per_page=1';
 
     function show(id) {
       ['state-loading','state-done','state-error','state-soon'].forEach(s => {
@@ -219,10 +220,11 @@
       show('state-loading');
       try {
         const res = await fetch(API, { headers: { Accept: 'application/vnd.github+json' } });
-        if (res.status === 404) { show('state-soon'); return; }
         if (!res.ok) throw new Error('GitHub API ' + res.status);
 
-        const release = await res.json();
+        const releases = await res.json();
+        if (!releases.length) { show('state-soon'); return; }
+        const release = releases[0];
         const exe = release.assets?.find(a => a.name.toLowerCase().endsWith('.exe'));
         if (!exe) { show('state-soon'); return; }
 
