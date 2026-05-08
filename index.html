@@ -28,11 +28,11 @@
       --white:      #ffffff;
       --text:       #1e1a14;
       --text-mid:   #4a4235;
-      --text-muted: #6b6356;
+      --text-muted: #4a4239;
       --text-inv:   #ddd5c5;
       --border:     #d4cfc6;
       --border-dk:  rgba(255,255,255,0.08);
-      --green:      #2a7a4e;
+      --green:      #1a5c35;
       --r:          10px;
       --r-lg:       16px;
       --r-xl:       22px;
@@ -219,7 +219,7 @@
     .wrap { max-width: var(--max); margin: 0 auto; }
     .s-label {
       font-size: 0.71rem; font-weight: 700; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--gold-dim); margin-bottom: 10px;
+      text-transform: uppercase; color: #6b4500; margin-bottom: 10px;
     }
     .s-title {
       font-family: 'Crimson Pro', serif;
@@ -254,14 +254,14 @@
 
     /* ── SCREENSHOTS ──────────────────────────────────────────── */
     #screenshots { background: var(--navy); padding: 96px 28px; }
-    #screenshots .s-label { color: var(--gold-dim); }
+    #screenshots .s-label { color: var(--gold-light); }
     #screenshots .s-title { color: var(--cream); }
     #screenshots .s-sub { color: var(--text-inv); opacity: 0.62; }
     .sc-grid {
-      display: grid; grid-template-columns: 1.25fr 1fr;
-      gap: 24px; align-items: start;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 28px; align-items: start;
     }
-    .sc-label { font-size:0.7rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:9px; }
+    .sc-label { font-size:0.7rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--gold-light); margin-bottom:9px; }
     .sc-desc { font-size:0.82rem; color:var(--text-inv); opacity:0.52; margin-top:10px; line-height:1.5; }
     .sc-side { display:flex; flex-direction:column; gap:22px; }
 
@@ -298,7 +298,7 @@
       padding: 4px 16px; border-radius: 10px; white-space: nowrap;
     }
     .price-name { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; }
-    .price-card.featured .price-name { color: var(--gold-dim); }
+    .price-card.featured .price-name { color: var(--gold-light); }
     .price-amount {
       font-family: 'Crimson Pro', serif;
       font-size: 3rem; font-weight: 700; line-height: 1;
@@ -371,7 +371,7 @@
     .form-section.light { background: var(--white); border-top: 1px solid var(--border); }
     .form-section.dark .s-title { color: var(--cream); }
     .form-section.dark .s-sub { color: var(--text-inv); opacity: 0.62; }
-    .form-section.dark .s-label { color: var(--gold-dim); }
+    .form-section.dark .s-label { color: var(--gold-light); }
     .form-wrap { max-width: 540px; margin: 0 auto; }
     .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .frow { margin-bottom: 14px; }
@@ -512,6 +512,37 @@
       .nav.open .nav-links { display: flex; flex-direction: row; position: static; background: none; border: none; padding: 0; gap: 6px; }
       .nav-cta { display: inline-block; }
     }
+
+    /* ── SCREENSHOT LIGHTBOX ──────────────────────────────────────── */
+    .sc-frame { cursor: zoom-in; position: relative; }
+    .sc-frame::after {
+      content: '⤢ Click to enlarge';
+      position: absolute; bottom: 8px; right: 10px;
+      font-size: 0.65rem; color: rgba(255,255,255,0.55);
+      background: rgba(0,0,0,0.4); padding: 3px 8px;
+      border-radius: 4px; pointer-events: none;
+      letter-spacing: 0.03em;
+    }
+    .sc-frame img { width: 100%; display: block; transition: opacity 0.15s; }
+    .sc-frame:hover img { opacity: 0.9; }
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.88); align-items: center; justify-content: center;
+      cursor: zoom-out; backdrop-filter: blur(6px);
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 92vw; max-height: 90vh;
+      border-radius: 8px; box-shadow: 0 24px 80px rgba(0,0,0,0.8);
+      cursor: default;
+    }
+    .lightbox-close {
+      position: absolute; top: 20px; right: 24px;
+      color: rgba(255,255,255,0.7); font-size: 2rem;
+      background: none; border: none; cursor: pointer; line-height: 1;
+    }
+    .lightbox-close:hover { color: #fff; }
+
   </style>
 </head>
 <body>
@@ -651,30 +682,36 @@
     </div>
     <div class="sc-grid">
       <div>
+        <div class="sc-label">Dashboard</div>
+        <div class="browser-frame sc-frame" onclick="openLightbox('3.jpg')">
+          <div class="bbar"><div class="bdots"><span></span><span></span><span></span></div><div class="burl">ModelCollectr — Home</div></div>
+          <img src="3.jpg" alt="ModelCollectr dashboard">
+        </div>
+        <p class="sc-desc">Your collection at a glance — totals, collection breakdown, quick actions and recent items.</p>
+      </div>
+      <div>
         <div class="sc-label">Stock View</div>
-        <div class="browser-frame">
+        <div class="browser-frame sc-frame" onclick="openLightbox('4.jpg')">
           <div class="bbar"><div class="bdots"><span></span><span></span><span></span></div><div class="burl">ModelCollectr — Stock</div></div>
-          <img src="4.jpg" alt="ModelCollectr stock view" style="width:100%;display:block;">
+          <img src="4.jpg" alt="ModelCollectr stock view">
         </div>
         <p class="sc-desc">Filter by collection type, sort any column, and see make, cat no, condition, location and value at a glance.</p>
       </div>
-      <div class="sc-side">
-        <div>
-          <div class="sc-label">Item Detail</div>
-          <div class="browser-frame">
-            <div class="bbar"><div class="bdots"><span></span><span></span><span></span></div><div class="burl">ModelCollectr — Item</div></div>
-            <img src="1.jpg" alt="ModelCollectr item detail" style="width:100%;display:block;">
-          </div>
-          <p class="sc-desc">Full records with make, cat no, location, condition and valuation. Custom fields for anything specific to your collection.</p>
+      <div>
+        <div class="sc-label">Item Detail</div>
+        <div class="browser-frame sc-frame" onclick="openLightbox('1.jpg')">
+          <div class="bbar"><div class="bdots"><span></span><span></span><span></span></div><div class="burl">ModelCollectr — Item</div></div>
+          <img src="1.jpg" alt="ModelCollectr item detail">
         </div>
-        <div>
-          <div class="sc-label">Insurance Report</div>
-          <div class="browser-frame">
-            <div class="bbar"><div class="bdots"><span></span><span></span><span></span></div><div class="burl">ModelCollectr — Reports</div></div>
-            <img src="2.jpg" alt="ModelCollectr insurance report" style="width:100%;display:block;">
-          </div>
-          <p class="sc-desc">Print-ready valuation sorted by value, with total replacement value and insurer guidance.</p>
+        <p class="sc-desc">Full records with make, cat no, location, condition and valuation. Custom fields for anything specific to your collection.</p>
+      </div>
+      <div>
+        <div class="sc-label">Insurance Report</div>
+        <div class="browser-frame sc-frame" onclick="openLightbox('2.jpg')">
+          <div class="bbar"><div class="bdots"><span></span><span></span><span></span></div><div class="burl">ModelCollectr — Reports</div></div>
+          <img src="2.jpg" alt="ModelCollectr insurance report">
         </div>
+        <p class="sc-desc">Print-ready valuation sorted by value, with total replacement value and insurer guidance.</p>
       </div>
     </div>
   </div>
@@ -905,6 +942,13 @@
   </div>
 </footer>
 
+<!-- ── LIGHTBOX ──────────────────────────────────────────────────── -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">&times;</button>
+  <img id="lightbox-img" src="" alt="Screenshot enlarged" onclick="event.stopPropagation()">
+</div>
+
+
 <script>
   // ── Nav ─────────────────────────────────────────────────────────
   var nav = document.getElementById('nav');
@@ -942,6 +986,20 @@
       btn.style.color = '#fff';
     }
   }
+
+  // ── Lightbox ─────────────────────────────────────────────────────
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
 </script>
 
 </body>
