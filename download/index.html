@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download ModelCollectr for Windows</title>
+  <meta name="description" content="Download the ModelCollectr desktop app for Windows — the professional catalogue app for model collectors.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:       #1c1f26;
+      --navy-2:     #252a34;
+      --gold:       #e8920a;
+      --gold-light: #f5b830;
+      --gold-glow:  rgba(232,146,10,0.13);
+      --cream:      #ede9e0;
+      --cream-2:    #f8f5ef;
+      --white:      #ffffff;
+      --text:       #1e1a14;
+      --text-inv:   #ddd5c5;
+      --border-dk:  rgba(255,255,255,0.08);
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Instrument Sans', sans-serif;
+      background: var(--navy);
+      color: var(--text-inv);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100dvh;
+      padding: 28px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .card {
+      background: var(--navy-2);
+      border: 1px solid var(--border-dk);
+      border-radius: 20px;
+      padding: 56px 48px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    }
+
+    .logo { margin-bottom: 28px; }
+    .logo img { height: 64px; width: auto; }
+
+    h1 {
+      font-family: 'Crimson Pro', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 10px;
+      line-height: 1.15;
+    }
+
+    .sub {
+      font-size: 0.93rem;
+      color: rgba(221,213,197,0.6);
+      margin-bottom: 40px;
+    }
+
+    /* Spinner */
+    .spinner-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .spinner {
+      width: 48px; height: 48px;
+      border: 3px solid rgba(232,146,10,0.15);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .status {
+      font-size: 0.95rem;
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+
+    /* Done state */
+    .done-icon {
+      width: 56px; height: 56px;
+      background: rgba(26,92,53,0.3);
+      border: 2px solid #2d9d5f;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 16px;
+    }
+
+    /* Error state */
+    .err-icon {
+      width: 56px; height: 56px;
+      background: rgba(180,30,30,0.2);
+      border: 2px solid #c0392b;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'Instrument Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      padding: 14px 30px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      box-shadow: 0 4px 18px rgba(232,146,10,0.3);
+      margin-top: 4px;
+    }
+    .btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .meta {
+      font-size: 0.78rem;
+      color: rgba(221,213,197,0.35);
+      margin-top: 24px;
+      line-height: 1.6;
+    }
+    .meta a { color: rgba(221,213,197,0.5); text-decoration: none; }
+    .meta a:hover { color: var(--gold-light); }
+
+    .back {
+      margin-top: 32px;
+      font-size: 0.82rem;
+      color: rgba(221,213,197,0.4);
+    }
+    .back a { color: rgba(221,213,197,0.5); text-decoration: none; }
+    .back a:hover { color: var(--gold-light); }
+
+    /* Hidden initially */
+    #state-loading, #state-done, #state-error, #state-soon { display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <img src="../logo-badge.png" alt="ModelCollectr">
+    </div>
+    <h1>Download for Windows</h1>
+    <p class="sub">ModelCollectr desktop app — works fully offline</p>
+
+    <!-- Loading state -->
+    <div id="state-loading">
+      <div class="spinner-wrap">
+        <div class="spinner"></div>
+        <div class="status">Finding latest version…</div>
+      </div>
+    </div>
+
+    <!-- Download starting state -->
+    <div id="state-done">
+      <div class="done-icon">↓</div>
+      <div class="status" style="margin-bottom:8px;color:#2d9d5f">Your download is starting…</div>
+      <p style="font-size:0.85rem;color:rgba(221,213,197,0.5);margin-bottom:24px;">
+        If it doesn't start automatically, use the button below.
+      </p>
+      <a id="dl-link" href="#" class="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download .exe
+      </a>
+      <div id="dl-meta" class="meta"></div>
+    </div>
+
+    <!-- Error state -->
+    <div id="state-error">
+      <div class="err-icon">!</div>
+      <div class="status" style="color:#e05555;margin-bottom:8px">Couldn't fetch download</div>
+      <p style="font-size:0.85rem;color:rgba(221,213,197,0.5);margin-bottom:24px;">
+        GitHub may be temporarily unavailable. Try again shortly.
+      </p>
+      <button class="btn" onclick="init()">Try again</button>
+    </div>
+
+    <!-- Coming soon state (no release yet) -->
+    <div id="state-soon">
+      <div style="font-size:2rem;margin-bottom:12px">🚀</div>
+      <div class="status" style="margin-bottom:8px;color:var(--gold-light)">Coming soon</div>
+      <p style="font-size:0.85rem;color:rgba(221,213,197,0.5)">
+        The Windows installer is being prepared. Check back shortly.
+      </p>
+    </div>
+
+    <div class="back"><a href="/">← Back to modelcollectr.co.uk</a></div>
+  </div>
+
+  <script>
+    const API = 'https://api.github.com/repos/ChrisBaldwin984/modelcollectr/releases/latest';
+
+    function show(id) {
+      ['state-loading','state-done','state-error','state-soon'].forEach(s => {
+        document.getElementById(s).style.display = s === id ? 'block' : 'none';
+      });
+    }
+
+    async function init() {
+      show('state-loading');
+      try {
+        const res = await fetch(API, { headers: { Accept: 'application/vnd.github+json' } });
+        if (res.status === 404) { show('state-soon'); return; }
+        if (!res.ok) throw new Error('GitHub API ' + res.status);
+
+        const release = await res.json();
+        const exe = release.assets?.find(a => a.name.toLowerCase().endsWith('.exe'));
+        if (!exe) { show('state-soon'); return; }
+
+        // Show done state, populate link
+        document.getElementById('dl-link').href = exe.browser_download_url;
+
+        const mb = (exe.size / 1024 / 1024).toFixed(0);
+        const date = new Date(release.published_at).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+        document.getElementById('dl-meta').innerHTML =
+          `${release.name} &nbsp;·&nbsp; ${mb} MB &nbsp;·&nbsp; Released ${date}<br>` +
+          `<a href="https://github.com/ChrisBaldwin984/modelcollectr/releases" target="_blank" rel="noopener">View all releases on GitHub</a>`;
+
+        show('state-done');
+
+        // Auto-start download after a brief pause
+        setTimeout(() => { window.location.href = exe.browser_download_url; }, 800);
+
+      } catch (e) {
+        console.error(e);
+        show('state-error');
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
