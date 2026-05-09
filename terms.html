@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms &amp; Conditions — ModelCollectr</title>
+  <meta name="description" content="ModelCollectr Terms and Conditions and End User Licence Agreement.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1c1f26; --navy-2: #252a34; --navy-3: #2e3340;
+      --gold: #e8920a; --gold-light: #f5b830; --gold-dim: #c97a08;
+      --cream: #ede9e0; --cream-2: #f8f5ef; --white: #ffffff;
+      --text: #1e1a14; --text-mid: #4a4235; --text-muted: #4a4239;
+      --text-inv: #ddd5c5; --border: #d4cfc6; --border-dk: rgba(255,255,255,0.08);
+      --r: 10px; --max: 800px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Instrument Sans', sans-serif; color: var(--text); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(28,31,38,0.97); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-dk); transition: box-shadow 0.25s; }
+    .nav.scrolled { box-shadow: 0 2px 28px rgba(0,0,0,0.5); }
+    .nav-inner { max-width: 1160px; margin: 0 auto; padding: 0 28px; height: 62px; display: flex; align-items: center; gap: 0; }
+    .nav-brand { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; }
+    .nav-brand img { height: 30px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 6px; list-style: none; margin: 0 auto; padding: 0; }
+    .nav-links a { color: var(--text-inv); font-size: 0.86rem; text-decoration: none; padding: 6px 12px; border-radius: 6px; opacity: 0.7; transition: opacity 0.15s, background 0.15s; }
+    .nav-links a:hover { opacity: 1; background: rgba(255,255,255,0.06); }
+    .nav-cta { background: var(--gold); color: var(--navy); padding: 9px 22px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; text-decoration: none; white-space: nowrap; transition: background 0.15s, transform 0.1s; flex-shrink: 0; box-shadow: 0 2px 10px rgba(232,146,10,0.3); }
+    .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .nav-toggle { display: none; background: none; border: 1px solid var(--border-dk); color: var(--cream); font-size: 1.15rem; cursor: pointer; border-radius: 6px; padding: 0; margin-left: auto; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+
+    /* PAGE HEADER */
+    .page-header { background: var(--navy); padding: 110px 28px 56px; text-align: center; }
+    .page-header h1 { font-family: 'Crimson Pro', serif; font-size: 2.6rem; font-weight: 700; color: var(--cream); margin-bottom: 10px; }
+    .page-header p { font-size: 0.9rem; color: var(--text-inv); opacity: 0.5; }
+
+    /* CONTENT */
+    .legal-wrap { max-width: var(--max); margin: 0 auto; padding: 56px 28px 80px; }
+    .legal-toc { background: var(--cream-2); border: 1px solid var(--border); border-radius: var(--r); padding: 22px 28px; margin-bottom: 48px; }
+    .legal-toc h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; }
+    .legal-toc ol { padding-left: 18px; }
+    .legal-toc li { margin-bottom: 6px; }
+    .legal-toc a { font-size: 0.85rem; color: var(--gold-dim); text-decoration: none; }
+    .legal-toc a:hover { text-decoration: underline; }
+    .legal-section { margin-bottom: 44px; padding-bottom: 44px; border-bottom: 1px solid var(--border); }
+    .legal-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .legal-section h2 { font-family: 'Crimson Pro', serif; font-size: 1.45rem; font-weight: 700; color: var(--text); margin-bottom: 14px; padding-top: 8px; }
+    .legal-section p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.75; margin-bottom: 12px; }
+    .legal-section p:last-child { margin-bottom: 0; }
+    .legal-section ul, .legal-section ol { padding-left: 20px; margin-bottom: 12px; }
+    .legal-section li { font-size: 0.9rem; color: var(--text-mid); line-height: 1.75; margin-bottom: 4px; }
+    .legal-section a { color: var(--gold-dim); text-decoration: underline; }
+    .legal-warning { background: #fef3e2; border-left: 4px solid var(--gold); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; }
+    .legal-warning p { font-size: 0.87rem; color: #5a3a00; margin: 0; line-height: 1.65; }
+    .legal-warning strong { color: #3a2500; }
+    .legal-meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 36px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+    .legal-meta span { margin-right: 20px; }
+
+    /* FOOTER */
+    footer { background: var(--navy); border-top: 1px solid var(--border-dk); padding: 52px 28px 28px; }
+    .foot-inner { max-width: 1160px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+    .foot-brand img { height: 52px; width: auto; display: block; margin-bottom: 8px; }
+    .foot-tag { font-size: 0.78rem; color: var(--text-inv); opacity: 0.38; }
+    .foot-links { display: flex; gap: 48px; flex-wrap: wrap; }
+    .foot-col h4 { font-size: 0.69rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--gold-dim); margin-bottom: 14px; }
+    .foot-col ul { list-style: none; }
+    .foot-col li { margin-bottom: 8px; }
+    .foot-col a { font-size: 0.82rem; color: var(--text-inv); opacity: 0.5; text-decoration: none; transition: opacity 0.15s; }
+    .foot-col a:hover { opacity: 1; }
+    .foot-bottom { max-width: 1160px; margin: 26px auto 0; padding-top: 22px; border-top: 1px solid var(--border-dk); display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: var(--text-inv); opacity: 0.32; flex-wrap: wrap; gap: 8px; }
+    .foot-bottom a { color: inherit; text-decoration: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) { .nav-links { display: none; } .nav-cta { display: none; } .nav-toggle { display: flex; } }
+    @media (max-width: 600px) { .nav-inner { padding: 0 16px; } .page-header { padding: 100px 20px 44px; } .page-header h1 { font-size: 2rem; } .legal-wrap { padding: 36px 20px 60px; } .foot-inner { flex-direction: column; gap: 28px; } .foot-links { gap: 28px; } .foot-bottom { flex-direction: column; text-align: center; } }
+    .nav.open .nav-links { display: flex; flex-direction: column; position: absolute; top: 62px; left: 0; right: 0; background: var(--navy-2); border-bottom: 1px solid var(--border-dk); padding: 12px 16px; gap: 2px; z-index: 999; }
+    .nav.open .nav-links a { padding: 13px 14px; opacity: 1; min-height: 44px; display: flex; align-items: center; }
+    @media (min-width: 961px) { .nav.open .nav-links { display: flex; flex-direction: row; position: static; background: none; border: none; padding: 0; gap: 6px; } .nav-cta { display: inline-block; } }
+  </style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="logo-banner.png" alt="ModelCollectr">
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/#screenshots">Screenshots</a></li>
+      <li><a href="/#pricing">Pricing</a></li>
+      <li><a href="/#faq">FAQ</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+    <a href="https://buy.stripe.com/eVqbJ12kyfY37Nu2py7N604" class="nav-cta" target="_blank" rel="noopener">Get Pro — £19.99/yr</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu">&#9776;</button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Terms &amp; Conditions</h1>
+  <p>End User Licence Agreement — ModelCollectr Desktop</p>
+</div>
+
+<div class="legal-wrap">
+  <p class="legal-meta">
+    <span><strong>Version:</strong> 1.0</span>
+    <span><strong>Effective:</strong> May 2026</span>
+    <span><strong>Operator:</strong> Chris Baldwin trading as CBTech Solutions</span>
+  </p>
+
+  <div class="legal-toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#s1">Introduction &amp; Agreement</a></li>
+      <li><a href="#s2">Licence Grant</a></li>
+      <li><a href="#s3">Free &amp; Pro Features</a></li>
+      <li><a href="#s4">Payments &amp; Subscriptions</a></li>
+      <li><a href="#s5">Licence Validation</a></li>
+      <li><a href="#s6">User Data &amp; Privacy</a></li>
+      <li><a href="#s7">Backup Responsibility</a></li>
+      <li><a href="#s8">No Warranty</a></li>
+      <li><a href="#s9">Limitation of Liability</a></li>
+      <li><a href="#s10">Acceptable Use</a></li>
+      <li><a href="#s11">Termination</a></li>
+      <li><a href="#s12">Updates &amp; Changes</a></li>
+      <li><a href="#s13">Governing Law</a></li>
+      <li><a href="#s14">Contact</a></li>
+    </ol>
+  </div>
+
+  <div class="legal-section" id="s1">
+    <h2>1. Introduction &amp; Agreement</h2>
+    <p>ModelCollectr ("the Application") is a Windows desktop application for cataloguing and managing physical collections, including scale models, collectibles, and similar items.</p>
+    <p>The Application is developed and operated by Chris Baldwin, trading as <strong>CBTech Solutions</strong>, a sole trader based in England, United Kingdom ("we", "us", "our").</p>
+    <p>By downloading, installing, or using the Application, you ("the User") agree to be bound by these Terms and Conditions ("Terms"). If you do not agree, you must not install or use the Application and should uninstall it immediately.</p>
+    <p>These Terms constitute a legally binding agreement between you and CBTech Solutions.</p>
+  </div>
+
+  <div class="legal-section" id="s2">
+    <h2>2. Licence Grant</h2>
+    <p>We grant you a personal, non-exclusive, non-transferable, revocable licence to install and use the Application on devices that you own or control, for your personal or internal business use only.</p>
+    <p><strong>This licence does not constitute a sale. The Application, including all intellectual property rights, remains the sole property of CBTech Solutions.</strong></p>
+    <p>You may not:</p>
+    <ul>
+      <li>Copy, reproduce, or duplicate the Application except for reasonable backup purposes</li>
+      <li>Sell, sublicense, redistribute, or transfer the Application or any licence to any third party</li>
+      <li>Reverse engineer, decompile, disassemble, or attempt to derive the source code</li>
+      <li>Modify, adapt, translate, or create derivative works based on the Application</li>
+      <li>Remove, alter, or obscure any proprietary notices or labels</li>
+      <li>Use the Application in any way that violates applicable laws or regulations</li>
+    </ul>
+  </div>
+
+  <div class="legal-section" id="s3">
+    <h2>3. Free &amp; Pro Features</h2>
+    <p>The Application is available in a free tier with limited functionality. The free tier is provided without warranty or guarantee of continued availability.</p>
+    <p>Full functionality ("Pro" features) requires activation with a valid licence key, purchased separately via our website at <a href="https://modelcollectr.co.uk">modelcollectr.co.uk</a>.</p>
+    <p>The features available in each tier may change at our discretion. We will endeavour to provide reasonable notice of significant changes where possible. Current tier details are always available on our website.</p>
+  </div>
+
+  <div class="legal-section" id="s4">
+    <h2>4. Payments &amp; Subscriptions</h2>
+    <p>All payments for Pro licences or subscriptions are processed externally via <strong>Stripe, Inc.</strong> ("Stripe"), a third-party payment processor. By making a payment, you agree to <a href="https://stripe.com/gb/legal" target="_blank" rel="noopener">Stripe's Terms of Service</a> and <a href="https://stripe.com/gb/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</p>
+    <p><strong>We do not store, process, or have access to your full payment card details at any time.</strong> All card data is handled exclusively by Stripe in accordance with PCI DSS standards.</p>
+    <p>Where a subscription billing model applies:</p>
+    <ul>
+      <li>Subscriptions renew automatically unless cancelled before the renewal date</li>
+      <li>You retain access to Pro features until the end of the current paid billing period following cancellation</li>
+      <li>Access to Pro features may be suspended if a payment fails or is declined</li>
+      <li>We reserve the right to modify subscription pricing with reasonable notice</li>
+    </ul>
+    <p>Where a one-off licence key is purchased, the licence grants access to the Application as it exists at the time of purchase. Continued access to future updates is not guaranteed unless otherwise stated.</p>
+    <p>Refunds are subject to UK consumer law. Where applicable, a statutory 14-day cooling-off period applies to digital goods not yet accessed. Once a licence key has been issued and activated, refunds are at our sole discretion. Licence keys are personal and non-transferable. Sharing or distributing licence keys is prohibited and may result in revocation without refund.</p>
+  </div>
+
+  <div class="legal-section" id="s5">
+    <h2>5. Licence Validation</h2>
+    <p>The Application may periodically connect to our servers to verify that your licence key is valid, active, and has not been revoked. This validation may occur at application launch or at intervals during use.</p>
+    <p>If you are unable to connect to the internet, the Application will continue to function for a reasonable grace period. Extended offline use without validation may result in Pro features being suspended until connectivity is restored.</p>
+    <p>We are not liable for any loss or inconvenience caused by the inability to validate your licence due to network issues, server maintenance, or circumstances outside our control.</p>
+  </div>
+
+  <div class="legal-section" id="s6">
+    <h2>6. User Data &amp; Privacy</h2>
+    <p>All collection data entered into the Application is stored locally on your device. We do not collect, transmit, or store your collection data on our servers.</p>
+    <p>We may collect and store the following in connection with your account: your email address (for licence management and support); your licence key and activation status; and basic diagnostic or usage information where you have consented.</p>
+    <p>We process your personal data in accordance with our <a href="/privacy">Privacy Policy</a> and in compliance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.</p>
+  </div>
+
+  <div class="legal-section" id="s7">
+    <h2>7. Backup Responsibility</h2>
+    <div class="legal-warning">
+      <p><strong>Important:</strong> You are solely and entirely responsible for maintaining adequate backups of your data. The Application stores data locally on your device only. We do not provide cloud backup or remote storage.</p>
+    </div>
+    <p>We strongly recommend maintaining regular backups of your collection data using the Application's export functionality or by other means.</p>
+    <p><strong>The Application must not be relied upon as the sole or primary storage location for important records</strong>, including but not limited to insurance records, valuation records, or any data required for legal, financial, or insurance purposes.</p>
+    <p>In the event of hardware failure, software corruption, operating system updates, accidental deletion, or any other cause of data loss, we accept no responsibility for the loss of your data.</p>
+  </div>
+
+  <div class="legal-section" id="s8">
+    <h2>8. No Warranty</h2>
+    <p><strong>The Application is provided "as is" and "as available", without warranty of any kind, express or implied.</strong></p>
+    <p>To the fullest extent permitted by applicable law, we expressly disclaim all warranties, including but not limited to:</p>
+    <ul>
+      <li>Implied warranties of merchantability, fitness for a particular purpose, and non-infringement</li>
+      <li>Warranties that the Application will be uninterrupted, error-free, or free of viruses or other harmful components</li>
+      <li>Warranties regarding the accuracy, reliability, or completeness of any data or output produced by the Application</li>
+      <li>Warranties that defects will be corrected</li>
+    </ul>
+    <p>You acknowledge that software of this nature may contain bugs or errors and that their existence shall not constitute a breach of these Terms.</p>
+  </div>
+
+  <div class="legal-section" id="s9">
+    <h2>9. Limitation of Liability</h2>
+    <div class="legal-warning">
+      <p><strong>To the fullest extent permitted by applicable law, CBTech Solutions shall not be liable for:</strong></p>
+      <p>Any loss of data, database corruption, or inability to access your collection records; any indirect, incidental, special, consequential, or punitive damages; any loss of profits, revenue, business, anticipated savings, goodwill, or opportunity; any business interruption; any loss arising from your inability to access the Application, including during insurance claims, legal proceedings, or valuations; or any damage caused by third-party software, operating system changes, or hardware failure.</p>
+      <p><strong>Our total aggregate liability shall not exceed the total amount paid by you for the Application in the 12 months immediately preceding the event giving rise to the claim.</strong></p>
+    </div>
+    <p>Nothing in these Terms shall exclude or limit our liability for death or personal injury caused by our negligence, fraud or fraudulent misrepresentation, or any other liability that cannot be excluded or limited under English law.</p>
+  </div>
+
+  <div class="legal-section" id="s10">
+    <h2>10. Acceptable Use</h2>
+    <p>You agree to use the Application only for lawful purposes and in a manner consistent with these Terms. You must not:</p>
+    <ul>
+      <li>Attempt to bypass, crack, or circumvent any licence validation or feature restriction</li>
+      <li>Use the Application to store, transmit, or process unlawful content</li>
+      <li>Attempt to gain unauthorised access to our systems or servers</li>
+      <li>Use automated tools to abuse or overload any online services connected to the Application</li>
+      <li>Impersonate any person or entity in connection with your use of the Application</li>
+    </ul>
+  </div>
+
+  <div class="legal-section" id="s11">
+    <h2>11. Termination</h2>
+    <p>These Terms remain in effect until terminated. Your licence terminates automatically if you breach any provision of these Terms, attempt to circumvent licence validation, or engage in fraud in connection with a purchase.</p>
+    <p>Upon termination, you must cease all use of the Application and delete all copies from your devices.</p>
+    <p>We reserve the right to revoke any licence key found to be used fraudulently, shared unlawfully, or in breach of these Terms, without refund.</p>
+  </div>
+
+  <div class="legal-section" id="s12">
+    <h2>12. Updates &amp; Changes</h2>
+    <p>We may release updates to the Application from time to time. Updates may change or remove features. We are not obligated to provide updates, support, or patches.</p>
+    <p>We reserve the right to modify these Terms at any time. Material changes will be notified within the Application or by email where possible. Continued use of the Application after changes take effect constitutes acceptance of the updated Terms.</p>
+    <p>We reserve the right to discontinue the Application at any time, with reasonable notice where possible.</p>
+  </div>
+
+  <div class="legal-section" id="s13">
+    <h2>13. Governing Law</h2>
+    <p>These Terms and any dispute or claim arising out of or in connection with them shall be governed by and construed in accordance with the laws of <strong>England and Wales</strong>.</p>
+    <p>Any disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
+  </div>
+
+  <div class="legal-section" id="s14">
+    <h2>14. Contact</h2>
+    <p>For support, legal enquiries, or to exercise your data rights:</p>
+    <p>
+      <strong>CBTech Solutions</strong><br>
+      Email: <a href="mailto:chrisbaldwin984@gmail.com">chrisbaldwin984@gmail.com</a><br>
+      Website: <a href="https://modelcollectr.co.uk">modelcollectr.co.uk</a>
+    </p>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <div class="foot-brand"><img src="logo-badge.png" alt="ModelCollectr"></div>
+      <div class="foot-tag">The professional catalogue app for model collectors.</div>
+    </div>
+    <div class="foot-links">
+      <div class="foot-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="/#features">Features</a></li>
+          <li><a href="/#screenshots">Screenshots</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/download">Download</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/#contact">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/terms">Terms &amp; Conditions</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>CBTech</h4>
+        <ul>
+          <li><a href="https://cbtech.dev" target="_blank" rel="noopener">cbtech.dev</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>&copy; 2026 ModelCollectr. All rights reserved.</span>
+    <span>Built by <a href="https://cbtech.dev" target="_blank" rel="noopener">CBTech Solutions</a></span>
+  </div>
+</footer>
+
+<script>
+  var nav = document.getElementById('nav');
+  document.getElementById('nav-toggle').addEventListener('click', function() { nav.classList.toggle('open'); });
+  window.addEventListener('scroll', function() { nav.classList.toggle('scrolled', window.scrollY > 20); });
+</script>
+</body>
+</html>

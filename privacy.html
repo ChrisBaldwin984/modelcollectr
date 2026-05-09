@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — ModelCollectr</title>
+  <meta name="description" content="ModelCollectr Privacy Policy — how we collect, use, and protect your data.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1c1f26; --navy-2: #252a34; --navy-3: #2e3340;
+      --gold: #e8920a; --gold-light: #f5b830; --gold-dim: #c97a08;
+      --cream: #ede9e0; --cream-2: #f8f5ef; --white: #ffffff;
+      --text: #1e1a14; --text-mid: #4a4235; --text-muted: #4a4239;
+      --text-inv: #ddd5c5; --border: #d4cfc6; --border-dk: rgba(255,255,255,0.08);
+      --r: 10px; --max: 800px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Instrument Sans', sans-serif; color: var(--text); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(28,31,38,0.97); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-dk); transition: box-shadow 0.25s; }
+    .nav.scrolled { box-shadow: 0 2px 28px rgba(0,0,0,0.5); }
+    .nav-inner { max-width: 1160px; margin: 0 auto; padding: 0 28px; height: 62px; display: flex; align-items: center; gap: 0; }
+    .nav-brand { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; }
+    .nav-brand img { height: 30px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 6px; list-style: none; margin: 0 auto; padding: 0; }
+    .nav-links a { color: var(--text-inv); font-size: 0.86rem; text-decoration: none; padding: 6px 12px; border-radius: 6px; opacity: 0.7; transition: opacity 0.15s, background 0.15s; }
+    .nav-links a:hover { opacity: 1; background: rgba(255,255,255,0.06); }
+    .nav-cta { background: var(--gold); color: var(--navy); padding: 9px 22px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; text-decoration: none; white-space: nowrap; transition: background 0.15s, transform 0.1s; flex-shrink: 0; box-shadow: 0 2px 10px rgba(232,146,10,0.3); }
+    .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .nav-toggle { display: none; background: none; border: 1px solid var(--border-dk); color: var(--cream); font-size: 1.15rem; cursor: pointer; border-radius: 6px; padding: 0; margin-left: auto; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+
+    /* PAGE HEADER */
+    .page-header { background: var(--navy); padding: 110px 28px 56px; text-align: center; }
+    .page-header h1 { font-family: 'Crimson Pro', serif; font-size: 2.6rem; font-weight: 700; color: var(--cream); margin-bottom: 10px; }
+    .page-header p { font-size: 0.9rem; color: var(--text-inv); opacity: 0.5; }
+
+    /* CONTENT */
+    .legal-wrap { max-width: var(--max); margin: 0 auto; padding: 56px 28px 80px; }
+    .legal-toc { background: var(--cream-2); border: 1px solid var(--border); border-radius: var(--r); padding: 22px 28px; margin-bottom: 48px; }
+    .legal-toc h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; }
+    .legal-toc ol { padding-left: 18px; }
+    .legal-toc li { margin-bottom: 6px; }
+    .legal-toc a { font-size: 0.85rem; color: var(--gold-dim); text-decoration: none; }
+    .legal-toc a:hover { text-decoration: underline; }
+    .legal-section { margin-bottom: 44px; padding-bottom: 44px; border-bottom: 1px solid var(--border); }
+    .legal-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .legal-section h2 { font-family: 'Crimson Pro', serif; font-size: 1.45rem; font-weight: 700; color: var(--text); margin-bottom: 14px; padding-top: 8px; }
+    .legal-section p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.75; margin-bottom: 12px; }
+    .legal-section p:last-child { margin-bottom: 0; }
+    .legal-section ul { padding-left: 20px; margin-bottom: 12px; }
+    .legal-section li { font-size: 0.9rem; color: var(--text-mid); line-height: 1.75; margin-bottom: 4px; }
+    .legal-section a { color: var(--gold-dim); text-decoration: underline; }
+    .legal-note { background: var(--cream-2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+    .legal-note p { font-size: 0.87rem; color: var(--text-muted); margin: 0; line-height: 1.65; }
+    .legal-meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 36px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+    .legal-meta span { margin-right: 20px; }
+    .third-party-card { border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 12px 0; }
+    .third-party-card h4 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .third-party-card p { font-size: 0.85rem; color: var(--text-mid); margin: 0; }
+    .third-party-card a { color: var(--gold-dim); }
+
+    /* FOOTER */
+    footer { background: var(--navy); border-top: 1px solid var(--border-dk); padding: 52px 28px 28px; }
+    .foot-inner { max-width: 1160px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+    .foot-brand img { height: 52px; width: auto; display: block; margin-bottom: 8px; }
+    .foot-tag { font-size: 0.78rem; color: var(--text-inv); opacity: 0.38; }
+    .foot-links { display: flex; gap: 48px; flex-wrap: wrap; }
+    .foot-col h4 { font-size: 0.69rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--gold-dim); margin-bottom: 14px; }
+    .foot-col ul { list-style: none; }
+    .foot-col li { margin-bottom: 8px; }
+    .foot-col a { font-size: 0.82rem; color: var(--text-inv); opacity: 0.5; text-decoration: none; transition: opacity 0.15s; }
+    .foot-col a:hover { opacity: 1; }
+    .foot-bottom { max-width: 1160px; margin: 26px auto 0; padding-top: 22px; border-top: 1px solid var(--border-dk); display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: var(--text-inv); opacity: 0.32; flex-wrap: wrap; gap: 8px; }
+    .foot-bottom a { color: inherit; text-decoration: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) { .nav-links { display: none; } .nav-cta { display: none; } .nav-toggle { display: flex; } }
+    @media (max-width: 600px) { .nav-inner { padding: 0 16px; } .page-header { padding: 100px 20px 44px; } .page-header h1 { font-size: 2rem; } .legal-wrap { padding: 36px 20px 60px; } .foot-inner { flex-direction: column; gap: 28px; } .foot-links { gap: 28px; } .foot-bottom { flex-direction: column; text-align: center; } }
+    .nav.open .nav-links { display: flex; flex-direction: column; position: absolute; top: 62px; left: 0; right: 0; background: var(--navy-2); border-bottom: 1px solid var(--border-dk); padding: 12px 16px; gap: 2px; z-index: 999; }
+    .nav.open .nav-links a { padding: 13px 14px; opacity: 1; min-height: 44px; display: flex; align-items: center; }
+    @media (min-width: 961px) { .nav.open .nav-links { display: flex; flex-direction: row; position: static; background: none; border: none; padding: 0; gap: 6px; } .nav-cta { display: inline-block; } }
+  </style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="logo-banner.png" alt="ModelCollectr">
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/#screenshots">Screenshots</a></li>
+      <li><a href="/#pricing">Pricing</a></li>
+      <li><a href="/#faq">FAQ</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+    <a href="https://buy.stripe.com/eVqbJ12kyfY37Nu2py7N604" class="nav-cta" target="_blank" rel="noopener">Get Pro — £19.99/yr</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu">&#9776;</button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Privacy Policy</h1>
+  <p>How we collect, use, and protect your personal data</p>
+</div>
+
+<div class="legal-wrap">
+  <p class="legal-meta">
+    <span><strong>Version:</strong> 1.0</span>
+    <span><strong>Effective:</strong> May 2026</span>
+    <span><strong>Operator:</strong> Chris Baldwin trading as CBTech Solutions</span>
+  </p>
+
+  <div class="legal-toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#p1">Who We Are</a></li>
+      <li><a href="#p2">What Data We Collect</a></li>
+      <li><a href="#p3">What We Do Not Collect</a></li>
+      <li><a href="#p4">How We Use Your Data</a></li>
+      <li><a href="#p5">Third-Party Services</a></li>
+      <li><a href="#p6">Data Retention</a></li>
+      <li><a href="#p7">Your Rights (UK GDPR)</a></li>
+      <li><a href="#p8">Security</a></li>
+      <li><a href="#p9">Changes to This Policy</a></li>
+      <li><a href="#p10">Contact</a></li>
+    </ol>
+  </div>
+
+  <div class="legal-section" id="p1">
+    <h2>1. Who We Are</h2>
+    <p>CBTech Solutions is a sole trader business operated by <strong>Chris Baldwin</strong>, based in England, United Kingdom. We develop and operate the ModelCollectr desktop application.</p>
+    <p>We are committed to protecting your personal data and processing it in accordance with the <strong>UK General Data Protection Regulation (UK GDPR)</strong> and the <strong>Data Protection Act 2018</strong>.</p>
+    <p>Contact: <a href="mailto:chrisbaldwin984@gmail.com">chrisbaldwin984@gmail.com</a> | <a href="https://modelcollectr.co.uk">modelcollectr.co.uk</a></p>
+  </div>
+
+  <div class="legal-section" id="p2">
+    <h2>2. What Data We Collect</h2>
+    <ul>
+      <li><strong>Email address</strong> — collected when you purchase a licence or contact us for support. Used for licence management and support communications only.</li>
+      <li><strong>Licence data</strong> — your licence key, activation date, and licence status. Stored locally on your device and on our licence validation server to verify Pro access.</li>
+      <li><strong>Payment confirmation</strong> — we receive a transaction reference and confirmation of payment status from Stripe. We do not receive your full card details.</li>
+    </ul>
+    <div class="legal-note">
+      <p><strong>Your collection data stays on your device.</strong> All catalogue entries, images, and preferences you create in the Application are stored exclusively on your local device. We have no access to your collection data.</p>
+    </div>
+  </div>
+
+  <div class="legal-section" id="p3">
+    <h2>3. What We Do Not Collect</h2>
+    <ul>
+      <li>Full payment card details — these are handled entirely by Stripe</li>
+      <li>Your collection catalogue data</li>
+      <li>Browsing history or third-party tracking data</li>
+      <li>Sensitive personal data (health, financial, biometric)</li>
+      <li>Data from children — the Application is not directed at children under 13</li>
+    </ul>
+  </div>
+
+  <div class="legal-section" id="p4">
+    <h2>4. How We Use Your Data</h2>
+    <p>We use your personal data solely to:</p>
+    <ul>
+      <li>Manage your licence and verify access to Pro features</li>
+      <li>Respond to support requests</li>
+      <li>Send important notices about your licence or the Application (not marketing, unless you explicitly opt in)</li>
+      <li>Comply with applicable legal obligations</li>
+    </ul>
+    <p>We do not sell, rent, or share your personal data with third parties for marketing purposes.</p>
+  </div>
+
+  <div class="legal-section" id="p5">
+    <h2>5. Third-Party Services</h2>
+    <p>The following third parties may process data in connection with your use of ModelCollectr:</p>
+
+    <div class="third-party-card">
+      <h4>Stripe, Inc.</h4>
+      <p>Handles all payment processing. Stripe processes your payment card details securely and in accordance with PCI DSS standards. We do not receive your full card details. <a href="https://stripe.com/gb/privacy" target="_blank" rel="noopener">View Stripe's Privacy Policy →</a></p>
+    </div>
+
+    <div class="third-party-card">
+      <h4>Microsoft Corporation</h4>
+      <p>If you download the Application via the Microsoft Store, Microsoft's privacy practices apply to that transaction and to any data collected by the Store. <a href="https://privacy.microsoft.com" target="_blank" rel="noopener">View Microsoft's Privacy Statement →</a></p>
+    </div>
+
+    <div class="third-party-card">
+      <h4>Google Fonts</h4>
+      <p>Our website loads fonts from Google Fonts. This may result in your IP address being sent to Google's servers. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">View Google's Privacy Policy →</a></p>
+    </div>
+  </div>
+
+  <div class="legal-section" id="p6">
+    <h2>6. Data Retention</h2>
+    <p>We retain your email address and licence data for as long as your licence is active, and for up to <strong>6 years</strong> thereafter for legal and accounting purposes in compliance with UK requirements.</p>
+    <p>You may request deletion of your data at any time (subject to legal retention obligations) by contacting us at <a href="mailto:chrisbaldwin984@gmail.com">chrisbaldwin984@gmail.com</a>.</p>
+  </div>
+
+  <div class="legal-section" id="p7">
+    <h2>7. Your Rights (UK GDPR)</h2>
+    <p>Under UK GDPR, you have the right to:</p>
+    <ul>
+      <li><strong>Access</strong> — request a copy of the personal data we hold about you</li>
+      <li><strong>Rectification</strong> — request correction of inaccurate or incomplete data</li>
+      <li><strong>Erasure</strong> — request deletion of your personal data, subject to legal obligations</li>
+      <li><strong>Restriction</strong> — request that we restrict processing of your data</li>
+      <li><strong>Portability</strong> — request your data in a structured, machine-readable format</li>
+      <li><strong>Objection</strong> — object to processing of your personal data</li>
+    </ul>
+    <p>To exercise any of these rights, contact us at <a href="mailto:chrisbaldwin984@gmail.com">chrisbaldwin984@gmail.com</a>. We will respond within 30 days.</p>
+    <p>You also have the right to lodge a complaint with the <strong>Information Commissioner's Office (ICO)</strong> at <a href="https://ico.org.uk" target="_blank" rel="noopener">ico.org.uk</a> if you believe your data has been processed unlawfully.</p>
+  </div>
+
+  <div class="legal-section" id="p8">
+    <h2>8. Security</h2>
+    <p>We take reasonable technical and organisational measures to protect the personal data we hold. Licence data in transit is protected by HTTPS/TLS encryption.</p>
+    <p>However, no method of transmission over the internet is completely secure. We cannot guarantee absolute security and cannot be responsible for breaches caused by factors outside our reasonable control.</p>
+  </div>
+
+  <div class="legal-section" id="p9">
+    <h2>9. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. Updates will be published on this page with a revised effective date. Where changes are material, we will notify you within the Application or by email where possible.</p>
+    <p>Continued use of the Application after changes are published constitutes acceptance of the updated policy.</p>
+  </div>
+
+  <div class="legal-section" id="p10">
+    <h2>10. Contact</h2>
+    <p>For any privacy-related questions or to exercise your data rights:</p>
+    <p>
+      <strong>CBTech Solutions</strong><br>
+      Email: <a href="mailto:chrisbaldwin984@gmail.com">chrisbaldwin984@gmail.com</a><br>
+      Website: <a href="https://modelcollectr.co.uk">modelcollectr.co.uk</a>
+    </p>
+    <p>We aim to respond to all requests within <strong>30 days</strong>.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <div class="foot-brand"><img src="logo-badge.png" alt="ModelCollectr"></div>
+      <div class="foot-tag">The professional catalogue app for model collectors.</div>
+    </div>
+    <div class="foot-links">
+      <div class="foot-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="/#features">Features</a></li>
+          <li><a href="/#screenshots">Screenshots</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/download">Download</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/#contact">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/terms">Terms &amp; Conditions</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>CBTech</h4>
+        <ul>
+          <li><a href="https://cbtech.dev" target="_blank" rel="noopener">cbtech.dev</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>&copy; 2026 ModelCollectr. All rights reserved.</span>
+    <span>Built by <a href="https://cbtech.dev" target="_blank" rel="noopener">CBTech Solutions</a></span>
+  </div>
+</footer>
+
+<script>
+  var nav = document.getElementById('nav');
+  document.getElementById('nav-toggle').addEventListener('click', function() { nav.classList.toggle('open'); });
+  window.addEventListener('scroll', function() { nav.classList.toggle('scrolled', window.scrollY > 20); });
+</script>
+</body>
+</html>
