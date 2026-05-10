@@ -13,15 +13,18 @@
     :root {
       --navy:       #1c1f26;
       --navy-2:     #252a34;
+      --navy-3:     #2d3340;
       --gold:       #e8920a;
       --gold-light: #f5b830;
       --gold-glow:  rgba(232,146,10,0.13);
       --cream:      #ede9e0;
       --cream-2:    #f8f5ef;
-      --white:      #ffffff;
-      --text:       #1e1a14;
       --text-inv:   #ddd5c5;
+      --text-muted: rgba(221,213,197,0.5);
+      --text-dim:   rgba(221,213,197,0.35);
       --border-dk:  rgba(255,255,255,0.08);
+      --green:      #2d9d5f;
+      --green-bg:   rgba(26,92,53,0.25);
     }
     html, body { height: 100%; }
     body {
@@ -39,115 +42,109 @@
       background: var(--navy-2);
       border: 1px solid var(--border-dk);
       border-radius: 20px;
-      padding: 56px 48px;
-      max-width: 520px;
+      padding: 48px 44px;
+      max-width: 540px;
       width: 100%;
       text-align: center;
       box-shadow: 0 24px 64px rgba(0,0,0,0.4);
     }
 
-    .logo { margin-bottom: 28px; }
-    .logo img { height: 64px; width: auto; }
+    .logo { margin-bottom: 24px; }
+    .logo img { height: 60px; width: auto; }
 
     h1 {
       font-family: 'Crimson Pro', serif;
-      font-size: 2rem;
+      font-size: 1.9rem;
       font-weight: 700;
       color: var(--cream);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       line-height: 1.15;
     }
-
     .sub {
-      font-size: 0.93rem;
-      color: rgba(221,213,197,0.6);
-      margin-bottom: 40px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 36px;
     }
 
     /* Spinner */
-    .spinner-wrap {
+    .spinner-wrap { display:flex; flex-direction:column; align-items:center; gap:16px; margin-bottom:32px; }
+    .spinner { width:44px; height:44px; border:3px solid rgba(232,146,10,0.15); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .status { font-size:0.92rem; color:var(--gold-light); font-weight:600; }
+
+    /* Steps */
+    .steps { display:flex; flex-direction:column; gap:14px; margin-bottom:28px; text-align:left; }
+    .step {
+      background: var(--navy-3);
+      border: 1px solid var(--border-dk);
+      border-radius: 12px;
+      padding: 16px 18px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 20px;
-      margin-bottom: 40px;
+      gap: 16px;
     }
-    .spinner {
-      width: 48px; height: 48px;
-      border: 3px solid rgba(232,146,10,0.15);
-      border-top-color: var(--gold);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .status {
-      font-size: 0.95rem;
-      color: var(--gold-light);
-      font-weight: 600;
-    }
-
-    /* Done state */
-    .done-icon {
-      width: 56px; height: 56px;
-      background: rgba(26,92,53,0.3);
-      border: 2px solid #2d9d5f;
-      border-radius: 50%;
+    .step.done { border-color: var(--green); background: var(--green-bg); }
+    .step-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--gold-glow); border: 1px solid var(--gold);
+      color: var(--gold-light); font-weight: 700; font-size: 0.9rem;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
-      margin: 0 auto 16px;
+      flex-shrink: 0;
     }
-
-    /* Error state */
-    .err-icon {
-      width: 56px; height: 56px;
-      background: rgba(180,30,30,0.2);
-      border: 2px solid #c0392b;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
-      margin: 0 auto 16px;
+    .step.done .step-num { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+    .step-body { flex: 1; }
+    .step-title { font-weight: 700; font-size: 0.92rem; color: var(--cream); margin-bottom: 3px; }
+    .step-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+    .step-badge {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+      padding: 2px 8px; border-radius: 4px;
+      background: rgba(232,146,10,0.15); color: var(--gold-light);
+      border: 1px solid rgba(232,146,10,0.3);
     }
+    .step-badge.msix { background:rgba(45,157,95,0.15); color:#5dcc8f; border-color:rgba(45,157,95,0.3); }
 
+    /* Download buttons */
+    .dl-btns { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
     .btn {
-      display: inline-flex;
-      align-items: center;
+      display: inline-flex; align-items: center; justify-content: center;
       gap: 8px;
-      background: var(--gold);
-      color: var(--navy);
       font-family: 'Instrument Sans', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      text-decoration: none;
-      padding: 14px 30px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
+      font-weight: 700; font-size: 0.9rem;
+      text-decoration: none; cursor: pointer;
+      padding: 13px 24px; border-radius: 10px; border: none;
       transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary {
+      background: var(--gold); color: var(--navy);
       box-shadow: 0 4px 18px rgba(232,146,10,0.3);
-      margin-top: 4px;
     }
-    .btn:hover { background: var(--gold-light); transform: translateY(-1px); }
-    .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-    .meta {
-      font-size: 0.78rem;
-      color: rgba(221,213,197,0.35);
-      margin-top: 24px;
-      line-height: 1.6;
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent; color: var(--text-inv);
+      border: 1px solid rgba(255,255,255,0.12);
     }
-    .meta a { color: rgba(221,213,197,0.5); text-decoration: none; }
-    .meta a:hover { color: var(--gold-light); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.05); }
+    .btn svg { width:16px; height:16px; flex-shrink:0; }
 
-    .back {
-      margin-top: 32px;
-      font-size: 0.82rem;
-      color: rgba(221,213,197,0.4);
+    .note {
+      font-size: 0.78rem; color: var(--text-muted);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-dk);
+      border-radius: 8px; padding: 12px 14px;
+      line-height: 1.6; text-align: left;
+      margin-bottom: 20px;
     }
-    .back a { color: rgba(221,213,197,0.5); text-decoration: none; }
-    .back a:hover { color: var(--gold-light); }
+    .note strong { color: var(--gold-light); }
 
-    /* Hidden initially */
-    #state-loading, #state-done, #state-error, #state-soon { display: none; }
+    .meta { font-size:0.75rem; color:var(--text-dim); line-height:1.6; }
+    .back { margin-top:28px; font-size:0.82rem; color:var(--text-dim); }
+    .back a { color:var(--text-muted); text-decoration:none; }
+    .back a:hover { color:var(--gold-light); }
+
+    /* Error */
+    .err-icon { width:52px; height:52px; background:rgba(180,30,30,0.2); border:2px solid #c0392b; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin:0 auto 14px; }
+
+    #state-loading, #state-done, #state-error, #state-soon { display:none; }
   </style>
 </head>
 <body>
@@ -158,7 +155,7 @@
     <h1>Download for Windows</h1>
     <p class="sub">ModelCollectr desktop app — works fully offline</p>
 
-    <!-- Loading state -->
+    <!-- Loading -->
     <div id="state-loading">
       <div class="spinner-wrap">
         <div class="spinner"></div>
@@ -166,40 +163,60 @@
       </div>
     </div>
 
-    <!-- Download starting state -->
+    <!-- Ready to download -->
     <div id="state-done">
-      <div class="done-icon">↓</div>
-      <div class="status" style="margin-bottom:8px;color:#2d9d5f">Your download is starting…</div>
-      <p style="font-size:0.85rem;color:rgba(221,213,197,0.5);margin-bottom:24px;">
-        If it doesn't start automatically, use the button below.
-      </p>
-      <a id="dl-link" href="#" class="btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        Download .exe
-      </a>
+
+      <div class="steps">
+        <div class="step" id="step1">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Install the security certificate <span class="step-badge">.cer</span></div>
+            <div class="step-desc">Double-click the downloaded <strong>.cer</strong> file → Install Certificate → Local Machine → Trusted Root Certification Authorities. You only need to do this once.</div>
+          </div>
+        </div>
+        <div class="step" id="step2">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Install ModelCollectr <span class="step-badge msix">.msix</span></div>
+            <div class="step-desc">Double-click the downloaded <strong>.msix</strong> file and follow the install prompt. The app will appear in your Start Menu.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>First time only:</strong> The certificate tells Windows this app is from a trusted source. Once installed, future updates will install without this step.
+      </div>
+
+      <div class="dl-btns">
+        <a id="dl-cert" href="#" class="btn btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Certificate (.cer)
+        </a>
+        <a id="dl-msix" href="#" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download ModelCollectr (.msix)
+        </a>
+      </div>
+
       <div id="dl-meta" class="meta"></div>
     </div>
 
-    <!-- Error state -->
+    <!-- Error -->
     <div id="state-error">
       <div class="err-icon">!</div>
       <div class="status" style="color:#e05555;margin-bottom:8px">Couldn't fetch download</div>
-      <p style="font-size:0.85rem;color:rgba(221,213,197,0.5);margin-bottom:24px;">
-        GitHub may be temporarily unavailable. Try again shortly.
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:24px;">
+        Check back shortly or try again.
       </p>
-      <button class="btn" onclick="init()">Try again</button>
+      <button class="btn btn-primary" onclick="init()">Try again</button>
     </div>
 
-    <!-- Coming soon state (no release yet) -->
+    <!-- Coming soon -->
     <div id="state-soon">
       <div style="font-size:2rem;margin-bottom:12px">🚀</div>
       <div class="status" style="margin-bottom:8px;color:var(--gold-light)">Coming soon</div>
-      <p style="font-size:0.85rem;color:rgba(221,213,197,0.5)">
-        The Windows installer is being prepared. Check back shortly.
+      <p style="font-size:0.85rem;color:var(--text-muted);">
+        The first release is being prepared. Check back shortly.
       </p>
     </div>
 
@@ -207,7 +224,6 @@
   </div>
 
   <script>
-    // Use /releases (list) not /releases/latest — latest skips pre-releases
     const API = 'https://api.github.com/repos/ChrisBaldwin984/modelcollectr/releases?per_page=1';
 
     function show(id) {
@@ -225,22 +241,26 @@
         const releases = await res.json();
         if (!releases.length) { show('state-soon'); return; }
         const release = releases[0];
-        const exe = release.assets?.find(a => a.name.toLowerCase().endsWith('.exe'));
-        if (!exe) { show('state-soon'); return; }
 
-        // Show done state, populate link
-        document.getElementById('dl-link').href = exe.browser_download_url;
+        const msix = release.assets?.find(a => a.name.toLowerCase().endsWith('.msix'));
+        const cer  = release.assets?.find(a => a.name.toLowerCase().endsWith('.cer'));
 
-        const mb = (exe.size / 1024 / 1024).toFixed(0);
+        if (!msix) { show('state-soon'); return; }
+
+        document.getElementById('dl-msix').href = msix.browser_download_url;
+        if (cer) document.getElementById('dl-cert').href = cer.browser_download_url;
+        else document.getElementById('dl-cert').style.display = 'none';
+
+        const mb   = (msix.size / 1024 / 1024).toFixed(0);
         const date = new Date(release.published_at).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
         document.getElementById('dl-meta').innerHTML =
-          `${release.name} &nbsp;·&nbsp; ${mb} MB &nbsp;·&nbsp; Released ${date}<br>` +
-          `<a href="https://github.com/ChrisBaldwin984/modelcollectr/releases" target="_blank" rel="noopener">View all releases on GitHub</a>`;
+          `${release.name} &nbsp;·&nbsp; ${mb} MB &nbsp;·&nbsp; Released ${date}`;
 
         show('state-done');
 
-        // Auto-start download after a brief pause
-        setTimeout(() => { window.location.href = exe.browser_download_url; }, 800);
+        // Auto-trigger both downloads with a short gap
+        setTimeout(() => { window.location.href = msix.browser_download_url; }, 600);
+        if (cer) setTimeout(() => { window.location.href = cer.browser_download_url; }, 1400);
 
       } catch (e) {
         console.error(e);
