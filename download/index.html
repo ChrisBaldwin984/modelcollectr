@@ -224,7 +224,7 @@
   </div>
 
   <script>
-    const API = 'https://api.github.com/repos/ChrisBaldwin984/modelcollectr/releases?per_page=1';
+    const API = 'https://api.github.com/repos/ChrisBaldwin984/modelcollectr/releases?per_page=5';
 
     function show(id) {
       ['state-loading','state-done','state-error','state-soon'].forEach(s => {
@@ -240,12 +240,14 @@
 
         const releases = await res.json();
         if (!releases.length) { show('state-soon'); return; }
-        const release = releases[0];
 
-        const msix = release.assets?.find(a => a.name.toLowerCase().endsWith('.msix'));
-        const cer  = release.assets?.find(a => a.name.toLowerCase().endsWith('.cer'));
-
-        if (!msix) { show('state-soon'); return; }
+        // Find the most recent release that actually has an .msix asset
+        let release = null, msix = null, cer = null;
+        for (const r of releases) {
+          const m = r.assets?.find(a => a.name.toLowerCase().endsWith('.msix'));
+          if (m) { release = r; msix = m; cer = r.assets?.find(a => a.name.toLowerCase().endsWith('.cer')); break; }
+        }
+        if (!release) { show('state-soon'); return; }
 
         document.getElementById('dl-msix').href = msix.browser_download_url;
         if (cer) document.getElementById('dl-cert').href = cer.browser_download_url;
