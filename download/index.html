@@ -260,10 +260,6 @@
 
         show('state-done');
 
-        // Auto-trigger both downloads with a short gap
-        setTimeout(() => { window.location.href = msix.browser_download_url; }, 600);
-        if (cer) setTimeout(() => { window.location.href = cer.browser_download_url; }, 1400);
-
       } catch (e) {
         console.error(e);
         show('state-error');
