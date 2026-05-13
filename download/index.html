@@ -170,8 +170,8 @@
         <div class="step" id="step1">
           <div class="step-num">1</div>
           <div class="step-body">
-            <div class="step-title">Install the security certificate <span class="step-badge">.cer</span></div>
-            <div class="step-desc">Double-click the downloaded <strong>.cer</strong> file → Install Certificate → Local Machine → Trusted Root Certification Authorities. You only need to do this once.</div>
+            <div class="step-title">Run the certificate installer <span class="step-badge">.bat</span></div>
+            <div class="step-desc">Download and double-click <strong>InstallCert.bat</strong>, then click <strong>Yes</strong> on the UAC prompt. This trusts the app's signature — you only need to do this once.</div>
           </div>
         </div>
         <div class="step" id="step2">
@@ -188,9 +188,9 @@
       </div>
 
       <div class="dl-btns">
-        <a id="dl-cert" href="#" class="btn btn-secondary">
+        <a id="dl-bat" href="#" class="btn btn-secondary">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download Certificate (.cer)
+          Download Cert Installer (.bat)
         </a>
         <a id="dl-msix" href="#" class="btn btn-primary">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -242,16 +242,16 @@
         if (!releases.length) { show('state-soon'); return; }
 
         // Find the most recent release that actually has an .msix asset
-        let release = null, msix = null, cer = null;
+        let release = null, msix = null, bat = null;
         for (const r of releases) {
           const m = r.assets?.find(a => a.name.toLowerCase().endsWith('.msix'));
-          if (m) { release = r; msix = m; cer = r.assets?.find(a => a.name.toLowerCase().endsWith('.cer')); break; }
+          if (m) { release = r; msix = m; bat = r.assets?.find(a => a.name.toLowerCase().endsWith('.bat')); break; }
         }
         if (!release) { show('state-soon'); return; }
 
         document.getElementById('dl-msix').href = msix.browser_download_url;
-        if (cer) document.getElementById('dl-cert').href = cer.browser_download_url;
-        else document.getElementById('dl-cert').style.display = 'none';
+        if (bat) document.getElementById('dl-bat').href = bat.browser_download_url;
+        else document.getElementById('dl-bat').style.display = 'none';
 
         const mb   = (msix.size / 1024 / 1024).toFixed(0);
         const date = new Date(release.published_at).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
