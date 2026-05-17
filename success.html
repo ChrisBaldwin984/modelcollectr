@@ -43,6 +43,7 @@
       animation: spin 0.8s linear infinite; margin: 0 auto 20px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation: none; border-top-color: var(--gold); opacity: 0.7; } }
     .state-loading h2 { color: var(--cream); font-size: 1.1rem; margin-bottom: 8px; }
     .state-loading p { color: var(--text-muted); font-size: 0.87rem; }
 
@@ -51,7 +52,7 @@
     .check-circle {
       width: 52px; height: 52px; background: var(--green-bg);
       border-radius: 50%; display: flex; align-items: center;
-      justify-content: center; margin: 0 auto 20px; font-size: 1.5rem;
+      justify-content: center; margin: 0 auto 20px;
     }
     .state-success h2 { color: var(--cream); font-size: 1.2rem; text-align: center; margin-bottom: 8px; }
     .state-success .sub { color: var(--text-muted); font-size: 0.87rem; text-align: center; margin-bottom: 28px; line-height: 1.6; }
@@ -73,6 +74,7 @@
       cursor: pointer; transition: background 0.15s;
     }
     .copy-btn:hover { background: var(--gold-light); }
+    .copy-btn:focus-visible { outline: 3px solid var(--gold-light); outline-offset: 3px; }
     .copy-btn.copied { background: var(--green); color: white; }
 
     .steps {
@@ -112,8 +114,10 @@
       </div>
 
       <!-- Success -->
-      <div class="state-success" id="state-success">
-        <div class="check-circle">&#10003;</div>
+      <div class="state-success" id="state-success" aria-live="polite">
+        <div class="check-circle" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a5c35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
         <h2>You&rsquo;re all set!</h2>
         <p class="sub">Your ModelCollectr Pro subscription is active. Copy your licence key below — we&rsquo;ve also emailed it to you.</p>
         <div class="key-box">
