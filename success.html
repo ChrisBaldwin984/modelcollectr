@@ -28,11 +28,13 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.25);
     }
     .card-header {
-      padding: 28px 36px 20px;
+      padding: 24px 36px 20px;
       border-bottom: 2px solid var(--gold);
     }
-    .logo { font-family: 'Crimson Pro', serif; font-size: 1.5rem; font-weight: 700; color: var(--gold-light); }
-    .logo-sub { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+    .logo { display: flex; align-items: center; gap: 14px; }
+    .logo img { height: 52px; width: auto; display: block; }
+    .logo-text { font-family: 'Crimson Pro', serif; font-size: 1.4rem; font-weight: 700; color: var(--gold-light); }
+    .logo-sub { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
     .card-body { padding: 32px 36px; }
 
     /* Loading state */
@@ -101,8 +103,13 @@
 
   <div class="card">
     <div class="card-header">
-      <div class="logo">ModelCollectr</div>
-      <div class="logo-sub">Pro — Purchase Confirmation</div>
+      <div class="logo">
+        <img src="logo-badge.png" alt="ModelCollectr">
+        <div>
+          <div class="logo-text">ModelCollectr</div>
+          <div class="logo-sub">Pro — Purchase Confirmation</div>
+        </div>
+      </div>
     </div>
     <div class="card-body">
 
