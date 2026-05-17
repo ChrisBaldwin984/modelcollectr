@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModelCollectr Ops — Customer Cancellation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; }
+    .nav { background: #1c1f26; padding: 14px 32px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e8920a; flex-wrap: wrap; }
+    .nav a { color: #f5b830; font-weight: 700; font-size: 0.92rem; text-decoration: none; } .nav a:hover { color: #ffc93a; }
+    .nav-sep { color: #4a4235; } .nav-cur { color: #8a8070; font-size: 0.85rem; }
+    .page-hdr { background: #1c1f26; padding: 32px; border-bottom: 1px solid #252a34; }
+    .page-hdr-inner { max-width: 860px; margin: 0 auto; }
+    .page-cat { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 12px; background: #eeecff; color: #5050d0; }
+    .page-title { font-size: 1.55rem; font-weight: 700; color: #ede9e0; margin-bottom: 10px; }
+    .page-desc { color: #8a8070; font-size: 0.88rem; line-height: 1.65; max-width: 620px; }
+    .actors { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .actor-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 60px; }
+    .flow-label { font-size: 1rem; font-weight: 700; color: #1e1a14; margin-bottom: 6px; }
+    .flow-hint { font-size: 0.8rem; color: #8a8070; margin-bottom: 28px; }
+    .flow { position: relative; padding-left: 58px; }
+    .flow::before { content: ''; position: absolute; left: 20px; top: 10px; bottom: 10px; width: 2px; background: linear-gradient(to bottom, #5b8def, #635bff, #e8920a, #4caf7d); opacity: 0.4; border-radius: 2px; }
+    .step { position: relative; margin-bottom: 18px; }
+    .step-circle { position: absolute; left: -58px; top: 0; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 2px solid; background: #f4f1eb; z-index: 1; }
+    .step-card { background: white; border-radius: 10px; padding: 14px 18px; border-left: 4px solid; cursor: pointer; transition: box-shadow 0.15s; user-select: none; }
+    .step-card:hover { box-shadow: 0 3px 16px rgba(0,0,0,0.09); }
+    .actor-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 9px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.07em; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 7px; }
+    .step-title { font-weight: 600; color: #1e1a14; font-size: 0.93rem; margin-bottom: 3px; }
+    .step-desc { font-size: 0.84rem; color: #4a4235; line-height: 1.55; }
+    .expand-hint { float: right; font-size: 0.7rem; color: #b0a898; transition: color 0.15s; }
+    .step-card:hover .expand-hint { color: #e8920a; }
+    .step-detail { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
+    .step-detail-inner { margin-top: 12px; padding: 12px 16px; background: #f4f1eb; border-radius: 7px; font-size: 0.82rem; line-height: 1.65; color: #2a2015; }
+    .step-detail-inner code { font-family: 'Courier New', monospace; background: #1c1f26; color: #f5b830; padding: 1px 5px; border-radius: 3px; font-size: 0.78rem; }
+    .step-detail-inner pre { font-family: 'Courier New', monospace; background: #1c1f26; color: #ede9e0; padding: 12px 14px; border-radius: 7px; font-size: 0.76rem; line-height: 1.65; overflow-x: auto; margin-top: 8px; white-space: pre-wrap; }
+    .step-detail-inner ul { padding-left: 18px; margin-top: 6px; } .step-detail-inner li { margin-bottom: 4px; }
+    .actor-customer .step-circle { color: #5b8def; border-color: #5b8def; } .actor-customer .step-card { border-left-color: #5b8def; } .actor-customer .actor-badge { background: #e8f0fd; color: #3a6abf; }
+    .actor-stripe .step-circle { color: #635bff; border-color: #635bff; } .actor-stripe .step-card { border-left-color: #635bff; } .actor-stripe .actor-badge { background: #eeecff; color: #5050d0; }
+    .actor-worker .step-circle { color: #e8920a; border-color: #e8920a; } .actor-worker .step-card { border-left-color: #e8920a; } .actor-worker .actor-badge { background: #fef3e2; color: #a06000; }
+    .actor-db .step-circle { color: #4caf7d; border-color: #4caf7d; } .actor-db .step-card { border-left-color: #4caf7d; } .actor-db .actor-badge { background: #e8f5ee; color: #2a7a4a; }
+    .actor-danger .step-circle { color: #c0392b; border-color: #c0392b; } .actor-danger .step-card { border-left-color: #c0392b; } .actor-danger .actor-badge { background: #f8d7da; color: #9a1a1a; }
+    .state-card { background: white; border-radius: 12px; padding: 24px; margin-top: 44px; }
+    .state-title { font-size: 0.95rem; font-weight: 700; color: #1e1a14; margin-bottom: 16px; }
+    .state-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .state-table th { text-align: left; padding: 8px 12px; background: #f4f1eb; color: #4a4235; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .state-table td { padding: 10px 12px; border-bottom: 1px solid #ede9e0; vertical-align: top; }
+    .state-table tr:last-child td { border-bottom: none; }
+    .sys-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 0.74rem; font-weight: 600; }
+    .tip { background: #e8f5ee; border-left: 3px solid #4caf7d; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 12px; font-size: 0.84rem; color: #1a4030; line-height: 1.5; }
+    .tip strong { display: block; margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: #e8920a; font-weight: 600; font-size: 0.85rem; text-decoration: none; margin-top: 36px; }
+    .back-link svg { width: 16px; height: 16px; } .back-link:hover { color: #c07000; }
+    @media (max-width: 600px) { .nav, .page-hdr { padding-left: 16px; padding-right: 16px; } .wrap { padding: 24px 16px 48px; } .flow { padding-left: 48px; } .step-circle { left: -48px; width: 34px; height: 34px; font-size: 0.76rem; } .page-title { font-size: 1.25rem; } }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html">Ops Hub</a><span class="nav-sep">/</span><a href="workflow.html">Workflow</a><span class="nav-sep">/</span><span class="nav-cur">Customer Cancellation</span>
+</nav>
+<div class="page-hdr">
+  <div class="page-hdr-inner">
+    <span class="page-cat">Billing</span>
+    <div class="page-title">Customer Cancellation</div>
+    <div class="page-desc">Customer decides to cancel their subscription. Stripe lets them keep access until the end of the billing period they've already paid for, then the key is revoked automatically. No refund is involved — they paid for the year.</div>
+    <div class="actors">
+      <span class="actor-chip" style="background:#e8f0fd;color:#3a6abf">● Customer</span>
+      <span class="actor-chip" style="background:#eeecff;color:#5050d0">● Stripe</span>
+      <span class="actor-chip" style="background:#fef3e2;color:#a06000">● Cloudflare Worker</span>
+      <span class="actor-chip" style="background:#e8f5ee;color:#2a7a4a">● D1 Database</span>
+    </div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="flow-label">Step-by-Step Flow</div>
+  <div class="flow-hint">6 steps. The customer retains access until their paid period ends. Click any step for detail.</div>
+  <div class="flow">
+
+    <div class="step actor-customer">
+      <div class="step-circle">1</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div><span class="expand-hint"></span>
+        <div class="step-title">Customer requests cancellation</div>
+        <div class="step-desc">Customer either contacts you directly (email support) or uses the Stripe customer portal link to cancel themselves.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          Two ways this can happen:
+          <ul>
+            <li><strong>Self-serve:</strong> Customer visits the Stripe customer portal (you can give them the URL from Stripe Dashboard → Customer → "Send customer portal link"). They cancel there directly.</li>
+            <li><strong>Via you:</strong> Customer emails asking to cancel. You go to Stripe Dashboard → Subscriptions → find their subscription → Cancel.</li>
+          </ul>
+          In both cases, Stripe gives the option to cancel "immediately" or "at period end". Always choose <strong>at period end</strong> unless it's a refund situation.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">2</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div><span class="expand-hint"></span>
+        <div class="step-title">Stripe marks subscription cancel_at_period_end = true</div>
+        <div class="step-desc">The subscription doesn't end immediately. Stripe sets a flag that means "cancel when the current period expires". The customer keeps their access.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          At this point, the subscription object has:
+          <pre>{
+  "status": "active",
+  "cancel_at_period_end": true,
+  "cancel_at": 1748649600,
+  "current_period_end": 1748649600
+}</pre>
+          A <code>customer.subscription.updated</code> webhook fires to tell the Worker about this change, but since <code>status</code> is still <code>active</code>, the Worker keeps the licence active in D1.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">3</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div><span class="expand-hint"></span>
+        <div class="step-title">Customer retains Pro access until period end</div>
+        <div class="step-desc">The licence is still 'active' in D1. The app continues working normally. The customer gets everything they paid for until the renewal date.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          During this period, <code>POST /license/verify</code> still returns <code>{"valid": true, "status": "active"}</code>. Nothing changes for the customer's experience until the period end date.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">4</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div><span class="expand-hint"></span>
+        <div class="step-title">Period end arrives — Stripe deletes the subscription</div>
+        <div class="step-desc">At the exact moment current_period_end is reached, Stripe terminates the subscription and fires the deleted event.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>{
+  "type": "customer.subscription.deleted",
+  "data": {
+    "object": {
+      "id": "sub_1ABC...",
+      "status": "canceled",
+      "ended_at": 1748649600
+    }
+  }
+}</pre>
+          This event is the same one triggered by a final payment failure — the Worker handles it identically.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-db">
+      <div class="step-circle">5</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● D1 Database</div><span class="expand-hint"></span>
+        <div class="step-title">Worker revokes the licence</div>
+        <div class="step-desc">The Worker updates the licence status to 'revoked' with a note. This happens automatically — no admin action needed.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>UPDATE licenses
+SET status = 'revoked',
+    notes = 'Subscription cancelled by Stripe event'
+WHERE stripe_subscription_id = 'sub_1ABC...'</pre>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-danger">
+      <div class="step-circle">6</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer App</div><span class="expand-hint"></span>
+        <div class="step-title">Customer's next check-in shows access has ended</div>
+        <div class="step-desc">On the next app startup after the period end date, /license/verify returns {valid: false, status: 'revoked'}. Pro features are locked.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>{"valid": false, "status": "revoked"}</pre>
+          The app should show a friendly message: "Your ModelCollectr Pro subscription has ended. Visit modelcollectr.co.uk to resubscribe." The customer's key won't work again unless you manually restore it in the admin dashboard (which would only make sense if they resubscribed through another route).
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="state-card">
+    <div class="state-title">State After This Scenario</div>
+    <table class="state-table">
+      <thead><tr><th>System</th><th>Final state</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sys-badge" style="background:#eeecff;color:#5050d0">Stripe</span></td><td>Subscription status: canceled. No future invoices. Customer record remains.</td></tr>
+        <tr><td><span class="sys-badge" style="background:#e8f5ee;color:#2a7a4a">D1 Database</span></td><td>Licence status: revoked. Notes: "Subscription cancelled by Stripe event"</td></tr>
+        <tr><td><span class="sys-badge" style="background:#e8f0fd;color:#3a6abf">Customer App</span></td><td>Pro locked. Key invalid. Sees "subscription ended" message.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip"><strong>Customer changed their mind?</strong>If they want to come back, they need to go through the full purchase flow again — this creates a new subscription and a new licence key. The old key stays revoked. See the Re-subscription scenario for the exact flow.</div>
+
+  <a class="back-link" href="workflow.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Workflow Overview</a>
+</div>
+<script>
+  document.querySelectorAll('.step-card').forEach(card => {
+    card.addEventListener('click', () => { const o = card.classList.contains('open'); card.classList.toggle('open', !o); card.setAttribute('aria-expanded', !o); const d = card.querySelector('.step-detail'); d.style.maxHeight = !o ? d.scrollHeight + 'px' : '0'; });
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); } });
+  });
+</script>
+</body>
+</html>

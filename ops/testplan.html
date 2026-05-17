@@ -6,928 +6,804 @@
   <title>ModelCollectr — Test Plan</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; padding: 32px 24px; }
-    .page { max-width: 1000px; margin: 0 auto; }
-    .hdr { background: #1c1f26; border-radius: 12px; padding: 24px 32px; margin-bottom: 24px; border-bottom: 3px solid #e8920a; }
-    .hdr-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .logo { font-size: 1.2rem; font-weight: 700; color: #f5b830; }
-    .doc-title { font-size: 1rem; color: #ede9e0; font-weight: 600; }
-    .doc-sub { font-size: 0.75rem; color: #8a8070; margin-top: 4px; }
-    .back { color: #e8920a; font-size: 0.82rem; text-decoration: none; }
-    .back:hover { text-decoration: underline; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; }
+    .nav { background: #1c1f26; padding: 14px 32px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e8920a; flex-wrap: wrap; }
+    .nav a { color: #f5b830; font-weight: 700; font-size: 0.92rem; text-decoration: none; } .nav a:hover { color: #ffc93a; }
+    .nav-sep { color: #4a4235; } .nav-cur { color: #8a8070; font-size: 0.85rem; }
+    .page-hdr { background: #1c1f26; padding: 36px 32px; border-bottom: 1px solid #252a34; }
+    .page-hdr-inner { max-width: 960px; margin: 0 auto; }
+    .page-title { font-size: 1.6rem; font-weight: 700; color: #ede9e0; margin-bottom: 8px; }
+    .page-desc { color: #8a8070; font-size: 0.88rem; line-height: 1.65; max-width: 640px; margin-bottom: 18px; }
+    .page-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+    .page-meta-item { font-size: 0.8rem; color: #6a6050; }
+    .page-meta-item strong { color: #ede9e0; display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; }
 
-    .intro { background: white; border-radius: 10px; padding: 22px 28px; margin-bottom: 24px; }
-    .intro h2 { font-size: 0.95rem; font-weight: 700; color: #1c1f26; margin-bottom: 12px; }
-    .intro p { font-size: 0.85rem; color: #4a4235; line-height: 1.7; margin-bottom: 10px; }
-    .intro p:last-child { margin-bottom: 0; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 36px 24px 60px; }
 
-    .cards { background: #1c1f26; border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; }
-    .cards-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8a8070; margin-bottom: 14px; }
-    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-    .card-item { background: #252a34; border-radius: 8px; padding: 12px 16px; }
-    .card-num { font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 700; color: #f5b830; letter-spacing: 0.05em; margin-bottom: 4px; }
-    .card-desc { font-size: 0.75rem; color: #8a8070; line-height: 1.4; }
+    /* Test card setup */
+    .cards-section { background: #1c1f26; border-radius: 12px; padding: 24px 28px; margin-bottom: 40px; }
+    .cards-title { color: #ede9e0; font-size: 0.92rem; font-weight: 700; margin-bottom: 16px; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .card-item { background: #252a34; border-radius: 8px; padding: 12px 14px; }
+    .card-num { font-family: 'Courier New', monospace; font-size: 0.9rem; color: #f5b830; font-weight: 700; margin-bottom: 4px; }
+    .card-label { font-size: 0.75rem; color: #8a8070; }
+    .card-result { font-size: 0.72rem; margin-top: 5px; padding: 2px 7px; border-radius: 4px; display: inline-block; font-weight: 600; }
+    .card-result.success { background: #e8f5ee; color: #2d8a57; }
+    .card-result.fail { background: #f8d7da; color: #9a1a1a; }
+    .card-result.auth { background: #eeecff; color: #5050d0; }
+    .card-result.fail-after { background: #fff3cd; color: #7a4f00; }
 
-    .section-title { font-size: 0.92rem; font-weight: 700; color: #1c1f26; margin: 28px 0 12px; padding: 0 0 8px; border-bottom: 2px solid #e8920a; display: flex; align-items: center; gap: 10px; }
-    .tc-count { font-size: 0.72rem; font-weight: 600; background: #1c1f26; color: #f5b830; padding: 2px 8px; border-radius: 10px; }
+    /* Test groups */
+    .test-group { margin-bottom: 40px; }
+    .test-group-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: white; background: #1c1f26; padding: 8px 16px; border-radius: 6px; display: inline-block; margin-bottom: 14px; }
 
-    .test-card { background: white; border-radius: 10px; margin-bottom: 14px; overflow: hidden; border: 1px solid #ede9e0; }
-    .test-header { display: grid; grid-template-columns: 60px 1fr auto; align-items: center; gap: 0; border-bottom: 1px solid #ede9e0; }
-    .test-id { background: #1c1f26; color: #f5b830; font-family: 'Courier New', monospace; font-size: 0.8rem; font-weight: 700; padding: 12px 14px; text-align: center; align-self: stretch; display: flex; align-items: center; justify-content: center; }
-    .test-name { padding: 12px 16px; font-size: 0.9rem; font-weight: 600; color: #1e1a14; }
-    .test-priority { padding: 12px 14px; font-size: 0.72rem; font-weight: 700; text-align: right; white-space: nowrap; }
-    .priority-high { color: #c0392b; }
-    .priority-med { color: #e8920a; }
-    .priority-low { color: #1a5c35; }
+    /* Test case */
+    .test-case { background: white; border-radius: 12px; margin-bottom: 14px; overflow: hidden; border: 2px solid transparent; transition: border-color 0.15s; }
+    .test-case:hover { border-color: #e8d4b4; }
+    .test-hdr { padding: 14px 18px; display: flex; gap: 14px; align-items: flex-start; cursor: pointer; }
+    .tc-id { font-family: 'Courier New', monospace; font-size: 0.78rem; font-weight: 700; color: #8a8070; background: #f4f1eb; padding: 2px 8px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+    .tc-title { font-weight: 700; font-size: 0.92rem; color: #1e1a14; flex: 1; }
+    .tc-badge { font-size: 0.68rem; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+    .tc-expand { font-size: 0.72rem; color: #b0a898; flex-shrink: 0; margin-top: 3px; white-space: nowrap; }
 
-    .test-body { padding: 16px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .test-col-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8a8070; margin-bottom: 8px; }
-    .test-steps ol { padding-left: 18px; }
-    .test-steps li { font-size: 0.82rem; color: #4a4235; line-height: 1.6; margin-bottom: 4px; }
-    .test-steps li strong { color: #1e1a14; }
-    .test-expected { font-size: 0.82rem; color: #4a4235; line-height: 1.6; }
-    .test-expected ul { padding-left: 16px; }
-    .test-expected li { margin-bottom: 4px; }
+    .test-body { border-top: 1px solid #ede9e0; }
+    .test-section { padding: 14px 18px; border-bottom: 1px solid #f0ece6; }
+    .test-section:last-child { border-bottom: none; }
+    .test-section-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8a8070; margin-bottom: 8px; }
+    .test-section-body { font-size: 0.84rem; color: #2a2015; line-height: 1.6; }
+    .test-section-body ol, .test-section-body ul { padding-left: 18px; }
+    .test-section-body li { margin-bottom: 4px; }
+    .test-section-body code { font-family: 'Courier New', monospace; background: #f4f1eb; padding: 1px 5px; border-radius: 3px; font-size: 0.78rem; }
 
-    .test-result { border-top: 1px solid #ede9e0; padding: 10px 18px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; background: #faf8f4; }
-    .result-field label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8a8070; display: block; margin-bottom: 4px; }
-    .result-box { border: 1.5px solid #d4cfc6; border-radius: 6px; height: 30px; background: white; width: 100%; }
-    .result-options { display: flex; gap: 8px; align-items: center; }
-    .result-option { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; color: #4a4235; cursor: pointer; }
-    .result-option input { width: 16px; height: 16px; accent-color: #e8920a; }
+    /* Pass/Fail fields */
+    .result-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding: 14px 18px; background: #faf8f4; }
+    .result-field { display: flex; flex-direction: column; gap: 4px; }
+    .result-field label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #8a8070; }
+    .result-field input { border: 1px solid #d4cfc6; border-radius: 6px; padding: 6px 10px; font-family: inherit; font-size: 0.84rem; background: white; }
+    .result-field select { border: 1px solid #d4cfc6; border-radius: 6px; padding: 6px 10px; font-family: inherit; font-size: 0.84rem; background: white; cursor: pointer; }
+    .result-field select option[value="pass"] { color: #2d8a57; }
+    .result-field select option[value="fail"] { color: #c0392b; }
+    .result-field select option[value="skip"] { color: #8a8070; }
 
-    .callout { border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 0.82rem; line-height: 1.6; }
-    .callout.info { background: #d0e8ff; color: #0c3a6e; border-left: 3px solid #5b8def; }
-    .callout.warn { background: #fff3cd; color: #7a4f00; border-left: 3px solid #e8920a; }
-    .callout.success { background: #d4edda; color: #1a5c35; border-left: 3px solid #2ecc71; }
+    /* Category colours */
+    .cat-purchase .tc-badge { background: #e8f5ee; color: #2d8a57; }
+    .cat-billing .tc-badge { background: #eeecff; color: #5050d0; }
+    .cat-admin .tc-badge { background: #fef3e2; color: #b06a00; }
+    .cat-edge .tc-badge { background: #e8f0fd; color: #3a6abf; }
+    .cat-security .tc-badge { background: #f8d7da; color: #9a1a1a; }
 
-    .summary-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.85rem; }
-    .summary-table th { background: #1c1f26; color: #ede9e0; padding: 10px 14px; text-align: left; font-size: 0.78rem; }
-    .summary-table td { padding: 10px 14px; border-bottom: 1px solid #ede9e0; }
-    .summary-table .result-box-sm { border: 1.5px solid #d4cfc6; border-radius: 4px; height: 24px; background: white; min-width: 80px; display: inline-block; }
+    /* Summary table */
+    .summary-card { background: white; border-radius: 12px; padding: 24px; margin-top: 40px; }
+    .summary-title { font-size: 0.95rem; font-weight: 700; color: #1e1a14; margin-bottom: 18px; }
+    .summary-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .summary-table th { text-align: left; padding: 8px 12px; background: #f4f1eb; color: #4a4235; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .summary-table td { padding: 10px 12px; border-bottom: 1px solid #ede9e0; }
+    .summary-table tr:last-child td { border-bottom: none; }
+    .summary-table input { border: 1px solid #d4cfc6; border-radius: 4px; padding: 4px 8px; font-size: 0.84rem; width: 100%; }
+    .pass-cell select, .fail-cell select { border: 1px solid #d4cfc6; border-radius: 4px; padding: 4px 8px; font-size: 0.84rem; }
 
-    @media (max-width: 640px) {
-      .test-body { grid-template-columns: 1fr; }
-      .test-result { grid-template-columns: 1fr; }
-      .test-header { grid-template-columns: 50px 1fr; }
-      .test-priority { display: none; }
-    }
-    @media print {
-      body { background: white; padding: 16px; font-size: 12px; }
-      .hdr { background: #1c1f26 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .cards { background: #1c1f26 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .test-card { break-inside: avoid; }
-      .back { display: none; }
-      .result-box { border: 1.5px solid #999; }
-    }
+    @media (max-width: 640px) { .nav, .page-hdr { padding-left: 16px; padding-right: 16px; } .wrap { padding: 24px 16px 48px; } .result-row { grid-template-columns: 1fr 1fr; } .cards-grid { grid-template-columns: 1fr 1fr; } }
+    @media print { .test-body { display: block !important; } .tc-expand { display: none; } }
   </style>
 </head>
 <body>
-<div class="page">
+<nav class="nav">
+  <a href="index.html">ModelCollectr Ops</a><span class="nav-sep">/</span><span class="nav-cur">Test Plan</span>
+</nav>
 
-  <div class="hdr">
-    <div class="hdr-top">
-      <div>
-        <div class="logo">ModelCollectr</div>
-        <div class="doc-title">Licence System — Test Plan</div>
-        <div class="doc-sub">Tester reference document — all scenarios, test cards, expected results &nbsp;·&nbsp; May 2026</div>
-      </div>
-      <a href="index.html" class="back">← Back to Ops</a>
+<div class="page-hdr">
+  <div class="page-hdr-inner">
+    <div class="page-title">Test Plan — ModelCollectr Pro</div>
+    <div class="page-desc">Structured test cases for verifying every aspect of the licence system — from purchase to admin actions to edge cases. Fill in the pass/fail and notes fields as you test each case.</div>
+    <div class="page-meta">
+      <div class="page-meta-item"><strong>Admin Secret</strong><span style="font-family:'Courier New',monospace;font-size:0.78rem;color:#f5b830">MC_ADMIN_3F21F96F91C4DFC7BED4B0E4FC829A36</span></div>
+      <div class="page-meta-item"><strong>Total Cases</strong>18</div>
+      <div class="page-meta-item"><strong>Environment</strong>Stripe Test Mode</div>
     </div>
   </div>
+</div>
 
-  <!-- INTRO -->
-  <div class="intro">
-    <h2>Before you start</h2>
-    <p>This document covers all test scenarios for the ModelCollectr Pro licence system. The system is in <strong>Stripe test mode</strong> — no real money is charged. Use the test cards below. Report any failures to the developer with the test case ID and what you observed.</p>
-    <p><strong>What you need:</strong> A Windows PC with the ModelCollectr desktop app installed. A web browser (Chrome recommended). Access to an email inbox. The admin dashboard URL and secret (provided separately).</p>
-    <div class="callout warn">Always use the test card numbers below — never enter a real card during testing.</div>
-  </div>
+<div class="wrap">
 
-  <!-- TEST CARDS -->
-  <div class="cards">
+  <!-- Test card reference -->
+  <div class="cards-section">
     <div class="cards-title">Stripe Test Cards</div>
-    <div class="card-grid">
+    <div class="cards-grid">
       <div class="card-item">
         <div class="card-num">4242 4242 4242 4242</div>
-        <div class="card-desc">✓ Successful payment. Any future expiry, any 3-digit CVC, any postcode.</div>
+        <div class="card-label">Any future date · Any CVC</div>
+        <span class="card-result success">Succeeds always</span>
       </div>
       <div class="card-item">
         <div class="card-num">4000 0000 0000 9995</div>
-        <div class="card-desc">✗ Always declines. Use to test payment failure scenarios.</div>
+        <div class="card-label">Any future date · Any CVC</div>
+        <span class="card-result fail">Always declines (insufficient funds)</span>
       </div>
       <div class="card-item">
         <div class="card-num">4000 0025 0000 3155</div>
-        <div class="card-desc">⚠ Requires 3D Secure authentication. Tests the auth flow.</div>
+        <div class="card-label">Any future date · Any CVC</div>
+        <span class="card-result auth">Requires 3D Secure authentication</span>
       </div>
       <div class="card-item">
         <div class="card-num">4000 0000 0000 0341</div>
-        <div class="card-desc">✗ Attaches OK but payment fails. Use for subscription payment failure.</div>
+        <div class="card-label">Any future date · Any CVC</div>
+        <span class="card-result fail-after">Attaches OK, fails on charge</span>
       </div>
     </div>
   </div>
 
-  <!-- GROUP 1: PURCHASE FLOW -->
-  <div class="section-title">Group 1 — Purchase &amp; Key Delivery <span class="tc-count">4 tests</span></div>
+  <!-- Group 1: Purchase & Key Delivery -->
+  <div class="test-group">
+    <div class="test-group-title" style="background:#1a3a1a">Purchase &amp; Key Delivery</div>
 
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-01</div>
-      <div class="test-name">Successful purchase — key displayed on success page</div>
-      <div class="test-priority priority-high">HIGH</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>Go to <strong>modelcollectr.co.uk</strong></li>
-          <li>Click <strong>"Get Pro — £19.99/yr"</strong> button (nav or hero)</li>
-          <li>On Stripe checkout: enter any email, card <strong>4242 4242 4242 4242</strong>, any future expiry, any CVC</li>
-          <li>Click <strong>Subscribe</strong></li>
-          <li>Observe the success page</li>
-        </ol>
+    <div class="test-case cat-purchase" id="tc01">
+      <div class="test-hdr" onclick="toggle('tc01')">
+        <span class="tc-id">TC-01</span>
+        <div class="tc-title">Successful purchase — key delivered by email</div>
+        <span class="tc-badge">Happy Path</span>
+        <span class="tc-expand" id="tc01-hint">▼ expand</span>
       </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>Redirected to modelcollectr.co.uk/success?session_id=...</li>
-          <li>Spinner shows "Activating your licence…"</li>
-          <li>Within 10 seconds: key in format <strong>MC-XXXX-XXXX-XXXX-XXXX</strong> appears</li>
-          <li>Green tick icon visible</li>
-          <li>"Copy Key" button present and works</li>
-          <li>Email address shown below key box</li>
-          <li>Activation steps visible</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc01" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc01" value="fail"> Fail</label>
+      <div class="test-body" id="tc01-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Preconditions</div>
+          <div class="test-section-body">Stripe in test mode. ModelCollectr website accessible. Admin dashboard accessible.</div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Go to modelcollectr.co.uk → click "Buy Now"</li>
+            <li>You should be redirected to Stripe's hosted checkout page</li>
+            <li>Enter a real email address, card <code>4242 4242 4242 4242</code>, any future date, any CVC</li>
+            <li>Click Subscribe. You'll see "Your trial has started" on the Stripe page.</li>
+            <li>Wait to be redirected to the success page (success.html?session_id=...)</li>
+            <li>Confirm the licence key is displayed on screen with "Copy" button</li>
+            <li>Confirm "We've emailed a copy to [your email]" message appears</li>
+            <li>Check your email inbox for the licence email. Subject: "Your ModelCollectr Pro Licence Key"</li>
+            <li>Confirm the email contains the same key shown on the success page</li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Success page displays key in MC-XXXX-XXXX-XXXX-XXXX format</li>
+            <li>Email arrives within 60 seconds with matching key</li>
+            <li>Email contains 4-step activation instructions</li>
+            <li>Admin dashboard shows new active row with email</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5" placeholder="e.g. CB"></div>
+          <div class="result-field"><label>Notes / Bug ID</label><input type="text" placeholder="Optional notes"></div>
         </div>
       </div>
-      <div class="result-field">
-        <label>Key received (first 8 chars)</label>
-        <div class="result-box"></div>
+    </div>
+
+    <div class="test-case cat-purchase" id="tc02">
+      <div class="test-hdr" onclick="toggle('tc02')">
+        <span class="tc-id">TC-02</span>
+        <div class="tc-title">Declined card — checkout fails gracefully</div>
+        <span class="tc-badge">Purchase</span>
+        <span class="tc-expand" id="tc02-hint">▼ expand</span>
       </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
+      <div class="test-body" id="tc02-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Go to modelcollectr.co.uk → click "Buy Now"</li>
+            <li>Enter an email address, card <code>4000 0000 0000 9995</code> (decline)</li>
+            <li>Click Subscribe</li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Stripe checkout shows an error: "Your card has insufficient funds"</li>
+            <li>Customer remains on the Stripe checkout page to retry</li>
+            <li>No key is created — admin dashboard is unchanged</li>
+            <li>No email sent</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="test-case cat-purchase" id="tc03">
+      <div class="test-hdr" onclick="toggle('tc03')">
+        <span class="tc-id">TC-03</span>
+        <div class="tc-title">3D Secure card — authentication required</div>
+        <span class="tc-badge">Purchase</span>
+        <span class="tc-expand" id="tc03-hint">▼ expand</span>
+      </div>
+      <div class="test-body" id="tc03-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Go to modelcollectr.co.uk → click "Buy Now"</li>
+            <li>Enter an email address, card <code>4000 0025 0000 3155</code> (3DS required)</li>
+            <li>Click Subscribe — a 3D Secure modal appears</li>
+            <li>Click "Complete authentication" in the modal</li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>3DS modal appears and completes</li>
+            <li>Subscription is created, customer redirected to success page</li>
+            <li>Key displayed on success page and emailed</li>
+            <li>Full purchase flow completes normally</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="test-case cat-purchase" id="tc04">
+      <div class="test-hdr" onclick="toggle('tc04')">
+        <span class="tc-id">TC-04</span>
+        <div class="tc-title">Success page — key shows correctly while waiting for webhook</div>
+        <span class="tc-badge">Purchase</span>
+        <span class="tc-expand" id="tc04-hint">▼ expand</span>
+      </div>
+      <div class="test-body" id="tc04-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Complete a successful purchase (TC-01 steps)</li>
+            <li>Observe the success page — it should show a spinner initially</li>
+            <li>Wait for the key to appear (usually &lt; 3 seconds)</li>
+            <li>Note: the spinner indicates the page is polling /license/lookup</li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Spinner visible briefly while polling</li>
+            <li>Key appears without requiring a page reload</li>
+            <li>Maximum wait time: approximately 10 seconds</li>
+            <li>Email address shown in "emailed to" message matches what was entered at checkout</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-02</div>
-      <div class="test-name">Licence key email received</div>
-      <div class="test-priority priority-high">HIGH</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>Complete TC-01 using a real email inbox you can access</li>
-          <li>Check the inbox (and spam) for the email address used at checkout</li>
-          <li>Open the email</li>
-        </ol>
+  <!-- Group 2: App Activation -->
+  <div class="test-group">
+    <div class="test-group-title" style="background:#1c1f26">App Activation &amp; Verification</div>
+
+    <div class="test-case cat-purchase" id="tc05">
+      <div class="test-hdr" onclick="toggle('tc05')">
+        <span class="tc-id">TC-05</span>
+        <div class="tc-title">Valid key activates Pro features in the app</div>
+        <span class="tc-badge">Happy Path</span>
+        <span class="tc-expand" id="tc05-hint">▼ expand</span>
       </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>Email arrives within 60 seconds</li>
-          <li>From: <strong>ModelCollectr &lt;hello@modelcollectr.co.uk&gt;</strong></li>
-          <li>Subject: "Your ModelCollectr Pro Licence Key"</li>
-          <li>Key displayed in amber/gold monospace text — matches the key on the success page</li>
-          <li>Activation steps listed correctly</li>
-          <li>Subscription details and cancel info present</li>
-          <li>Logo visible in email header</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc02" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc02" value="fail"> Fail</label>
+      <div class="test-body" id="tc05-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Preconditions</div>
+          <div class="test-section-body">Complete TC-01 first. Have the licence key ready.</div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Open ModelCollectr desktop app</li>
+            <li>Go to Help → Enter Licence Key</li>
+            <li>Paste the key received in TC-01</li>
+            <li>Click Activate</li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>App shows "Licence activated" or equivalent success message</li>
+            <li>Pro features are now accessible</li>
+            <li>Admin dashboard shows check-in count incremented to 1</li>
+            <li>Last check-in date updated in admin dashboard</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
         </div>
       </div>
-      <div class="result-field">
-        <label>Email arrived within (seconds)</label>
-        <div class="result-box"></div>
+    </div>
+
+    <div class="test-case cat-security" id="tc06">
+      <div class="test-hdr" onclick="toggle('tc06')">
+        <span class="tc-id">TC-06</span>
+        <div class="tc-title">Invalid key format is rejected immediately</div>
+        <span class="tc-badge">Security</span>
+        <span class="tc-expand" id="tc06-hint">▼ expand</span>
       </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
+      <div class="test-body" id="tc06-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Send a POST to <code>https://api.modelcollectr.co.uk/license/verify</code> with body <code>{"key": "INVALID-KEY"}</code></li>
+            <li>Also test with: empty string, very long string (1000 chars), SQL injection attempt <code>'; DROP TABLE licenses; --</code>, key with correct length but wrong prefix</li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>All invalid formats return HTTP 200 with <code>{"valid": false, "reason": "invalid_format"}</code></li>
+            <li>No database query is made (Worker rejects before DB lookup)</li>
+            <li>No 500 errors triggered</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="test-case cat-edge" id="tc07">
+      <div class="test-hdr" onclick="toggle('tc07')">
+        <span class="tc-id">TC-07</span>
+        <div class="tc-title">Non-existent valid-format key returns not_found</div>
+        <span class="tc-badge">Edge Case</span>
+        <span class="tc-expand" id="tc07-hint">▼ expand</span>
+      </div>
+      <div class="test-body" id="tc07-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Send POST to <code>/license/verify</code> with body <code>{"key": "MC-AAAA-BBBB-CCCC-DDDD"}</code></li>
+            <li>(This key has valid format but doesn't exist in D1)</li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Returns HTTP 200 with <code>{"valid": false, "reason": "not_found"}</code></li>
+            <li>No 404 error (always returns 200 for consistent behaviour)</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-03</div>
-      <div class="test-name">Copy key button works</div>
-      <div class="test-priority priority-med">MEDIUM</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>On the success page from TC-01</li>
-          <li>Click <strong>"Copy Key"</strong> button</li>
-          <li>Open Notepad (or any text app)</li>
-          <li>Paste (Ctrl+V)</li>
-        </ol>
+  <!-- Group 3: Admin Dashboard -->
+  <div class="test-group">
+    <div class="test-group-title" style="background:#261e00">Admin Dashboard</div>
+
+    <div class="test-case cat-admin" id="tc08">
+      <div class="test-hdr" onclick="toggle('tc08')">
+        <span class="tc-id">TC-08</span>
+        <div class="tc-title">Admin dashboard loads with correct licence data</div>
+        <span class="tc-badge">Admin</span>
+        <span class="tc-expand" id="tc08-hint">▼ expand</span>
       </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>Button changes to "✓ Copied!" with green background</li>
-          <li>Button reverts to "Copy Key" after ~2.5 seconds</li>
-          <li>Pasted text matches the key shown on screen exactly</li>
-          <li>Format is MC-XXXX-XXXX-XXXX-XXXX (19 characters total)</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc03" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc03" value="fail"> Fail</label>
+      <div class="test-body" id="tc08-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Preconditions</div>
+          <div class="test-section-body">At least one licence created (from TC-01).</div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Install ModHeader browser extension</li>
+            <li>Add header: <code>X-Admin-Secret: MC_ADMIN_3F21F96F91C4DFC7BED4B0E4FC829A36</code></li>
+            <li>Navigate to <code>https://api.modelcollectr.co.uk/admin</code></li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Dashboard loads (not 401 Unauthorised)</li>
+            <li>Stats bar shows correct counts (Total / Active / Revoked / Suspended)</li>
+            <li>Table shows the licence from TC-01 with correct key, email (from Stripe), status, and dates</li>
+            <li>Filter buttons (All / Active / Revoked / Suspended) work correctly</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
         </div>
       </div>
-      <div class="result-field">
-        <label>Key length correct (19 chars)?</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc03b" value="yes"> Yes</label>
-          <label class="result-option"><input type="radio" name="tc03b" value="no"> No</label>
+    </div>
+
+    <div class="test-case cat-security" id="tc09">
+      <div class="test-hdr" onclick="toggle('tc09')">
+        <span class="tc-id">TC-09</span>
+        <div class="tc-title">Admin dashboard blocked without correct secret</div>
+        <span class="tc-badge">Security</span>
+        <span class="tc-expand" id="tc09-hint">▼ expand</span>
+      </div>
+      <div class="test-body" id="tc09-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Navigate to <code>https://api.modelcollectr.co.uk/admin</code> without ModHeader (no header)</li>
+            <li>Try again with header <code>X-Admin-Secret: WRONGSECRET</code></li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>HTTP 401 "Unauthorised" in both cases</li>
+            <li>No licence data is returned</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
         </div>
       </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
+    </div>
+
+    <div class="test-case cat-admin" id="tc10">
+      <div class="test-hdr" onclick="toggle('tc10')">
+        <span class="tc-id">TC-10</span>
+        <div class="tc-title">Revoke a licence from the admin dashboard</div>
+        <span class="tc-badge">Admin</span>
+        <span class="tc-expand" id="tc10-hint">▼ expand</span>
+      </div>
+      <div class="test-body" id="tc10-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Preconditions</div>
+          <div class="test-section-body">Active licence from TC-01 available in admin dashboard.</div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Open admin dashboard</li>
+            <li>Find the active licence from TC-01</li>
+            <li>Click "Revoke" button</li>
+            <li>Confirm the browser dialog</li>
+            <li>Reload the dashboard</li>
+            <li>Now try to verify the key: POST to <code>/license/verify</code> with that key</li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Toast notification: "Done — reload to see changes"</li>
+            <li>After reload: status badge shows "revoked" (red)</li>
+            <li>Verify endpoint returns <code>{"valid": false, "status": "revoked"}</code></li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="test-case cat-admin" id="tc11">
+      <div class="test-hdr" onclick="toggle('tc11')">
+        <span class="tc-id">TC-11</span>
+        <div class="tc-title">Restore a revoked licence</div>
+        <span class="tc-badge">Admin</span>
+        <span class="tc-expand" id="tc11-hint">▼ expand</span>
+      </div>
+      <div class="test-body" id="tc11-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Preconditions</div>
+          <div class="test-section-body">A revoked licence is available (e.g. from TC-10).</div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Open admin dashboard, filter to "Revoked"</li>
+            <li>Find the revoked licence, click "Restore"</li>
+            <li>Reload the dashboard</li>
+            <li>Verify the key again via POST to <code>/license/verify</code></li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Toast: "Done — reload to see changes"</li>
+            <li>After reload: status badge shows "active" (green)</li>
+            <li>Notes field cleared</li>
+            <li>Verify endpoint returns <code>{"valid": true, "status": "active"}</code></li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="test-case cat-admin" id="tc12">
+      <div class="test-hdr" onclick="toggle('tc12')">
+        <span class="tc-id">TC-12</span>
+        <div class="tc-title">Resend licence email</div>
+        <span class="tc-badge">Admin</span>
+        <span class="tc-expand" id="tc12-hint">▼ expand</span>
+      </div>
+      <div class="test-body" id="tc12-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Open admin dashboard</li>
+            <li>Find an active licence row</li>
+            <li>Click "Resend" button</li>
+            <li>Check the email inbox associated with that licence</li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Toast: "Email resent!"</li>
+            <li>Email arrives within 60 seconds with the same key as shown in the dashboard</li>
+            <li>Email subject: "Your ModelCollectr Pro Licence Key"</li>
+            <li>Key in email matches key in the admin table row</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-04</div>
-      <div class="test-name">Promo code applies discount at checkout</div>
-      <div class="test-priority priority-med">MEDIUM</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>Create a test promo code in Stripe Dashboard first (ask operator)</li>
-          <li>Click "Get Pro" on the site</li>
-          <li>On Stripe checkout, click <strong>"Add promotion code"</strong></li>
-          <li>Enter the promo code</li>
-          <li>Complete checkout with card 4242 4242 4242 4242</li>
-        </ol>
+  <!-- Group 4: Webhook events via Stripe CLI -->
+  <div class="test-group">
+    <div class="test-group-title" style="background:#0e0c30">Billing Events (Stripe Test)</div>
+
+    <div class="test-case cat-billing" id="tc13">
+      <div class="test-hdr" onclick="toggle('tc13')">
+        <span class="tc-id">TC-13</span>
+        <div class="tc-title">Simulate payment failure — licence becomes suspended</div>
+        <span class="tc-badge">Billing</span>
+        <span class="tc-expand" id="tc13-hint">▼ expand</span>
       </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>Promo code accepted — price updates to show discount</li>
-          <li>Checkout completes successfully</li>
-          <li>Success page shows key as normal</li>
-          <li>Key email received as normal</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc04" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc04" value="fail"> Fail</label>
+      <div class="test-body" id="tc13-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>In Stripe Dashboard (test mode) → find the subscription from TC-01</li>
+            <li>Click the subscription → Actions → "Simulate payment failure" (or use Stripe CLI)</li>
+            <li>Stripe CLI: <code>stripe trigger invoice.payment_failed --add invoice:subscription=sub_...</code></li>
+            <li>Check admin dashboard (reload)</li>
+            <li>Verify the key via <code>/license/verify</code></li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Admin dashboard shows status: "suspended" (amber badge)</li>
+            <li>Verify returns <code>{"valid": false, "status": "suspended"}</code></li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
         </div>
       </div>
-      <div class="result-field">
-        <label>Discount applied correctly?</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc04b" value="yes"> Yes</label>
-          <label class="result-option"><input type="radio" name="tc04b" value="no"> No</label>
+    </div>
+
+    <div class="test-case cat-billing" id="tc14">
+      <div class="test-hdr" onclick="toggle('tc14')">
+        <span class="tc-id">TC-14</span>
+        <div class="tc-title">Simulate payment recovery — licence returns to active</div>
+        <span class="tc-badge">Billing</span>
+        <span class="tc-expand" id="tc14-hint">▼ expand</span>
+      </div>
+      <div class="test-body" id="tc14-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Preconditions</div>
+          <div class="test-section-body">Licence is suspended (from TC-13).</div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Stripe CLI: <code>stripe trigger invoice.payment_succeeded --add invoice:subscription=sub_...</code></li>
+            <li>Or in Stripe Dashboard: retry the failed invoice manually</li>
+            <li>Check admin dashboard (reload)</li>
+            <li>Verify key via <code>/license/verify</code></li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Admin dashboard shows status: "active" (green badge)</li>
+            <li>Verify returns <code>{"valid": true, "status": "active"}</code></li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
         </div>
       </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
+    </div>
+
+    <div class="test-case cat-billing" id="tc15">
+      <div class="test-hdr" onclick="toggle('tc15')">
+        <span class="tc-id">TC-15</span>
+        <div class="tc-title">Subscription cancellation — licence revoked at period end</div>
+        <span class="tc-badge">Billing</span>
+        <span class="tc-expand" id="tc15-hint">▼ expand</span>
+      </div>
+      <div class="test-body" id="tc15-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>In Stripe Dashboard → find the subscription → Cancel → Cancel immediately (for test)</li>
+            <li>Stripe fires <code>customer.subscription.deleted</code> webhook</li>
+            <li>Check admin dashboard (reload)</li>
+            <li>Verify key via <code>/license/verify</code></li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Admin dashboard shows status: "revoked" (red badge)</li>
+            <li>Notes column shows "Subscription cancelled by Stripe event"</li>
+            <li>Verify returns <code>{"valid": false, "status": "revoked"}</code></li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- GROUP 2: APP ACTIVATION -->
-  <div class="section-title">Group 2 — Desktop App Activation &amp; Feature Gating <span class="tc-count">5 tests</span></div>
+  <!-- Group 5: Edge Cases & Security -->
+  <div class="test-group">
+    <div class="test-group-title" style="background:#1a1a40">Edge Cases &amp; Security</div>
 
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-05</div>
-      <div class="test-name">Free tier enforces 30-item limit</div>
-      <div class="test-priority priority-high">HIGH</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>Open ModelCollectr desktop app (no licence activated)</li>
-          <li>Add items to any collection until you reach 30 total</li>
-          <li>Try to add a 31st item</li>
-        </ol>
+    <div class="test-case cat-security" id="tc16">
+      <div class="test-hdr" onclick="toggle('tc16')">
+        <span class="tc-id">TC-16</span>
+        <div class="tc-title">Webhook with invalid signature is rejected</div>
+        <span class="tc-badge">Security</span>
+        <span class="tc-expand" id="tc16-hint">▼ expand</span>
       </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>First 30 items add without issue</li>
-          <li>On the 31st: a modal appears explaining the limit</li>
-          <li>Modal contains "Get Pro" button that opens the website</li>
-          <li>31st item is NOT added to the collection</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc05" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc05" value="fail"> Fail</label>
+      <div class="test-body" id="tc16-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Send a POST to <code>/webhooks/stripe</code> with a fake/invalid <code>Stripe-Signature</code> header</li>
+            <li>e.g. <code>curl -X POST https://api.modelcollectr.co.uk/webhooks/stripe -H "Stripe-Signature: t=1,v1=invalid" -d '{"type":"test"}'</code></li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>HTTP 400 "Invalid signature"</li>
+            <li>No licence is created or modified</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
         </div>
       </div>
-      <div class="result-field">
-        <label>Modal appeared at item #</label>
-        <div class="result-box"></div>
+    </div>
+
+    <div class="test-case cat-security" id="tc17">
+      <div class="test-hdr" onclick="toggle('tc17')">
+        <span class="tc-id">TC-17</span>
+        <div class="tc-title">Duplicate webhook does not issue a second key (idempotency)</div>
+        <span class="tc-badge">Security</span>
+        <span class="tc-expand" id="tc17-hint">▼ expand</span>
       </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
+      <div class="test-body" id="tc17-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>Complete a purchase (TC-01) — note the key created and subscription ID</li>
+            <li>Using Stripe Dashboard → Webhooks → find the <code>customer.subscription.created</code> event → Resend</li>
+            <li>Check admin dashboard for duplicate rows</li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Only one row in admin dashboard for this subscription</li>
+            <li>No second key created</li>
+            <li>No second email sent</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="test-case cat-edge" id="tc18">
+      <div class="test-hdr" onclick="toggle('tc18')">
+        <span class="tc-id">TC-18</span>
+        <div class="tc-title">CORS — only allowed origins can call the API</div>
+        <span class="tc-badge">Edge Case</span>
+        <span class="tc-expand" id="tc18-hint">▼ expand</span>
+      </div>
+      <div class="test-body" id="tc18-body" style="display:none">
+        <div class="test-section">
+          <div class="test-section-label">Steps</div>
+          <div class="test-section-body"><ol>
+            <li>From a browser console on a different site, try: <code>fetch('https://api.modelcollectr.co.uk/checkout', {method:'POST'})</code></li>
+            <li>Compare with calling from modelcollectr.co.uk</li>
+          </ol></div>
+        </div>
+        <div class="test-section">
+          <div class="test-section-label">Expected Results</div>
+          <div class="test-section-body"><ul>
+            <li>Request from unauthorised origin: CORS error in browser console, request blocked</li>
+            <li>Request from modelcollectr.co.uk: succeeds with correct CORS headers</li>
+          </ul></div>
+        </div>
+        <div class="result-row">
+          <div class="result-field"><label>Result</label><select><option value="">— Select —</option><option value="pass">✅ Pass</option><option value="fail">❌ Fail</option><option value="skip">⬜ Skip</option></select></div>
+          <div class="result-field"><label>Tester Initials</label><input type="text" maxlength="5"></div>
+          <div class="result-field"><label>Notes</label><input type="text"></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-06</div>
-      <div class="test-name">Free tier blocks locked reports and features</div>
-      <div class="test-priority priority-high">HIGH</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>With no licence active, open the <strong>Reports</strong> section</li>
-          <li>Try clicking the <strong>Insurance</strong> report tab</li>
-          <li>Try clicking <strong>Print Report</strong></li>
-          <li>Try clicking <strong>Export CSV</strong></li>
-          <li>Try adding a <strong>Custom Field</strong> to an item</li>
-        </ol>
-      </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>Each locked feature shows the Pro gate modal</li>
-          <li>Modal clearly states which feature requires Pro</li>
-          <li>"Get Pro" button opens the website in browser</li>
-          <li>None of the locked actions actually execute</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc06" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc06" value="fail"> Fail</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Which features NOT blocked? (if any)</label>
-        <div class="result-box"></div>
-      </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-07</div>
-      <div class="test-name">Licence key activates Pro features</div>
-      <div class="test-priority priority-high">HIGH</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>Get the test key from TC-01</li>
-          <li>In the desktop app: click <strong>Help</strong> menu → <strong>Enter Licence Key</strong></li>
-          <li>Paste the MC-XXXX-XXXX-XXXX-XXXX key</li>
-          <li>Click <strong>Activate</strong></li>
-          <li>After activation, try all previously blocked features</li>
-        </ol>
-      </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>Activation shows success message</li>
-          <li>Insurance report tab now accessible</li>
-          <li>Print Report works</li>
-          <li>Export CSV works</li>
-          <li>Custom fields can be added</li>
-          <li>Item limit removed (can add more than 30)</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc07" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc07" value="fail"> Fail</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Any features still blocked?</label>
-        <div class="result-box"></div>
-      </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-08</div>
-      <div class="test-name">Invalid key is rejected</div>
-      <div class="test-priority priority-high">HIGH</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>In the licence key dialog, enter a made-up key: <strong>MC-FAKE-WXYZ-TEST-0000</strong></li>
-          <li>Click Activate</li>
-          <li>Also try entering a totally random string: <strong>hello world</strong></li>
-          <li>Click Activate</li>
-        </ol>
-      </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>Both attempts are rejected with a clear error message</li>
-          <li>No Pro features unlock</li>
-          <li>App remains in free tier</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc08" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc08" value="fail"> Fail</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Error message shown?</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc08b" value="yes"> Yes</label>
-          <label class="result-option"><input type="radio" name="tc08b" value="no"> No</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-09</div>
-      <div class="test-name">Pro persists after app restart</div>
-      <div class="test-priority priority-high">HIGH</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>With a valid key activated (TC-07 complete)</li>
-          <li>Fully close the desktop app</li>
-          <li>Re-open it</li>
-          <li>Check Pro features are still active</li>
-        </ol>
-      </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>App opens with Pro active — no need to re-enter key</li>
-          <li>All Pro features accessible immediately</li>
-          <li>No login or re-activation prompt</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc09" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc09" value="fail"> Fail</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Pro active on restart?</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc09b" value="yes"> Yes</label>
-          <label class="result-option"><input type="radio" name="tc09b" value="no"> No</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- GROUP 3: ADMIN DASHBOARD -->
-  <div class="section-title">Group 3 — Admin Dashboard <span class="tc-count">4 tests</span></div>
-
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-10</div>
-      <div class="test-name">Admin dashboard loads and shows customer row</div>
-      <div class="test-priority priority-high">HIGH</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>Install ModHeader browser extension</li>
-          <li>Add header: <strong>X-Admin-Secret</strong> = [secret provided by operator]</li>
-          <li>Visit <strong>https://api.modelcollectr.co.uk/admin</strong></li>
-          <li>Find the row for the email used in TC-01</li>
-        </ol>
-      </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>Dashboard loads (not a 401 error)</li>
-          <li>Stats bar shows correct totals</li>
-          <li>Customer row visible with correct email</li>
-          <li>Status shows "active" (green badge)</li>
-          <li>Check-in count greater than 0 (app has checked in)</li>
-          <li>Revoke and Resend buttons visible</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc10" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc10" value="fail"> Fail</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Check-in count shown</label>
-        <div class="result-box"></div>
-      </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-11</div>
-      <div class="test-name">Resend email from admin dashboard</div>
-      <div class="test-priority priority-high">HIGH</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>In the admin dashboard, find the test customer row</li>
-          <li>Click <strong>Resend</strong></li>
-          <li>Enter the admin secret when prompted (first time only)</li>
-          <li>Check the email inbox for the email address in that row</li>
-        </ol>
-      </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>"Email resent!" toast notification appears</li>
-          <li>Second licence email arrives in inbox within 60 seconds</li>
-          <li>Key in the email is identical to the original key</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc11" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc11" value="fail"> Fail</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Email arrived?</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc11b" value="yes"> Yes</label>
-          <label class="result-option"><input type="radio" name="tc11b" value="no"> No</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-12</div>
-      <div class="test-name">Revoke key — app loses Pro access</div>
-      <div class="test-priority priority-high">HIGH</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>In admin dashboard, click <strong>Revoke</strong> on the test customer row</li>
-          <li>Confirm the confirmation dialog</li>
-          <li>Reload the admin page and check the row status</li>
-          <li>In the desktop app: close and re-open it</li>
-          <li>Try accessing a Pro feature (e.g. Insurance report)</li>
-        </ol>
-      </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>"Done — reload to see changes" toast appears</li>
-          <li>After reload: row shows "revoked" status (red badge)</li>
-          <li>After app restart: Pro features are blocked</li>
-          <li>App behaves as free tier</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc12" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc12" value="fail"> Fail</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>App locked after revoke?</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc12b" value="yes"> Yes</label>
-          <label class="result-option"><input type="radio" name="tc12b" value="no"> No</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-13</div>
-      <div class="test-name">Restore key — app regains Pro access</div>
-      <div class="test-priority priority-high">HIGH</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>With key revoked from TC-12, go back to admin dashboard</li>
-          <li>Find the row (status: revoked), click <strong>Restore</strong></li>
-          <li>Reload admin page and check status</li>
-          <li>Close and re-open the desktop app</li>
-          <li>Try a Pro feature</li>
-        </ol>
-      </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>"Done — reload to see changes" toast appears</li>
-          <li>After reload: row shows "active" status (green badge)</li>
-          <li>After app restart: Pro features work again</li>
-          <li>No need to re-enter the key</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc13" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc13" value="fail"> Fail</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Pro restored on restart?</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc13b" value="yes"> Yes</label>
-          <label class="result-option"><input type="radio" name="tc13b" value="no"> No</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- GROUP 4: EDGE CASES -->
-  <div class="section-title">Group 4 — Edge Cases &amp; Error Handling <span class="tc-count">3 tests</span></div>
-
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-14</div>
-      <div class="test-name">Checkout abandonment — no key issued</div>
-      <div class="test-priority priority-med">MEDIUM</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>Click "Get Pro" on the site</li>
-          <li>When Stripe checkout loads, close the tab or click Back</li>
-          <li>Check the admin dashboard</li>
-        </ol>
-      </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>No new key appears in the admin dashboard</li>
-          <li>No spurious email sent</li>
-          <li>Site continues working normally</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc14" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc14" value="fail"> Fail</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Spurious key created?</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc14b" value="yes"> Yes</label>
-          <label class="result-option"><input type="radio" name="tc14b" value="no"> No</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-15</div>
-      <div class="test-name">Declined card — checkout fails gracefully</div>
-      <div class="test-priority priority-med">MEDIUM</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>Click "Get Pro" on the site</li>
-          <li>Use the <strong>declining card: 4000 0000 0000 9995</strong></li>
-          <li>Any email, any future expiry, any CVC</li>
-          <li>Click Subscribe</li>
-        </ol>
-      </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>Stripe checkout shows a clear error message (not a crash)</li>
-          <li>Customer can try again with a different card</li>
-          <li>No key issued, no email sent</li>
-          <li>Admin dashboard unchanged</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc15" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc15" value="fail"> Fail</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Error shown clearly?</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc15b" value="yes"> Yes</label>
-          <label class="result-option"><input type="radio" name="tc15b" value="no"> No</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="test-card">
-    <div class="test-header">
-      <div class="test-id">TC-16</div>
-      <div class="test-name">Admin dashboard rejects wrong secret</div>
-      <div class="test-priority priority-med">MEDIUM</div>
-    </div>
-    <div class="test-body">
-      <div class="test-steps">
-        <div class="test-col-label">Steps</div>
-        <ol>
-          <li>In ModHeader, change the X-Admin-Secret value to <strong>WRONG_SECRET</strong></li>
-          <li>Visit https://api.modelcollectr.co.uk/admin</li>
-          <li>Also try performing a revoke action with the wrong secret</li>
-        </ol>
-      </div>
-      <div class="test-expected">
-        <div class="test-col-label">Expected results</div>
-        <ul>
-          <li>Dashboard page returns "Unauthorised" (not the dashboard)</li>
-          <li>Revoke/restore/resend actions with wrong secret return an error</li>
-          <li>No data is changed</li>
-        </ul>
-      </div>
-    </div>
-    <div class="test-result">
-      <div class="result-field">
-        <label>Pass / Fail</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc16" value="pass"> Pass</label>
-          <label class="result-option"><input type="radio" name="tc16" value="fail"> Fail</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Unauthorised returned?</label>
-        <div class="result-options">
-          <label class="result-option"><input type="radio" name="tc16b" value="yes"> Yes</label>
-          <label class="result-option"><input type="radio" name="tc16b" value="no"> No</label>
-        </div>
-      </div>
-      <div class="result-field">
-        <label>Notes / Bug description</label>
-        <div class="result-box"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SUMMARY -->
-  <div class="section-title">Test Run Summary</div>
-  <div class="intro">
-    <h2>Overall results</h2>
+  <!-- Summary -->
+  <div class="summary-card">
+    <div class="summary-title">Test Run Summary</div>
     <table class="summary-table">
-      <tr>
-        <th>Test ID</th><th>Test Name</th><th>Result</th><th>Tester initials</th><th>Date</th>
-      </tr>
-      <tr><td>TC-01</td><td>Successful purchase — key on success page</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-02</td><td>Licence key email received</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-03</td><td>Copy key button works</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-04</td><td>Promo code applies discount</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-05</td><td>Free tier 30-item limit enforced</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-06</td><td>Free tier blocks locked features</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-07</td><td>Key activates Pro features</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-08</td><td>Invalid key rejected</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-09</td><td>Pro persists after app restart</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-10</td><td>Admin dashboard loads correctly</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-11</td><td>Resend email from admin</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-12</td><td>Revoke key — app loses Pro</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-13</td><td>Restore key — app regains Pro</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-14</td><td>Checkout abandonment — no key issued</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-15</td><td>Declined card — fails gracefully</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
-      <tr><td>TC-16</td><td>Admin rejects wrong secret</td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td><td><div class="result-box-sm"></div></td></tr>
+      <thead><tr><th>Field</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td>Tester name</td><td><input type="text" placeholder="Full name"></td></tr>
+        <tr><td>Test date</td><td><input type="date"></td></tr>
+        <tr><td>Environment</td><td><input type="text" value="Stripe Test Mode — api.modelcollectr.co.uk"></td></tr>
+        <tr><td>Cases passed</td><td><input type="text" placeholder="e.g. 15"></td></tr>
+        <tr><td>Cases failed</td><td><input type="text" placeholder="e.g. 3"></td></tr>
+        <tr><td>Cases skipped</td><td><input type="text" placeholder="e.g. 0"></td></tr>
+        <tr><td>Overall result</td><td><select><option value="">— Select —</option><option>✅ Pass — ready for live</option><option>⚠️ Pass with conditions</option><option>❌ Fail — bugs to fix</option></select></td></tr>
+        <tr><td>Notes / Summary</td><td><input type="text" placeholder="General notes on this test run"></td></tr>
+      </tbody>
     </table>
-    <p style="margin-top:16px;font-size:0.82rem;color:#8a8070;">Total: 16 test cases &nbsp;·&nbsp; 4 groups &nbsp;·&nbsp; Report any failures to the developer with the TC number, what you did, and what you saw.</p>
   </div>
-
-  <p style="color:#8a8070;font-size:0.78rem;text-align:center;margin-top:32px;margin-bottom:8px;">
-    <a href="index.html" style="color:#e8920a">← Back to Ops</a> &nbsp;·&nbsp; modelcollectr.co.uk/ops/testplan.html &nbsp;·&nbsp; Print this page (Ctrl+P) to fill in on paper
-  </p>
 
 </div>
+
+<script>
+  function toggle(id) {
+    const body = document.getElementById(id + '-body');
+    const hint = document.getElementById(id + '-hint');
+    const isOpen = body.style.display !== 'none';
+    body.style.display = isOpen ? 'none' : 'block';
+    hint.textContent = isOpen ? '▼ expand' : '▲ collapse';
+  }
+  // Open all on print
+  window.addEventListener('beforeprint', () => {
+    document.querySelectorAll('.test-body').forEach(b => b.style.display = 'block');
+  });
+</script>
 </body>
 </html>

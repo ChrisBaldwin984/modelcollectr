@@ -3,398 +3,305 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ModelCollectr — Licence Workflow Diagram</title>
+  <title>ModelCollectr — Workflow Overview</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; padding: 32px 24px; }
-    .page { max-width: 960px; margin: 0 auto; }
-    .hdr { background: #1c1f26; border-radius: 12px; padding: 24px 32px; margin-bottom: 32px; border-bottom: 3px solid #e8920a; }
-    .hdr-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .logo { font-size: 1.2rem; font-weight: 700; color: #f5b830; }
-    .doc-title { font-size: 1rem; color: #ede9e0; font-weight: 600; }
-    .doc-sub { font-size: 0.75rem; color: #8a8070; margin-top: 4px; }
-    .back { color: #e8920a; font-size: 0.82rem; text-decoration: none; }
-    .back:hover { text-decoration: underline; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; }
+    .nav { background: #1c1f26; padding: 14px 32px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e8920a; }
+    .nav a { color: #f5b830; font-weight: 700; font-size: 0.95rem; text-decoration: none; }
+    .nav a:hover { color: #ffc93a; }
+    .nav-sep { color: #4a4235; }
+    .nav-cur { color: #8a8070; font-size: 0.88rem; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 40px 24px 60px; }
+    .section-title { font-size: 1.1rem; font-weight: 700; color: #1e1a14; margin-bottom: 6px; }
+    .section-sub { font-size: 0.85rem; color: #6a6050; margin-bottom: 28px; line-height: 1.5; }
 
-    h2 { font-size: 1rem; font-weight: 700; color: #1c1f26; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #e8920a; }
-    h3 { font-size: 0.88rem; font-weight: 700; color: #1e1a14; margin-bottom: 8px; }
+    /* Architecture card */
+    .arch-card { background: #1c1f26; border-radius: 14px; padding: 32px; margin-bottom: 48px; }
+    .arch-title { color: #ede9e0; font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .arch-sub { color: #8a8070; font-size: 0.8rem; margin-bottom: 24px; }
+    .arch-svg-wrap { overflow-x: auto; }
+    .legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.78rem; color: #8a8070; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 
-    /* Flow diagram */
-    .flow { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
-    .flow-title { font-size: 0.92rem; font-weight: 700; color: #1c1f26; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #ede9e0; display: flex; align-items: center; gap: 8px; }
-    .badge { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; letter-spacing: 0.04em; }
-    .badge.green { background: #d4edda; color: #1a5c35; }
-    .badge.amber { background: #fff3cd; color: #7a4f00; }
-    .badge.red { background: #f8d7da; color: #5c1a1a; }
-    .badge.blue { background: #d0e8ff; color: #0c3a6e; }
+    /* Category filter */
+    .cats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+    .cat-btn { padding: 6px 16px; border-radius: 20px; border: 1px solid #d4cfc6; background: white; cursor: pointer; font-size: 0.82rem; font-family: inherit; transition: all 0.15s; }
+    .cat-btn.active { background: #1c1f26; color: #f5b830; border-color: #1c1f26; }
+    .cat-btn:hover { border-color: #e8920a; }
+    .cat-btn:focus-visible { outline: 3px solid #e8920a; outline-offset: 2px; }
 
-    .steps { display: flex; flex-direction: column; gap: 0; }
-    .step { display: flex; align-items: flex-start; gap: 16px; padding: 10px 0; position: relative; }
-    .step:not(:last-child)::after { content: ''; position: absolute; left: 15px; top: 36px; bottom: -2px; width: 2px; background: #e8e4dc; }
-    .step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; z-index: 1; }
-    .step-num.customer { background: #1c3a6e; color: white; }
-    .step-num.stripe { background: #635bff; color: white; }
-    .step-num.worker { background: #e8920a; color: white; }
-    .step-num.email { background: #1a5c35; color: white; }
-    .step-num.app { background: #1c1f26; color: white; }
-    .step-num.admin { background: #5c1a1a; color: white; }
-    .step-body { padding-top: 6px; }
-    .step-label { font-size: 0.85rem; font-weight: 600; color: #1e1a14; }
-    .step-detail { font-size: 0.78rem; color: #8a8070; margin-top: 2px; line-height: 1.5; }
-
-    .branch { background: #faf8f4; border: 1px solid #ede9e0; border-radius: 8px; padding: 14px 16px; margin: 8px 0 8px 48px; }
-    .branch-label { font-size: 0.78rem; font-weight: 700; color: #8a8070; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
-    .branch-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 6px; font-size: 0.82rem; }
-    .branch-row:last-child { margin-bottom: 0; }
-    .branch-arrow { color: #e8920a; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
-    .branch-text { color: #4a4235; line-height: 1.4; }
-
-    .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; background: white; border-radius: 10px; padding: 14px 18px; }
-    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.78rem; color: #4a4235; }
-    .legend-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
-
-    @media print {
-      body { background: white; padding: 16px; }
-      .hdr { background: #1c1f26 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .flow { break-inside: avoid; }
-      .back { display: none; }
+    /* Scenario grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 18px; }
+    .scenario-card {
+      background: white; border-radius: 12px; padding: 22px 22px 18px;
+      text-decoration: none; color: inherit;
+      border: 2px solid transparent;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+      display: flex; flex-direction: column; gap: 10px;
+      position: relative; overflow: hidden;
     }
-    @media (max-width: 600px) {
-      .branch { margin-left: 16px; }
-    }
+    .scenario-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .scenario-card:hover { border-color: #e8920a; box-shadow: 0 6px 24px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .scenario-card:focus-visible { outline: 3px solid #e8920a; outline-offset: 2px; }
+    .sc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .sc-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sc-icon svg { width: 22px; height: 22px; }
+    .sc-cat { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; white-space: nowrap; align-self: flex-start; }
+    .sc-title { font-size: 0.97rem; font-weight: 700; color: #1e1a14; line-height: 1.3; }
+    .sc-desc { font-size: 0.82rem; color: #6a6050; line-height: 1.55; flex: 1; }
+    .sc-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid #ede9e0; margin-top: auto; }
+    .sc-steps { font-size: 0.75rem; color: #8a8070; }
+    .sc-link { font-size: 0.8rem; font-weight: 600; color: #e8920a; display: flex; align-items: center; gap: 4px; }
+    .sc-link svg { width: 14px; height: 14px; transition: transform 0.15s; }
+    .scenario-card:hover .sc-link svg { transform: translateX(3px); }
+
+    /* Category colour variants */
+    .cat-purchase::before { background: #4caf7d; }
+    .cat-purchase .sc-icon { background: #e8f5ee; }
+    .cat-purchase .sc-icon svg { stroke: #2d8a57; }
+    .cat-purchase .sc-cat { background: #e8f5ee; color: #2d8a57; }
+    .cat-billing::before { background: #635bff; }
+    .cat-billing .sc-icon { background: #eeecff; }
+    .cat-billing .sc-icon svg { stroke: #635bff; }
+    .cat-billing .sc-cat { background: #eeecff; color: #5050d0; }
+    .cat-admin::before { background: #e8920a; }
+    .cat-admin .sc-icon { background: #fef3e2; }
+    .cat-admin .sc-icon svg { stroke: #b06a00; }
+    .cat-admin .sc-cat { background: #fef3e2; color: #b06a00; }
+    .cat-edge::before { background: #5b8def; }
+    .cat-edge .sc-icon { background: #e8f0fd; }
+    .cat-edge .sc-icon svg { stroke: #5b8def; }
+    .cat-edge .sc-cat { background: #e8f0fd; color: #3a6abf; }
+    .scenario-card.hidden { display: none; }
+
+    @media (max-width: 600px) { .nav { padding: 12px 16px; } .wrap { padding: 24px 16px 48px; } .arch-card { padding: 20px 14px; } }
   </style>
 </head>
 <body>
-<div class="page">
+<nav class="nav">
+  <a href="index.html">ModelCollectr Ops</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-cur">Workflow Overview</span>
+</nav>
 
-  <div class="hdr">
-    <div class="hdr-top">
-      <div>
-        <div class="logo">ModelCollectr</div>
-        <div class="doc-title">Licence System — Workflow Diagram</div>
-        <div class="doc-sub">All scenarios from purchase to expiry &nbsp;·&nbsp; Last updated May 2026</div>
-      </div>
-      <a href="index.html" class="back">← Back to Ops</a>
+<div class="wrap">
+  <div class="arch-card">
+    <div class="arch-title">System Architecture</div>
+    <div class="arch-sub">How the five components interact across every scenario</div>
+    <div class="arch-svg-wrap">
+      <svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:540px;max-width:760px;display:block">
+        <defs>
+          <marker id="ab" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L6.5,3.5 z" fill="#5b8def"/></marker>
+          <marker id="aa" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L6.5,3.5 z" fill="#e8920a"/></marker>
+          <marker id="ap" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L6.5,3.5 z" fill="#635bff"/></marker>
+          <marker id="ag" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L6.5,3.5 z" fill="#4caf7d"/></marker>
+          <marker id="ac" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L6.5,3.5 z" fill="#e8734a"/></marker>
+          <marker id="am" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L6.5,3.5 z" fill="#8a8070"/></marker>
+        </defs>
+
+        <!-- Customer -->
+        <rect x="10" y="62" width="132" height="70" rx="8" fill="#0d1e42" stroke="#5b8def" stroke-width="1.8"/>
+        <text x="76" y="88" fill="#5b8def" text-anchor="middle" font-size="13" font-weight="700" font-family="Segoe UI,Arial,sans-serif">Customer</text>
+        <text x="76" y="105" fill="#6a82a0" text-anchor="middle" font-size="10" font-family="Segoe UI,Arial,sans-serif">Browser / Desktop App</text>
+        <text x="76" y="121" fill="#4a6080" text-anchor="middle" font-size="9.5" font-family="Segoe UI,Arial,sans-serif">modelcollectr.co.uk</text>
+
+        <!-- Worker -->
+        <rect x="278" y="62" width="196" height="70" rx="8" fill="#261e00" stroke="#e8920a" stroke-width="1.8"/>
+        <text x="376" y="88" fill="#e8920a" text-anchor="middle" font-size="13" font-weight="700" font-family="Segoe UI,Arial,sans-serif">Cloudflare Worker</text>
+        <text x="376" y="105" fill="#8a7040" text-anchor="middle" font-size="10" font-family="Segoe UI,Arial,sans-serif">api.modelcollectr.co.uk</text>
+        <text x="376" y="121" fill="#6a5830" text-anchor="middle" font-size="9.5" font-family="Segoe UI,Arial,sans-serif">/checkout · /verify · /lookup · /admin</text>
+
+        <!-- Stripe -->
+        <rect x="608" y="62" width="142" height="70" rx="8" fill="#0e0c30" stroke="#635bff" stroke-width="1.8"/>
+        <text x="679" y="88" fill="#635bff" text-anchor="middle" font-size="13" font-weight="700" font-family="Segoe UI,Arial,sans-serif">Stripe</text>
+        <text x="679" y="105" fill="#6060a0" text-anchor="middle" font-size="10" font-family="Segoe UI,Arial,sans-serif">Billing &amp; Checkout</text>
+        <text x="679" y="121" fill="#4a4878" text-anchor="middle" font-size="9.5" font-family="Segoe UI,Arial,sans-serif">api.stripe.com</text>
+
+        <!-- D1 -->
+        <rect x="210" y="205" width="148" height="62" rx="8" fill="#072010" stroke="#4caf7d" stroke-width="1.8"/>
+        <text x="284" y="233" fill="#4caf7d" text-anchor="middle" font-size="12" font-weight="700" font-family="Segoe UI,Arial,sans-serif">D1 Database</text>
+        <text x="284" y="250" fill="#3a7850" text-anchor="middle" font-size="9.5" font-family="Segoe UI,Arial,sans-serif">Keys · status · check-ins</text>
+
+        <!-- Resend -->
+        <rect x="400" y="205" width="148" height="62" rx="8" fill="#280e04" stroke="#e8734a" stroke-width="1.8"/>
+        <text x="474" y="233" fill="#e8734a" text-anchor="middle" font-size="12" font-weight="700" font-family="Segoe UI,Arial,sans-serif">Resend</text>
+        <text x="474" y="250" fill="#8a5030" text-anchor="middle" font-size="9.5" font-family="Segoe UI,Arial,sans-serif">Transactional email</text>
+
+        <!-- Customer → Worker -->
+        <line x1="143" y1="86" x2="276" y2="86" stroke="#5b8def" stroke-width="1.6" marker-end="url(#ab)"/>
+        <text x="210" y="80" fill="#5b8def" text-anchor="middle" font-size="9" font-family="Segoe UI,Arial,sans-serif">POST /checkout · /verify</text>
+
+        <!-- Worker → Customer (response, dashed) -->
+        <line x1="276" y1="104" x2="143" y2="104" stroke="#8a8070" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#am)"/>
+        <text x="210" y="117" fill="#8a8070" text-anchor="middle" font-size="9" font-family="Segoe UI,Arial,sans-serif">{ url, key, valid }</text>
+
+        <!-- Worker → Stripe -->
+        <line x1="474" y1="86" x2="606" y2="86" stroke="#e8920a" stroke-width="1.6" marker-end="url(#aa)"/>
+        <text x="540" y="80" fill="#e8920a" text-anchor="middle" font-size="9" font-family="Segoe UI,Arial,sans-serif">Stripe API calls</text>
+
+        <!-- Stripe → Worker (webhook, curved dashed) -->
+        <path d="M 679,133 C 679,180 376,180 376,133" fill="none" stroke="#635bff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ap)"/>
+        <text x="528" y="178" fill="#635bff" text-anchor="middle" font-size="9" font-family="Segoe UI,Arial,sans-serif">webhooks — subscription events</text>
+
+        <!-- Worker → D1 -->
+        <line x1="344" y1="133" x2="295" y2="203" stroke="#4caf7d" stroke-width="1.5" marker-end="url(#ag)"/>
+        <text x="298" y="175" fill="#4caf7d" text-anchor="middle" font-size="9" font-family="Segoe UI,Arial,sans-serif">INSERT / SELECT</text>
+
+        <!-- Worker → Resend -->
+        <line x1="412" y1="133" x2="462" y2="203" stroke="#e8734a" stroke-width="1.5" marker-end="url(#ac)"/>
+        <text x="460" y="175" fill="#e8734a" text-anchor="middle" font-size="9" font-family="Segoe UI,Arial,sans-serif">send email API</text>
+      </svg>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#5b8def"></div>Customer / Browser</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e8920a"></div>Cloudflare Worker</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#635bff"></div>Stripe</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4caf7d"></div>D1 Database</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e8734a"></div>Resend / Email</div>
     </div>
   </div>
 
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:#1c3a6e"></div> Customer action</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#635bff"></div> Stripe</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#e8920a"></div> Worker API</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#1a5c35"></div> Email (Resend)</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#1c1f26"></div> Desktop App</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#5c1a1a"></div> Admin action</div>
+  <div class="section-title">All 9 Scenarios</div>
+  <div class="section-sub">Click any card to open a full step-by-step breakdown — including the exact API calls, data written, and decision points at each stage.</div>
+
+  <div class="cats">
+    <button class="cat-btn active" onclick="filter('all',this)">All</button>
+    <button class="cat-btn" onclick="filter('purchase',this)">Purchase</button>
+    <button class="cat-btn" onclick="filter('billing',this)">Billing</button>
+    <button class="cat-btn" onclick="filter('admin',this)">Admin</button>
+    <button class="cat-btn" onclick="filter('edge',this)">Edge Cases</button>
   </div>
 
-  <!-- SCENARIO 1 -->
-  <h2>Scenario 1 — Successful Purchase &amp; Activation <span class="badge green">Happy Path</span></h2>
-  <div class="flow">
-    <div class="steps">
-      <div class="step">
-        <div class="step-num customer">1</div>
-        <div class="step-body">
-          <div class="step-label">Customer visits modelcollectr.co.uk</div>
-          <div class="step-detail">Clicks "Get Pro — £19.99/yr" in the nav or hero, or the pricing card button.</div>
-        </div>
+  <div class="grid">
+    <a class="scenario-card cat-purchase" href="scenario-purchase.html">
+      <div class="sc-top">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <span class="sc-cat">Happy Path</span>
       </div>
-      <div class="step">
-        <div class="step-num worker">2</div>
-        <div class="step-body">
-          <div class="step-label">Worker creates Stripe Checkout Session</div>
-          <div class="step-detail">POST /checkout → Stripe API → returns one-time checkout URL. 14-day free trial enabled. Promo code field shown on checkout page.</div>
-        </div>
+      <div class="sc-title">Successful Purchase &amp; Activation</div>
+      <div class="sc-desc">Customer clicks Buy Now, completes Stripe checkout with 14-day free trial, receives licence key by email, and activates Pro in the desktop app.</div>
+      <div class="sc-footer">
+        <span class="sc-steps">23 steps · all 5 systems</span>
+        <span class="sc-link">View details <svg viewBox="0 0 24 24" fill="none" stroke="#e8920a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
       </div>
-      <div class="step">
-        <div class="step-num stripe">3</div>
-        <div class="step-body">
-          <div class="step-label">Customer completes Stripe checkout</div>
-          <div class="step-detail">Enters email + card details on Stripe-hosted page. Clicks Subscribe. Card is saved for annual auto-renewal.</div>
-        </div>
+    </a>
+
+    <a class="scenario-card cat-billing" href="scenario-renewal.html">
+      <div class="sc-top">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
+        <span class="sc-cat">Billing</span>
       </div>
-      <div class="step">
-        <div class="step-num stripe">4</div>
-        <div class="step-body">
-          <div class="step-label">Stripe fires customer.subscription.created webhook</div>
-          <div class="step-detail">Sent to https://api.modelcollectr.co.uk/webhooks/stripe. Verified by HMAC-SHA256 signature + 5-minute timestamp window.</div>
-        </div>
+      <div class="sc-title">Annual Renewal</div>
+      <div class="sc-desc">Stripe automatically charges the card on the anniversary date. If payment succeeds, Pro access continues without any customer action required.</div>
+      <div class="sc-footer">
+        <span class="sc-steps">7 steps · Stripe + Worker + D1</span>
+        <span class="sc-link">View details <svg viewBox="0 0 24 24" fill="none" stroke="#e8920a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
       </div>
-      <div class="step">
-        <div class="step-num worker">5</div>
-        <div class="step-body">
-          <div class="step-label">Worker generates licence key &amp; stores in database</div>
-          <div class="step-detail">Format: MC-XXXX-XXXX-XXXX-XXXX (cryptographically random). Stored in Cloudflare D1 with email, Stripe customer ID, subscription ID, status = active.</div>
-        </div>
+    </a>
+
+    <a class="scenario-card cat-billing" href="scenario-payment-failure.html">
+      <div class="sc-top">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <span class="sc-cat">Billing</span>
       </div>
-      <div class="step">
-        <div class="step-num email">6</div>
-        <div class="step-body">
-          <div class="step-label">Licence email sent to customer</div>
-          <div class="step-detail">From hello@modelcollectr.co.uk via Resend. Contains key, activation steps, and subscription details.</div>
-        </div>
+      <div class="sc-title">Payment Failure &amp; Recovery</div>
+      <div class="sc-desc">Card declines at renewal. Licence is suspended immediately. Stripe retries over several days — recovering if the card is updated, or revoking on final failure.</div>
+      <div class="sc-footer">
+        <span class="sc-steps">11 steps · two outcomes</span>
+        <span class="sc-link">View details <svg viewBox="0 0 24 24" fill="none" stroke="#e8920a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
       </div>
-      <div class="step">
-        <div class="step-num customer">7</div>
-        <div class="step-body">
-          <div class="step-label">Customer sees success page with key</div>
-          <div class="step-detail">Redirected to modelcollectr.co.uk/success?session_id=... — page polls /license/lookup every 2 seconds until key is ready (up to 30s). Key displayed with Copy button.</div>
-        </div>
+    </a>
+
+    <a class="scenario-card cat-billing" href="scenario-cancellation.html">
+      <div class="sc-top">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+        <span class="sc-cat">Billing</span>
       </div>
-      <div class="step">
-        <div class="step-num app">8</div>
-        <div class="step-body">
-          <div class="step-label">Customer activates key in desktop app</div>
-          <div class="step-detail">Help → Enter Licence Key → pastes MC-XXXX key → clicks Activate. App calls POST /license/verify → server confirms valid + active → Pro features unlock immediately.</div>
-        </div>
+      <div class="sc-title">Customer Cancellation</div>
+      <div class="sc-desc">Customer cancels via Stripe customer portal or contacts you. Pro access continues until the end of the paid period, then the key is automatically revoked.</div>
+      <div class="sc-footer">
+        <span class="sc-steps">6 steps · graceful end</span>
+        <span class="sc-link">View details <svg viewBox="0 0 24 24" fill="none" stroke="#e8920a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
       </div>
-      <div class="step">
-        <div class="step-num app">9</div>
-        <div class="step-body">
-          <div class="step-label">App checks in on every launch</div>
-          <div class="step-detail">POST /license/verify on startup. Updates last_check_in timestamp in database. 7-day offline grace period — if server unreachable, keeps previous valid status for up to 7 days.</div>
-        </div>
+    </a>
+
+    <a class="scenario-card cat-admin" href="scenario-revoke.html">
+      <div class="sc-top">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="12" x2="15" y2="12"/></svg></div>
+        <span class="sc-cat">Admin</span>
       </div>
-    </div>
+      <div class="sc-title">Admin Revocation</div>
+      <div class="sc-desc">You manually revoke a licence from the dashboard — e.g. fraud, refund issued, or policy violation. Also cancel in Stripe to stop future charges.</div>
+      <div class="sc-footer">
+        <span class="sc-steps">8 steps · manual action</span>
+        <span class="sc-link">View details <svg viewBox="0 0 24 24" fill="none" stroke="#e8920a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </div>
+    </a>
+
+    <a class="scenario-card cat-admin" href="scenario-restore.html">
+      <div class="sc-top">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+        <span class="sc-cat">Admin</span>
+      </div>
+      <div class="sc-title">Restore a Revoked Licence</div>
+      <div class="sc-desc">Undo a revocation — e.g. refund reversed or wrong key revoked. Pro access is restored on the customer's very next app check-in. No new key needed.</div>
+      <div class="sc-footer">
+        <span class="sc-steps">5 steps · quick fix</span>
+        <span class="sc-link">View details <svg viewBox="0 0 24 24" fill="none" stroke="#e8920a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </div>
+    </a>
+
+    <a class="scenario-card cat-admin" href="scenario-resend.html">
+      <div class="sc-top">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <span class="sc-cat">Admin</span>
+      </div>
+      <div class="sc-title">Resend Lost Licence Key</div>
+      <div class="sc-desc">Customer lost their licence email. You click Resend in the dashboard — Worker fetches their email live from Stripe and delivers a fresh copy of the key.</div>
+      <div class="sc-footer">
+        <span class="sc-steps">8 steps · support action</span>
+        <span class="sc-link">View details <svg viewBox="0 0 24 24" fill="none" stroke="#e8920a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </div>
+    </a>
+
+    <a class="scenario-card cat-edge" href="scenario-offline.html">
+      <div class="sc-top">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
+        <span class="sc-cat">Edge Case</span>
+      </div>
+      <div class="sc-title">Offline Grace Period</div>
+      <div class="sc-desc">Customer's PC has no internet. The app uses its last cached valid status for up to 7 days before requiring a fresh check-in to confirm the licence is still active.</div>
+      <div class="sc-footer">
+        <span class="sc-steps">6 steps · app-side caching</span>
+        <span class="sc-link">View details <svg viewBox="0 0 24 24" fill="none" stroke="#e8920a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </div>
+    </a>
+
+    <a class="scenario-card cat-purchase" href="scenario-resubscribe.html">
+      <div class="sc-top">
+        <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+        <span class="sc-cat">Purchase</span>
+      </div>
+      <div class="sc-title">Re-subscription After Cancellation</div>
+      <div class="sc-desc">A lapsed customer subscribes again. A brand new licence key is issued for the new subscription. The old revoked row stays in D1 for records.</div>
+      <div class="sc-footer">
+        <span class="sc-steps">10 steps · new key issued</span>
+        <span class="sc-link">View details <svg viewBox="0 0 24 24" fill="none" stroke="#e8920a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </div>
+    </a>
   </div>
-
-  <!-- SCENARIO 2 -->
-  <h2>Scenario 2 — Annual Renewal <span class="badge green">Automatic</span></h2>
-  <div class="flow">
-    <div class="steps">
-      <div class="step">
-        <div class="step-num stripe">1</div>
-        <div class="step-body">
-          <div class="step-label">Stripe attempts annual charge</div>
-          <div class="step-detail">~12 months after subscription start (or after trial ends). Charges saved card automatically.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num stripe">2</div>
-        <div class="step-body">
-          <div class="step-label">invoice.payment_succeeded webhook fires</div>
-          <div class="step-detail">Worker receives event → confirms subscription still active → no action needed. Licence key status remains active.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num app">3</div>
-        <div class="step-body">
-          <div class="step-label">App continues working</div>
-          <div class="step-detail">Next check-in returns valid + active. Customer notices nothing — seamless renewal.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCENARIO 3 -->
-  <h2>Scenario 3 — Payment Failure &amp; Recovery <span class="badge amber">Requires Action</span></h2>
-  <div class="flow">
-    <div class="steps">
-      <div class="step">
-        <div class="step-num stripe">1</div>
-        <div class="step-body">
-          <div class="step-label">Stripe annual charge fails</div>
-          <div class="step-detail">Card declined / expired. Stripe fires invoice.payment_failed webhook.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num worker">2</div>
-        <div class="step-body">
-          <div class="step-label">Licence suspended (not revoked)</div>
-          <div class="step-detail">Status set to suspended in database. App check-in returns valid: false, status: suspended. After 7-day grace period, Pro features lock in the app.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num stripe">3</div>
-        <div class="step-body">
-          <div class="step-label">Stripe retries payment automatically</div>
-          <div class="step-detail">Stripe sends reminder emails to customer and retries the charge (typically 3–4 attempts over ~2 weeks depending on your Stripe retry settings).</div>
-        </div>
-      </div>
-    </div>
-    <div class="branch">
-      <div class="branch-label">Two outcomes</div>
-      <div class="branch-row"><div class="branch-arrow">✓</div><div class="branch-text"><strong>Payment recovered:</strong> invoice.payment_succeeded fires → Worker sets status = active → App unlocks on next check-in. No intervention needed.</div></div>
-      <div class="branch-row"><div class="branch-arrow">✗</div><div class="branch-text"><strong>Payment never recovered:</strong> Stripe cancels subscription → customer.subscription.deleted fires → Worker sets status = revoked → App locks permanently until new subscription.</div></div>
-    </div>
-  </div>
-
-  <!-- SCENARIO 4 -->
-  <h2>Scenario 4 — Customer Cancels Subscription <span class="badge amber">Graceful End</span></h2>
-  <div class="flow">
-    <div class="steps">
-      <div class="step">
-        <div class="step-num customer">1</div>
-        <div class="step-body">
-          <div class="step-label">Customer cancels via Stripe customer portal</div>
-          <div class="step-detail">Or contacts you to cancel. Stripe cancels at end of current billing period (not immediately).</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num stripe">2</div>
-        <div class="step-body">
-          <div class="step-label">customer.subscription.deleted fires at period end</div>
-          <div class="step-detail">Worker receives event. Status set to revoked. Note: customer keeps access until their paid period expires — Stripe handles this timing.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num app">3</div>
-        <div class="step-body">
-          <div class="step-label">App locks on next check-in after period ends</div>
-          <div class="step-detail">Pro features revert to free tier. Customer sees upgrade prompt. Their collection data is never deleted.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCENARIO 5 -->
-  <h2>Scenario 5 — Admin Revocation (Refund / Abuse) <span class="badge red">Manual Action</span></h2>
-  <div class="flow">
-    <div class="steps">
-      <div class="step">
-        <div class="step-num admin">1</div>
-        <div class="step-body">
-          <div class="step-label">Open admin dashboard</div>
-          <div class="step-detail">Visit https://api.modelcollectr.co.uk/admin with X-Admin-Secret header set in ModHeader browser extension.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num admin">2</div>
-        <div class="step-body">
-          <div class="step-label">Find the customer's row, click Revoke</div>
-          <div class="step-detail">Confirm the prompt. Status set to revoked immediately in database.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num app">3</div>
-        <div class="step-body">
-          <div class="step-label">App locks on next check-in</div>
-          <div class="step-detail">Within 7 days at most (7-day grace period). Immediate if customer opens app while connected to internet.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num admin">4</div>
-        <div class="step-body">
-          <div class="step-label">Also cancel in Stripe if subscription is still active</div>
-          <div class="step-detail">Admin revoke only blocks the key — it doesn't stop Stripe charging the card. Go to Stripe Dashboard → Customers → cancel subscription separately.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCENARIO 6 -->
-  <h2>Scenario 6 — Restore Revoked Licence <span class="badge blue">Admin Action</span></h2>
-  <div class="flow">
-    <div class="steps">
-      <div class="step">
-        <div class="step-num admin">1</div>
-        <div class="step-body">
-          <div class="step-label">Find the customer's row in admin dashboard</div>
-          <div class="step-detail">Status shows "revoked" (red badge).</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num admin">2</div>
-        <div class="step-body">
-          <div class="step-label">Click Restore</div>
-          <div class="step-detail">Status immediately set to active in database.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num app">3</div>
-        <div class="step-body">
-          <div class="step-label">App unlocks on next check-in</div>
-          <div class="step-detail">Customer opens app → check-in returns valid: true → Pro features unlock. No key change needed.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCENARIO 7 -->
-  <h2>Scenario 7 — Customer Lost Their Key Email <span class="badge blue">Support Action</span></h2>
-  <div class="flow">
-    <div class="steps">
-      <div class="step">
-        <div class="step-num customer">1</div>
-        <div class="step-body">
-          <div class="step-label">Customer contacts you — can't find key email</div>
-          <div class="step-detail">Ask for the email address they used to subscribe.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num admin">2</div>
-        <div class="step-body">
-          <div class="step-label">Find their row in admin dashboard</div>
-          <div class="step-detail">Look up by email address in the table. Confirm status is active.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num admin">3</div>
-        <div class="step-body">
-          <div class="step-label">Click Resend</div>
-          <div class="step-detail">Same licence key email resent to their email address. No new key generated — same key as before.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCENARIO 8 -->
-  <h2>Scenario 8 — Offline Grace Period <span class="badge amber">Edge Case</span></h2>
-  <div class="flow">
-    <div class="steps">
-      <div class="step">
-        <div class="step-num app">1</div>
-        <div class="step-body">
-          <div class="step-label">App opens but can't reach the server</div>
-          <div class="step-detail">No internet, or server temporarily down. Check-in fails.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num app">2</div>
-        <div class="step-body">
-          <div class="step-label">App checks last successful check-in date</div>
-          <div class="step-detail">If within 7 days: Pro features stay unlocked silently. Customer notices nothing.</div>
-        </div>
-      </div>
-    </div>
-    <div class="branch">
-      <div class="branch-label">After 7 days offline</div>
-      <div class="branch-row"><div class="branch-arrow">→</div><div class="branch-text">Pro features lock. App shows message explaining it couldn't verify the licence and prompts to connect to internet.</div></div>
-      <div class="branch-row"><div class="branch-arrow">→</div><div class="branch-text">Once connected, next check-in restores Pro immediately if key is still active.</div></div>
-    </div>
-  </div>
-
-  <!-- SCENARIO 9 -->
-  <h2>Scenario 9 — Re-subscription (After Previous Cancellation) <span class="badge blue">Edge Case</span></h2>
-  <div class="flow">
-    <div class="steps">
-      <div class="step">
-        <div class="step-num customer">1</div>
-        <div class="step-body">
-          <div class="step-label">Customer subscribes again after previously cancelling</div>
-          <div class="step-detail">Goes through normal checkout flow again.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num worker">2</div>
-        <div class="step-body">
-          <div class="step-label">New key generated for new subscription</div>
-          <div class="step-detail">Old revoked key stays in database (not deleted). New key created for the new subscription ID. Customer gets a new email with a new key.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num customer">3</div>
-        <div class="step-body">
-          <div class="step-label">Customer enters new key in app</div>
-          <div class="step-detail">Help → Enter Licence Key → enters new MC-XXXX key → Pro unlocked again.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <p style="color:#8a8070;font-size:0.78rem;text-align:center;margin-top:32px;margin-bottom:8px;">
-    <a href="index.html" style="color:#e8920a">← Back to Ops</a> &nbsp;·&nbsp; modelcollectr.co.uk/ops/workflow.html
-  </p>
-
 </div>
+
+<script>
+  function filter(cat, btn) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.scenario-card').forEach(card => {
+      card.classList.toggle('hidden', cat !== 'all' && !card.classList.contains('cat-' + cat));
+    });
+  }
+</script>
 </body>
 </html>

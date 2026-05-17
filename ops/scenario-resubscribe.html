@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModelCollectr Ops — Re-subscription</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; }
+    .nav { background: #1c1f26; padding: 14px 32px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e8920a; flex-wrap: wrap; }
+    .nav a { color: #f5b830; font-weight: 700; font-size: 0.92rem; text-decoration: none; } .nav a:hover { color: #ffc93a; }
+    .nav-sep { color: #4a4235; } .nav-cur { color: #8a8070; font-size: 0.85rem; }
+    .page-hdr { background: #1c1f26; padding: 32px; border-bottom: 1px solid #252a34; }
+    .page-hdr-inner { max-width: 860px; margin: 0 auto; }
+    .page-cat { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 12px; background: #e8f5ee; color: #2d8a57; }
+    .page-title { font-size: 1.55rem; font-weight: 700; color: #ede9e0; margin-bottom: 10px; }
+    .page-desc { color: #8a8070; font-size: 0.88rem; line-height: 1.65; max-width: 620px; }
+    .actors { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .actor-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 60px; }
+    .flow-label { font-size: 1rem; font-weight: 700; color: #1e1a14; margin-bottom: 6px; }
+    .flow-hint { font-size: 0.8rem; color: #8a8070; margin-bottom: 28px; }
+    .flow { position: relative; padding-left: 58px; }
+    .flow::before { content: ''; position: absolute; left: 20px; top: 10px; bottom: 10px; width: 2px; background: linear-gradient(to bottom, #5b8def, #e8920a, #635bff, #4caf7d, #e8734a); opacity: 0.4; border-radius: 2px; }
+    .step { position: relative; margin-bottom: 18px; }
+    .step-circle { position: absolute; left: -58px; top: 0; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 2px solid; background: #f4f1eb; z-index: 1; }
+    .step-card { background: white; border-radius: 10px; padding: 14px 18px; border-left: 4px solid; cursor: pointer; transition: box-shadow 0.15s; user-select: none; }
+    .step-card:hover { box-shadow: 0 3px 16px rgba(0,0,0,0.09); }
+    .actor-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 9px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.07em; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 7px; }
+    .step-title { font-weight: 600; color: #1e1a14; font-size: 0.93rem; margin-bottom: 3px; }
+    .step-desc { font-size: 0.84rem; color: #4a4235; line-height: 1.55; }
+    .expand-hint { float: right; font-size: 0.7rem; color: #b0a898; transition: color 0.15s; }
+    .step-card:hover .expand-hint { color: #e8920a; }
+    .step-detail { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
+    .step-detail-inner { margin-top: 12px; padding: 12px 16px; background: #f4f1eb; border-radius: 7px; font-size: 0.82rem; line-height: 1.65; color: #2a2015; }
+    .step-detail-inner code { font-family: 'Courier New', monospace; background: #1c1f26; color: #f5b830; padding: 1px 5px; border-radius: 3px; font-size: 0.78rem; }
+    .step-detail-inner pre { font-family: 'Courier New', monospace; background: #1c1f26; color: #ede9e0; padding: 12px 14px; border-radius: 7px; font-size: 0.76rem; line-height: 1.65; overflow-x: auto; margin-top: 8px; white-space: pre-wrap; }
+    .step-detail-inner ul { padding-left: 18px; margin-top: 6px; } .step-detail-inner li { margin-bottom: 4px; }
+    .actor-customer .step-circle { color: #5b8def; border-color: #5b8def; } .actor-customer .step-card { border-left-color: #5b8def; } .actor-customer .actor-badge { background: #e8f0fd; color: #3a6abf; }
+    .actor-worker .step-circle { color: #e8920a; border-color: #e8920a; } .actor-worker .step-card { border-left-color: #e8920a; } .actor-worker .actor-badge { background: #fef3e2; color: #a06000; }
+    .actor-stripe .step-circle { color: #635bff; border-color: #635bff; } .actor-stripe .step-card { border-left-color: #635bff; } .actor-stripe .actor-badge { background: #eeecff; color: #5050d0; }
+    .actor-db .step-circle { color: #4caf7d; border-color: #4caf7d; } .actor-db .step-card { border-left-color: #4caf7d; } .actor-db .actor-badge { background: #e8f5ee; color: #2a7a4a; }
+    .actor-email .step-circle { color: #e8734a; border-color: #e8734a; } .actor-email .step-card { border-left-color: #e8734a; } .actor-email .actor-badge { background: #fdf0eb; color: #b04a20; }
+    .state-card { background: white; border-radius: 12px; padding: 24px; margin-top: 44px; }
+    .state-title { font-size: 0.95rem; font-weight: 700; color: #1e1a14; margin-bottom: 16px; }
+    .state-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .state-table th { text-align: left; padding: 8px 12px; background: #f4f1eb; color: #4a4235; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .state-table td { padding: 10px 12px; border-bottom: 1px solid #ede9e0; vertical-align: top; }
+    .state-table tr:last-child td { border-bottom: none; }
+    .sys-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 0.74rem; font-weight: 600; }
+    .tip { background: #e8f5ee; border-left: 3px solid #4caf7d; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 12px; font-size: 0.84rem; color: #1a4030; line-height: 1.5; }
+    .tip strong { display: block; margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: #e8920a; font-weight: 600; font-size: 0.85rem; text-decoration: none; margin-top: 36px; }
+    .back-link svg { width: 16px; height: 16px; } .back-link:hover { color: #c07000; }
+    @media (max-width: 600px) { .nav, .page-hdr { padding-left: 16px; padding-right: 16px; } .wrap { padding: 24px 16px 48px; } .flow { padding-left: 48px; } .step-circle { left: -48px; width: 34px; height: 34px; font-size: 0.76rem; } .page-title { font-size: 1.25rem; } }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html">Ops Hub</a><span class="nav-sep">/</span><a href="workflow.html">Workflow</a><span class="nav-sep">/</span><span class="nav-cur">Re-subscription</span>
+</nav>
+<div class="page-hdr">
+  <div class="page-hdr-inner">
+    <span class="page-cat">Purchase</span>
+    <div class="page-title">Re-subscription After Cancellation</div>
+    <div class="page-desc">A lapsed customer decides to resubscribe. They go through the full purchase flow as if they were a new customer — a brand new licence key is generated and issued. Their old revoked key stays in D1 for records but is never reactivated.</div>
+    <div class="actors">
+      <span class="actor-chip" style="background:#e8f0fd;color:#3a6abf">● Customer</span>
+      <span class="actor-chip" style="background:#fef3e2;color:#a06000">● Cloudflare Worker</span>
+      <span class="actor-chip" style="background:#eeecff;color:#5050d0">● Stripe</span>
+      <span class="actor-chip" style="background:#e8f5ee;color:#2a7a4a">● D1 Database</span>
+      <span class="actor-chip" style="background:#fdf0eb;color:#b04a20">● Resend Email</span>
+    </div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="flow-label">Step-by-Step Flow</div>
+  <div class="flow-hint">10 steps. Mostly the same as the purchase scenario, but with key differences around idempotency and Stripe's handling of returning customers. Click any step for detail.</div>
+  <div class="flow">
+
+    <div class="step actor-customer">
+      <div class="step-circle">1</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div><span class="expand-hint"></span>
+        <div class="step-title">Lapsed customer revisits modelcollectr.co.uk and clicks Buy Now</div>
+        <div class="step-desc">They may be using the same email address as before, or a different one. Either way, the flow starts fresh from their browser.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          There's no "returning customer" flow on the website — it's identical to a first-time purchase. The same <code>startCheckout()</code> call is made. The Worker doesn't look up old subscriptions — it just creates a new Stripe Checkout Session.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">2</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div><span class="expand-hint"></span>
+        <div class="step-title">Worker creates a new Stripe Checkout Session</div>
+        <div class="step-desc">Same as the original purchase — a new session is created with the annual price. No mention of the previous subscription.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The Checkout Session parameters are identical to the original purchase. If the returning customer uses the same email, Stripe will recognise them and may pre-fill their details.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">3</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div><span class="expand-hint"></span>
+        <div class="step-title">Customer completes the Stripe checkout</div>
+        <div class="step-desc">If Stripe recognises their email, they may see their previous payment method pre-filled. They complete the checkout and subscribe.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          Stripe may link this to their existing Customer object (if the email matches) or create a new one. Either way, a new Subscription object is created with a new subscription ID. The 14-day free trial applies again as it's a new subscription.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">4</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div><span class="expand-hint"></span>
+        <div class="step-title">Stripe creates a NEW subscription and fires customer.subscription.created</div>
+        <div class="step-desc">A brand new subscription ID is generated — different from the cancelled one. This is the key difference from the original purchase.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The webhook event contains:
+          <pre>{
+  "type": "customer.subscription.created",
+  "data": {
+    "object": {
+      "id": "sub_2NEW...",     ← NEW subscription ID
+      "customer": "cus_1XYZ...", ← may be same customer
+      "status": "trialing"
+    }
+  }
+}</pre>
+          The old subscription ID was <code>sub_1ABC...</code> (cancelled, row in D1 with status revoked). This new one is completely different.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">5</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div><span class="expand-hint"></span>
+        <div class="step-title">Worker verifies webhook and checks idempotency</div>
+        <div class="step-desc">The idempotency check looks for an existing key with THIS subscription ID — which doesn't exist yet. So the Worker proceeds to create a new key.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>SELECT key FROM licenses
+WHERE stripe_subscription_id = 'sub_2NEW...'
+
+→ No row found → proceed to create new key</pre>
+          <strong>Critical:</strong> The idempotency check is on <code>stripe_subscription_id</code>, not on <code>stripe_customer_id</code>. This means the same customer can have multiple rows in D1 — one for each subscription. That's by design: each subscription period gets its own unique key.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">6</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div><span class="expand-hint"></span>
+        <div class="step-title">Worker fetches customer email from Stripe</div>
+        <div class="step-desc">Same as original purchase — the email is fetched from the Stripe customer object and used to send the new key email.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          If the customer used the same email, this is their existing Stripe Customer with the same ID. If they used a new email, Stripe may have created a new Customer object with a new ID.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">7</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div><span class="expand-hint"></span>
+        <div class="step-title">Worker generates a brand new licence key</div>
+        <div class="step-desc">A completely new MC-XXXX-XXXX-XXXX-XXXX key is generated. It has no relation to the previous key.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The old key (e.g. <code>MC-K8HN-4XRQ-BZTW-7YJP</code>) remains in D1 with status revoked. The new key (e.g. <code>MC-R4MN-7ZPQ-XWTK-5HJC</code>) is a completely different string generated fresh with <code>crypto.getRandomValues()</code>.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-db">
+      <div class="step-circle">8</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● D1 Database</div><span class="expand-hint"></span>
+        <div class="step-title">Worker inserts a NEW row in D1 for the new subscription</div>
+        <div class="step-desc">D1 now has two rows for this customer — the old revoked one and the new active one. The old row is preserved as a historical record.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>-- Existing row (from original subscription):
+key='MC-K8HN-...', stripe_subscription_id='sub_1ABC...', status='revoked'
+
+-- New row (inserted now):
+INSERT INTO licenses
+  (key, stripe_customer_id, stripe_subscription_id, status, created_at)
+VALUES
+  ('MC-R4MN-7ZPQ-XWTK-5HJC',
+   'cus_1XYZ...',   ← same customer ID
+   'sub_2NEW...',   ← new subscription ID
+   'active',
+   1716500000000)</pre>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-email">
+      <div class="step-circle">9</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Resend Email</div><span class="expand-hint"></span>
+        <div class="step-title">Worker sends the new key via Resend</div>
+        <div class="step-desc">The customer receives a fresh licence email with the brand new key and activation instructions.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The email is identical to the original. The customer must use the new key — their old key is permanently revoked. They need to go into Help → Enter Licence Key and replace the old key with the new one.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">10</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div><span class="expand-hint"></span>
+        <div class="step-title">Customer enters the new key in the app — Pro restored</div>
+        <div class="step-desc">The customer removes or replaces the old key with the new one. /license/verify returns {valid: true, status: 'active'} and Pro features unlock.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The old key (<code>MC-K8HN-...</code>) will return <code>{"valid": false, "status": "revoked"}</code> if checked. The new key (<code>MC-R4MN-...</code>) returns <code>{"valid": true, "status": "active"}</code>. The customer must update the key stored in the app.
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="state-card">
+    <div class="state-title">✅ State After This Scenario</div>
+    <table class="state-table">
+      <thead><tr><th>System</th><th>What's in it</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sys-badge" style="background:#eeecff;color:#5050d0">Stripe</span></td><td>Customer has 2 subscriptions: sub_1ABC (cancelled) and sub_2NEW (active/trialing)</td></tr>
+        <tr><td><span class="sys-badge" style="background:#e8f5ee;color:#2a7a4a">D1 Database</span></td><td>2 rows: old key (revoked, sub_1ABC) and new key (active, sub_2NEW) — both linked to same stripe_customer_id</td></tr>
+        <tr><td><span class="sys-badge" style="background:#fdf0eb;color:#b04a20">Email</span></td><td>New licence email delivered with new key and activation instructions</td></tr>
+        <tr><td><span class="sys-badge" style="background:#e8f0fd;color:#3a6abf">Customer App</span></td><td>New key entered, Pro restored</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip"><strong>Admin dashboard view</strong>You'll see two rows for this customer in the admin dashboard — one revoked, one active. Both show the same email (fetched from the same Stripe customer). This is expected and correct. The revoked row is a historical record.</div>
+
+  <a class="back-link" href="workflow.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Workflow Overview</a>
+</div>
+<script>
+  document.querySelectorAll('.step-card').forEach(card => {
+    card.addEventListener('click', () => { const o = card.classList.contains('open'); card.classList.toggle('open', !o); card.setAttribute('aria-expanded', !o); const d = card.querySelector('.step-detail'); d.style.maxHeight = !o ? d.scrollHeight + 'px' : '0'; });
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); } });
+  });
+</script>
+</body>
+</html>

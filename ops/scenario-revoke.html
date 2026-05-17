@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModelCollectr Ops — Admin Revocation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; }
+    .nav { background: #1c1f26; padding: 14px 32px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e8920a; flex-wrap: wrap; }
+    .nav a { color: #f5b830; font-weight: 700; font-size: 0.92rem; text-decoration: none; } .nav a:hover { color: #ffc93a; }
+    .nav-sep { color: #4a4235; } .nav-cur { color: #8a8070; font-size: 0.85rem; }
+    .page-hdr { background: #1c1f26; padding: 32px; border-bottom: 1px solid #252a34; }
+    .page-hdr-inner { max-width: 860px; margin: 0 auto; }
+    .page-cat { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 12px; background: #fef3e2; color: #b06a00; }
+    .page-title { font-size: 1.55rem; font-weight: 700; color: #ede9e0; margin-bottom: 10px; }
+    .page-desc { color: #8a8070; font-size: 0.88rem; line-height: 1.65; max-width: 620px; }
+    .actors { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .actor-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 60px; }
+    .flow-label { font-size: 1rem; font-weight: 700; color: #1e1a14; margin-bottom: 6px; }
+    .flow-hint { font-size: 0.8rem; color: #8a8070; margin-bottom: 28px; }
+    .flow { position: relative; padding-left: 58px; }
+    .flow::before { content: ''; position: absolute; left: 20px; top: 10px; bottom: 10px; width: 2px; background: linear-gradient(to bottom, #e8920a, #c0392b, #4caf7d); opacity: 0.4; border-radius: 2px; }
+    .step { position: relative; margin-bottom: 18px; }
+    .step-circle { position: absolute; left: -58px; top: 0; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 2px solid; background: #f4f1eb; z-index: 1; }
+    .step-card { background: white; border-radius: 10px; padding: 14px 18px; border-left: 4px solid; cursor: pointer; transition: box-shadow 0.15s; user-select: none; }
+    .step-card:hover { box-shadow: 0 3px 16px rgba(0,0,0,0.09); }
+    .actor-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 9px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.07em; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 7px; }
+    .step-title { font-weight: 600; color: #1e1a14; font-size: 0.93rem; margin-bottom: 3px; }
+    .step-desc { font-size: 0.84rem; color: #4a4235; line-height: 1.55; }
+    .expand-hint { float: right; font-size: 0.7rem; color: #b0a898; transition: color 0.15s; }
+    .step-card:hover .expand-hint { color: #e8920a; }
+    .step-detail { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
+    .step-detail-inner { margin-top: 12px; padding: 12px 16px; background: #f4f1eb; border-radius: 7px; font-size: 0.82rem; line-height: 1.65; color: #2a2015; }
+    .step-detail-inner code { font-family: 'Courier New', monospace; background: #1c1f26; color: #f5b830; padding: 1px 5px; border-radius: 3px; font-size: 0.78rem; }
+    .step-detail-inner pre { font-family: 'Courier New', monospace; background: #1c1f26; color: #ede9e0; padding: 12px 14px; border-radius: 7px; font-size: 0.76rem; line-height: 1.65; overflow-x: auto; margin-top: 8px; white-space: pre-wrap; }
+    .step-detail-inner ul { padding-left: 18px; margin-top: 6px; } .step-detail-inner li { margin-bottom: 4px; }
+    .actor-admin .step-circle { color: #e8920a; border-color: #e8920a; } .actor-admin .step-card { border-left-color: #e8920a; } .actor-admin .actor-badge { background: #fef3e2; color: #a06000; }
+    .actor-worker .step-circle { color: #635bff; border-color: #635bff; } .actor-worker .step-card { border-left-color: #635bff; } .actor-worker .actor-badge { background: #eeecff; color: #5050d0; }
+    .actor-db .step-circle { color: #4caf7d; border-color: #4caf7d; } .actor-db .step-card { border-left-color: #4caf7d; } .actor-db .actor-badge { background: #e8f5ee; color: #2a7a4a; }
+    .actor-stripe .step-circle { color: #635bff; border-color: #635bff; } .actor-stripe .step-card { border-left-color: #635bff; } .actor-stripe .actor-badge { background: #eeecff; color: #5050d0; }
+    .actor-danger .step-circle { color: #c0392b; border-color: #c0392b; } .actor-danger .step-card { border-left-color: #c0392b; } .actor-danger .actor-badge { background: #f8d7da; color: #9a1a1a; }
+    .state-card { background: white; border-radius: 12px; padding: 24px; margin-top: 44px; }
+    .state-title { font-size: 0.95rem; font-weight: 700; color: #1e1a14; margin-bottom: 16px; }
+    .state-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .state-table th { text-align: left; padding: 8px 12px; background: #f4f1eb; color: #4a4235; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .state-table td { padding: 10px 12px; border-bottom: 1px solid #ede9e0; vertical-align: top; }
+    .state-table tr:last-child td { border-bottom: none; }
+    .sys-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 0.74rem; font-weight: 600; }
+    .warn { background: #fff0f0; border-left: 3px solid #c0392b; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 12px; font-size: 0.84rem; color: #5c1a1a; line-height: 1.5; }
+    .tip { background: #fffbf0; border-left: 3px solid #e8920a; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 12px; font-size: 0.84rem; color: #5a3a00; line-height: 1.5; }
+    .warn strong, .tip strong { display: block; margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: #e8920a; font-weight: 600; font-size: 0.85rem; text-decoration: none; margin-top: 36px; }
+    .back-link svg { width: 16px; height: 16px; } .back-link:hover { color: #c07000; }
+    @media (max-width: 600px) { .nav, .page-hdr { padding-left: 16px; padding-right: 16px; } .wrap { padding: 24px 16px 48px; } .flow { padding-left: 48px; } .step-circle { left: -48px; width: 34px; height: 34px; font-size: 0.76rem; } .page-title { font-size: 1.25rem; } }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html">Ops Hub</a><span class="nav-sep">/</span><a href="workflow.html">Workflow</a><span class="nav-sep">/</span><span class="nav-cur">Admin Revocation</span>
+</nav>
+<div class="page-hdr">
+  <div class="page-hdr-inner">
+    <span class="page-cat">Admin</span>
+    <div class="page-title">Admin Revocation</div>
+    <div class="page-desc">You manually revoke a licence from the admin dashboard — e.g. you've issued a refund, detected fraud, or there's a policy violation. This immediately blocks Pro access on the customer's next check-in.</div>
+    <div class="actors">
+      <span class="actor-chip" style="background:#fef3e2;color:#a06000">● You (Admin)</span>
+      <span class="actor-chip" style="background:#eeecff;color:#5050d0">● Worker / Dashboard</span>
+      <span class="actor-chip" style="background:#e8f5ee;color:#2a7a4a">● D1 Database</span>
+      <span class="actor-chip" style="background:#eeecff;color:#5050d0">● Stripe</span>
+    </div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="flow-label">Step-by-Step Flow</div>
+  <div class="flow-hint">8 steps. This is a manual action — you're in control throughout. Click any step for detail.</div>
+  <div class="flow">
+
+    <div class="step actor-admin">
+      <div class="step-circle">1</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Admin</div><span class="expand-hint"></span>
+        <div class="step-title">Open the admin dashboard</div>
+        <div class="step-desc">Navigate to https://api.modelcollectr.co.uk/admin with the X-Admin-Secret header set. The easiest way is the ModHeader browser extension.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          Using ModHeader (Chrome/Firefox extension):
+          <ul>
+            <li>Add header: <code>X-Admin-Secret</code></li>
+            <li>Value: <code>MC_ADMIN_3F21F96F91C4DFC7BED4B0E4FC829A36</code></li>
+            <li>Enable the rule, then visit the URL</li>
+          </ul>
+          Or via curl: <code>curl -H "X-Admin-Secret: MC_ADMIN_3F21F96F91C4DFC7BED4B0E4FC829A36" https://api.modelcollectr.co.uk/admin</code>
+          <br><br>
+          The dashboard loads with all licences listed. The admin secret is cached in sessionStorage after you enter it once via the prompt — you won't be asked again until you close the tab.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-admin">
+      <div class="step-circle">2</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Admin</div><span class="expand-hint"></span>
+        <div class="step-title">Find the licence you want to revoke</div>
+        <div class="step-desc">Use the status filter buttons (All / Active / Revoked / Suspended) to narrow the list, then identify the correct row by email or key.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          Each row shows: licence key, email (fetched live from Stripe), status badge, creation date, last check-in date, total check-in count, and action buttons. The email is displayed live — it's always up-to-date from Stripe, never stored in D1.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-admin">
+      <div class="step-circle">3</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Admin</div><span class="expand-hint"></span>
+        <div class="step-title">Click the "Revoke" button on that row</div>
+        <div class="step-desc">A confirmation dialog appears before anything is sent. You must confirm before the revocation is applied.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The browser shows: "Revoke this key? The customer will lose Pro access on their next check-in." — OK or Cancel. This prevents accidental revocations.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">4</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div><span class="expand-hint"></span>
+        <div class="step-title">Dashboard sends POST /admin/licenses/:key/revoke</div>
+        <div class="step-desc">The browser posts the revoke request to the Worker with the X-Admin-Secret header and a notes field explaining the reason.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>POST /admin/licenses/MC-K8HN-4XRQ-BZTW-7YJP/revoke
+X-Admin-Secret: MC_ADMIN_3F21F96F91C4DFC7BED4B0E4FC829A36
+Content-Type: application/json
+
+{"notes": "Manually revoked from dashboard"}</pre>
+          The Worker re-validates the admin secret on every action endpoint — it doesn't trust a session.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-db">
+      <div class="step-circle">5</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● D1 Database</div><span class="expand-hint"></span>
+        <div class="step-title">Worker updates the licence status to 'revoked'</div>
+        <div class="step-desc">D1 is updated with the new status and the optional note you provided. The change is instant.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>UPDATE licenses
+SET status = 'revoked',
+    notes = 'Manually revoked from dashboard'
+WHERE key = 'MC-K8HN-4XRQ-BZTW-7YJP'</pre>
+          Notes are capped at 500 characters. The notes field is visible in the admin dashboard to remind you why a key was revoked.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-admin">
+      <div class="step-circle">6</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Admin</div><span class="expand-hint"></span>
+        <div class="step-title">Dashboard shows "Done — reload to see changes" toast</div>
+        <div class="step-desc">A toast notification confirms the action succeeded. Reload the page to see the updated status badge.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The Worker returns <code>{"ok": true}</code> and the dashboard shows a brief toast. The row in the table still shows the old status until you reload — this is by design (reload to confirm).
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">7</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe — Important!</div><span class="expand-hint"></span>
+        <div class="step-title">Manually cancel the subscription in Stripe Dashboard</div>
+        <div class="step-desc">Revoking in D1 blocks Pro access but does NOT stop future billing. You must separately cancel the Stripe subscription to stop charges.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          In Stripe Dashboard → Customers → find the customer → Subscriptions → Cancel subscription. Choose "Cancel immediately" for a refund scenario, or "at period end" if they've paid for a period they'll lose access to.
+          <br><br>
+          <strong>Why two steps?</strong> The admin dashboard is deliberately separate from Stripe billing. This gives you flexibility — e.g. you can revoke access while still letting a refund dispute resolve before cancelling in Stripe.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-danger">
+      <div class="step-circle">8</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer App</div><span class="expand-hint"></span>
+        <div class="step-title">Customer's next check-in blocks Pro access</div>
+        <div class="step-desc">On the next app startup, /license/verify returns {valid: false, status: 'revoked'}. Pro features are locked immediately.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>{"valid": false, "status": "revoked"}</pre>
+          The customer loses access at their very next app launch — not instantly. If they have the app open, it'll hit the API at the configured check-in interval (e.g. next startup). The app should show: "Your licence key is no longer valid. Contact support if you believe this is an error."
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="state-card">
+    <div class="state-title">State After This Scenario</div>
+    <table class="state-table">
+      <thead><tr><th>System</th><th>State</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sys-badge" style="background:#e8f5ee;color:#2a7a4a">D1 Database</span></td><td>Status: revoked. Notes: reason you entered.</td></tr>
+        <tr><td><span class="sys-badge" style="background:#eeecff;color:#5050d0">Stripe</span></td><td>Subscription still active (unless you cancelled it in step 7). Future billing will continue if not cancelled.</td></tr>
+        <tr><td><span class="sys-badge" style="background:#f8d7da;color:#9a1a1a">Customer App</span></td><td>Pro locked on next check-in.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="warn"><strong>Always cancel in Stripe too</strong>Revoking in the dashboard only blocks the key in D1. If you don't also cancel in Stripe, the customer will keep being charged every year. Do both steps every time.</div>
+  <div class="tip"><strong>Accidentally revoked?</strong>Use the Restore scenario — it's quick and the customer won't notice if you're fast enough (before their next app check-in).</div>
+
+  <a class="back-link" href="workflow.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Workflow Overview</a>
+</div>
+<script>
+  document.querySelectorAll('.step-card').forEach(card => {
+    card.addEventListener('click', () => { const o = card.classList.contains('open'); card.classList.toggle('open', !o); card.setAttribute('aria-expanded', !o); const d = card.querySelector('.step-detail'); d.style.maxHeight = !o ? d.scrollHeight + 'px' : '0'; });
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); } });
+  });
+</script>
+</body>
+</html>

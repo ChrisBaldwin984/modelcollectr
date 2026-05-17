@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModelCollectr Ops — Payment Failure</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; }
+    .nav { background: #1c1f26; padding: 14px 32px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e8920a; flex-wrap: wrap; }
+    .nav a { color: #f5b830; font-weight: 700; font-size: 0.92rem; text-decoration: none; } .nav a:hover { color: #ffc93a; }
+    .nav-sep { color: #4a4235; } .nav-cur { color: #8a8070; font-size: 0.85rem; }
+    .page-hdr { background: #1c1f26; padding: 32px; border-bottom: 1px solid #252a34; }
+    .page-hdr-inner { max-width: 860px; margin: 0 auto; }
+    .page-cat { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 12px; background: #eeecff; color: #5050d0; }
+    .page-title { font-size: 1.55rem; font-weight: 700; color: #ede9e0; margin-bottom: 10px; line-height: 1.2; }
+    .page-desc { color: #8a8070; font-size: 0.88rem; line-height: 1.65; max-width: 620px; }
+    .actors { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .actor-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 60px; }
+    .flow-label { font-size: 1rem; font-weight: 700; color: #1e1a14; margin-bottom: 6px; }
+    .flow-hint { font-size: 0.8rem; color: #8a8070; margin-bottom: 28px; }
+    .flow { position: relative; padding-left: 58px; }
+    .flow::before { content: ''; position: absolute; left: 20px; top: 10px; bottom: 10px; width: 2px; background: linear-gradient(to bottom, #635bff, #c0392b, #e8920a, #4caf7d); opacity: 0.4; border-radius: 2px; }
+    .step { position: relative; margin-bottom: 18px; }
+    .step-circle { position: absolute; left: -58px; top: 0; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 2px solid; background: #f4f1eb; z-index: 1; }
+    .step-card { background: white; border-radius: 10px; padding: 14px 18px; border-left: 4px solid; cursor: pointer; transition: box-shadow 0.15s; user-select: none; }
+    .step-card:hover { box-shadow: 0 3px 16px rgba(0,0,0,0.09); }
+    .actor-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 9px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.07em; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 7px; }
+    .step-title { font-weight: 600; color: #1e1a14; font-size: 0.93rem; margin-bottom: 3px; }
+    .step-desc { font-size: 0.84rem; color: #4a4235; line-height: 1.55; }
+    .expand-hint { float: right; font-size: 0.7rem; color: #b0a898; transition: color 0.15s; }
+    .step-card:hover .expand-hint { color: #e8920a; }
+    .step-detail { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
+    .step-detail-inner { margin-top: 12px; padding: 12px 16px; background: #f4f1eb; border-radius: 7px; font-size: 0.82rem; line-height: 1.65; color: #2a2015; }
+    .step-detail-inner code { font-family: 'Courier New', monospace; background: #1c1f26; color: #f5b830; padding: 1px 5px; border-radius: 3px; font-size: 0.78rem; }
+    .step-detail-inner pre { font-family: 'Courier New', monospace; background: #1c1f26; color: #ede9e0; padding: 12px 14px; border-radius: 7px; font-size: 0.76rem; line-height: 1.65; overflow-x: auto; margin-top: 8px; white-space: pre-wrap; }
+    .step-detail-inner ul { padding-left: 18px; margin-top: 6px; } .step-detail-inner li { margin-bottom: 4px; }
+    .actor-stripe .step-circle { color: #635bff; border-color: #635bff; } .actor-stripe .step-card { border-left-color: #635bff; } .actor-stripe .actor-badge { background: #eeecff; color: #5050d0; }
+    .actor-worker .step-circle { color: #e8920a; border-color: #e8920a; } .actor-worker .step-card { border-left-color: #e8920a; } .actor-worker .actor-badge { background: #fef3e2; color: #a06000; }
+    .actor-db .step-circle { color: #4caf7d; border-color: #4caf7d; } .actor-db .step-card { border-left-color: #4caf7d; } .actor-db .actor-badge { background: #e8f5ee; color: #2a7a4a; }
+    .actor-danger .step-circle { color: #c0392b; border-color: #c0392b; } .actor-danger .step-card { border-left-color: #c0392b; } .actor-danger .actor-badge { background: #f8d7da; color: #9a1a1a; }
+    .actor-customer .step-circle { color: #5b8def; border-color: #5b8def; } .actor-customer .step-card { border-left-color: #5b8def; } .actor-customer .actor-badge { background: #e8f0fd; color: #3a6abf; }
+    /* Branch */
+    .branch { background: #fffbf0; border: 1px dashed #e8920a; border-radius: 10px; padding: 18px 20px; margin: 14px 0; }
+    .branch-title { font-weight: 700; color: #a06000; margin-bottom: 14px; font-size: 0.88rem; display: flex; align-items: center; gap: 8px; }
+    .branch-title svg { width: 18px; height: 18px; }
+    .branch-paths { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .branch-path { background: white; border-radius: 8px; padding: 14px 16px; border-top: 3px solid; }
+    .branch-path.success { border-top-color: #4caf7d; }
+    .branch-path.fail { border-top-color: #c0392b; }
+    .branch-path-label { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+    .branch-path.success .branch-path-label { color: #2a7a4a; }
+    .branch-path.fail .branch-path-label { color: #9a1a1a; }
+    .branch-path ul { padding-left: 16px; font-size: 0.82rem; color: #4a4235; line-height: 1.6; }
+    .state-card { background: white; border-radius: 12px; padding: 24px; margin-top: 44px; }
+    .state-title { font-size: 0.95rem; font-weight: 700; color: #1e1a14; margin-bottom: 16px; }
+    .state-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .state-table th { text-align: left; padding: 8px 12px; background: #f4f1eb; color: #4a4235; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .state-table td { padding: 10px 12px; border-bottom: 1px solid #ede9e0; vertical-align: top; }
+    .state-table tr:last-child td { border-bottom: none; }
+    .sys-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 0.74rem; font-weight: 600; white-space: nowrap; }
+    .warn { background: #fffbf0; border-left: 3px solid #e8920a; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 12px; font-size: 0.84rem; color: #5a3a00; line-height: 1.5; }
+    .danger { background: #fff0f0; border-left: 3px solid #c0392b; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 12px; font-size: 0.84rem; color: #5c1a1a; line-height: 1.5; }
+    .warn strong, .danger strong { display: block; margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: #e8920a; font-weight: 600; font-size: 0.85rem; text-decoration: none; margin-top: 36px; }
+    .back-link svg { width: 16px; height: 16px; } .back-link:hover { color: #c07000; }
+    @media (max-width: 600px) { .nav, .page-hdr { padding-left: 16px; padding-right: 16px; } .wrap { padding: 24px 16px 48px; } .flow { padding-left: 48px; } .step-circle { left: -48px; width: 34px; height: 34px; font-size: 0.76rem; } .page-title { font-size: 1.25rem; } .branch-paths { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html">Ops Hub</a><span class="nav-sep">/</span>
+  <a href="workflow.html">Workflow</a><span class="nav-sep">/</span>
+  <span class="nav-cur">Payment Failure</span>
+</nav>
+<div class="page-hdr">
+  <div class="page-hdr-inner">
+    <span class="page-cat">Billing</span>
+    <div class="page-title">Payment Failure &amp; Recovery</div>
+    <div class="page-desc">A renewal charge fails — card expired, insufficient funds, or bank declined. The licence is suspended immediately. Stripe retries automatically over several days. This scenario has two possible outcomes: recovery or final revocation.</div>
+    <div class="actors">
+      <span class="actor-chip" style="background:#eeecff;color:#5050d0">● Stripe</span>
+      <span class="actor-chip" style="background:#fef3e2;color:#a06000">● Cloudflare Worker</span>
+      <span class="actor-chip" style="background:#e8f5ee;color:#2a7a4a">● D1 Database</span>
+      <span class="actor-chip" style="background:#e8f0fd;color:#3a6abf">● Customer App</span>
+    </div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="flow-label">Step-by-Step Flow</div>
+  <div class="flow-hint">11 steps with a decision fork. The outcome depends on whether Stripe's retries eventually succeed. Click any step for detail.</div>
+  <div class="flow">
+
+    <div class="step actor-stripe">
+      <div class="step-circle">1</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div><span class="expand-hint"></span>
+        <div class="step-title">Stripe attempts renewal charge — card is declined</div>
+        <div class="step-desc">On the anniversary date, Stripe tries to charge the saved card. The bank returns a decline code (expired, insufficient funds, etc.).</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          Common decline reasons:
+          <ul>
+            <li><code>card_declined</code> — bank refused (could be fraud, limit, etc.)</li>
+            <li><code>expired_card</code> — card expiry date has passed</li>
+            <li><code>insufficient_funds</code> — not enough balance</li>
+            <li><code>do_not_honor</code> — generic bank refusal</li>
+          </ul>
+          Stripe's Smart Retries will try alternative processing routes first before generating the failure event.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">2</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div><span class="expand-hint"></span>
+        <div class="step-title">Stripe fires invoice.payment_failed webhook</div>
+        <div class="step-desc">The failed invoice event is sent to the Worker immediately after the first decline.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>{
+  "type": "invoice.payment_failed",
+  "data": {
+    "object": {
+      "subscription": "sub_1ABC...",
+      "amount_due": 1999,
+      "attempt_count": 1,
+      "next_payment_attempt": 1716172800
+    }
+  }
+}</pre>
+          <code>next_payment_attempt</code> is a Unix timestamp indicating when Stripe will try again. <code>attempt_count</code> tells you how many times it's tried so far.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">3</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div><span class="expand-hint"></span>
+        <div class="step-title">Worker verifies webhook and suspends the licence</div>
+        <div class="step-desc">The signature is verified, then the licence status is set to 'suspended' — not 'revoked'. This gives the customer time to fix their card before losing access.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>UPDATE licenses
+SET status = 'suspended'
+WHERE stripe_subscription_id = 'sub_1ABC...'</pre>
+          <strong>Suspended vs Revoked:</strong>
+          <ul>
+            <li><strong>Suspended</strong> — temporary, automatic. Stripe is still retrying. Can recover automatically.</li>
+            <li><strong>Revoked</strong> — permanent (until admin restores). Stripe has given up or admin forced it.</li>
+          </ul>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">4</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer App</div><span class="expand-hint"></span>
+        <div class="step-title">Customer's next check-in returns {valid: false, status: 'suspended'}</div>
+        <div class="step-desc">On the next app startup, the licence check comes back as invalid. The app should show a "payment issue" message rather than a generic "invalid key" error.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>POST /license/verify
+{"key": "MC-K8HN-4XRQ-BZTW-7YJP"}
+
+Response:
+{"valid": false, "status": "suspended"}</pre>
+          The app should differentiate between <code>status: "suspended"</code> (payment problem — fixable) and <code>status: "revoked"</code> (permanent). A suspended message should tell the customer: "Your subscription payment failed. Please update your card at modelcollectr.co.uk/billing."
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">5</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div><span class="expand-hint"></span>
+        <div class="step-title">Stripe sends the customer a payment failed email</div>
+        <div class="step-desc">Stripe automatically emails the customer explaining the payment failed and providing a link to update their card. This is Stripe's own email — you don't need to do anything.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The email includes a secure link to a Stripe-hosted page where the customer can update their payment method. This is the primary recovery path. You can customise the email text in Stripe Dashboard → Settings → Emails → Failed payments.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">6</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div><span class="expand-hint"></span>
+        <div class="step-title">Stripe retries the charge over the following days</div>
+        <div class="step-desc">Stripe's Smart Retry logic attempts the charge again at intervals — typically 3, 5, and 7 days after the first failure. The exact schedule is configurable in your Stripe settings.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          Default Stripe retry schedule:
+          <ul>
+            <li>Attempt 1: Day 0 (immediate)</li>
+            <li>Attempt 2: Day 3</li>
+            <li>Attempt 3: Day 5</li>
+            <li>Attempt 4: Day 7 (final)</li>
+          </ul>
+          If the customer updates their card between attempts, Stripe will use the new card on the next retry. Configure in Stripe Dashboard → Settings → Billing → Retry schedule.
+        </div></div>
+      </div>
+    </div>
+
+    <!-- Decision fork -->
+    <div class="branch">
+      <div class="branch-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#a06000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Decision Point — What happens next depends on whether a retry succeeds
+      </div>
+      <div class="branch-paths">
+        <div class="branch-path success">
+          <div class="branch-path-label">✅ Outcome A — Recovery</div>
+          <ul>
+            <li>Customer updates their card via Stripe's link</li>
+            <li>A retry succeeds → <code>invoice.payment_succeeded</code> fires</li>
+            <li>Worker sets status = 'active'</li>
+            <li>Customer's next check-in returns valid again</li>
+            <li>No new key — same key re-activates</li>
+          </ul>
+        </div>
+        <div class="branch-path fail">
+          <div class="branch-path-label">❌ Outcome B — Final Failure</div>
+          <ul>
+            <li>All retries fail (customer didn't update card)</li>
+            <li>Stripe cancels the subscription</li>
+            <li><code>customer.subscription.deleted</code> fires</li>
+            <li>Worker sets status = 'revoked'</li>
+            <li>Customer permanently loses access</li>
+            <li>Must re-subscribe to get a new key</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">7</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe — Outcome A: Recovery</div><span class="expand-hint"></span>
+        <div class="step-title">A retry succeeds → invoice.payment_succeeded webhook fires</div>
+        <div class="step-desc">If the customer updated their card, or the bank approves on a retry, Stripe fires the success event.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>{
+  "type": "invoice.payment_succeeded",
+  "data": { "object": { "subscription": "sub_1ABC..." } }
+}</pre>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-db">
+      <div class="step-circle">8</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● D1 — Outcome A</div><span class="expand-hint"></span>
+        <div class="step-title">Worker sets licence back to 'active'</div>
+        <div class="step-desc">The same UPDATE query as the renewal scenario. Status goes from 'suspended' → 'active'. The customer's next app check-in will succeed.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>UPDATE licenses
+SET status = 'active'
+WHERE stripe_subscription_id = 'sub_1ABC...'</pre>
+          No admin action needed. The recovery is fully automatic.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">9</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe — Outcome B: Final Failure</div><span class="expand-hint"></span>
+        <div class="step-title">All retries fail → Stripe cancels the subscription</div>
+        <div class="step-desc">After exhausting all retry attempts, Stripe marks the subscription as cancelled and fires customer.subscription.deleted.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>{
+  "type": "customer.subscription.deleted",
+  "data": { "object": { "id": "sub_1ABC...", "status": "canceled" } }
+}</pre>
+          Stripe also emails the customer to let them know their subscription has ended. The customer will need to re-subscribe and will receive a new licence key.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-danger">
+      <div class="step-circle">10</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● D1 — Outcome B</div><span class="expand-hint"></span>
+        <div class="step-title">Worker sets licence to 'revoked'</div>
+        <div class="step-desc">The subscription.deleted event causes the Worker to revoke the licence permanently. The customer loses Pro access on their next check-in.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>UPDATE licenses
+SET status = 'revoked',
+    notes = 'Subscription cancelled by Stripe event'
+WHERE stripe_subscription_id = 'sub_1ABC...'</pre>
+          At this point, the customer's key is dead. They must purchase a new subscription to get a new key. You do not need to do anything — this is fully automatic.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">11</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer App — Outcome B</div><span class="expand-hint"></span>
+        <div class="step-title">Customer's next check-in returns {valid: false, status: 'revoked'}</div>
+        <div class="step-desc">The app should show a clear message that their subscription has ended and direct them to the website to re-subscribe.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>{"valid": false, "status": "revoked"}</pre>
+          The app message should be: "Your ModelCollectr Pro subscription has ended. Visit modelcollectr.co.uk to resubscribe and get a new licence key." The old key cannot be reactivated — a new subscription creates a new key.
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="warn"><strong>What you might need to do</strong>If a customer emails saying their app stopped working — check their subscription in Stripe. If it shows <code>past_due</code> or <code>canceled</code> you now know why. Direct them to update their card via the Stripe customer portal link, or if the subscription is already cancelled, tell them to re-subscribe.</div>
+
+  <a class="back-link" href="workflow.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Workflow Overview</a>
+</div>
+<script>
+  document.querySelectorAll('.step-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const isOpen = card.classList.contains('open');
+      card.classList.toggle('open', !isOpen);
+      card.setAttribute('aria-expanded', !isOpen);
+      const detail = card.querySelector('.step-detail');
+      detail.style.maxHeight = !isOpen ? detail.scrollHeight + 'px' : '0';
+    });
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); } });
+  });
+</script>
+</body>
+</html>

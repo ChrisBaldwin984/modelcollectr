@@ -6,264 +6,309 @@
   <title>ModelCollectr — Operator User Guide</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; padding: 32px 24px; }
-    .page { max-width: 820px; margin: 0 auto; }
-    .hdr { background: #1c1f26; border-radius: 12px; padding: 24px 32px; margin-bottom: 32px; border-bottom: 3px solid #e8920a; }
-    .hdr-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .logo { font-size: 1.2rem; font-weight: 700; color: #f5b830; }
-    .doc-title { font-size: 1rem; color: #ede9e0; font-weight: 600; }
-    .doc-sub { font-size: 0.75rem; color: #8a8070; margin-top: 4px; }
-    .back { color: #e8920a; font-size: 0.82rem; text-decoration: none; }
-    .back:hover { text-decoration: underline; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; }
+    .nav { background: #1c1f26; padding: 14px 32px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e8920a; flex-wrap: wrap; }
+    .nav a { color: #f5b830; font-weight: 700; font-size: 0.92rem; text-decoration: none; } .nav a:hover { color: #ffc93a; }
+    .nav-sep { color: #4a4235; } .nav-cur { color: #8a8070; font-size: 0.85rem; }
+    .page-hdr { background: #1c1f26; padding: 36px 32px; border-bottom: 1px solid #252a34; }
+    .page-hdr-inner { max-width: 860px; margin: 0 auto; }
+    .page-title { font-size: 1.6rem; font-weight: 700; color: #ede9e0; margin-bottom: 8px; }
+    .page-desc { color: #8a8070; font-size: 0.88rem; line-height: 1.65; max-width: 600px; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 60px; }
 
-    .toc { background: white; border-radius: 10px; padding: 20px 24px; margin-bottom: 32px; }
-    .toc h3 { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #8a8070; margin-bottom: 12px; }
-    .toc ol { padding-left: 20px; }
-    .toc li { font-size: 0.87rem; margin-bottom: 6px; }
-    .toc a { color: #e8920a; text-decoration: none; }
-    .toc a:hover { text-decoration: underline; }
+    /* TOC */
+    .toc { background: white; border-radius: 12px; padding: 22px 26px; margin-bottom: 40px; }
+    .toc-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8a8070; margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .toc-list li a { color: #e8920a; text-decoration: none; font-size: 0.88rem; font-weight: 600; }
+    .toc-list li a:hover { color: #c07000; }
+    .toc-list li { display: flex; gap: 8px; align-items: flex-start; }
+    .toc-num { color: #8a8070; font-size: 0.82rem; min-width: 20px; }
 
-    .section { background: white; border-radius: 12px; padding: 28px 32px; margin-bottom: 24px; }
-    .section-num { font-size: 0.72rem; font-weight: 700; color: #e8920a; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
-    h2 { font-size: 1.1rem; font-weight: 700; color: #1c1f26; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #ede9e0; }
-    h3 { font-size: 0.92rem; font-weight: 700; color: #1c1f26; margin: 20px 0 8px; }
-    p { font-size: 0.88rem; color: #4a4235; line-height: 1.7; margin-bottom: 14px; }
-    p:last-child { margin-bottom: 0; }
+    /* Sections */
+    .section { margin-bottom: 48px; scroll-margin-top: 20px; }
+    .section-hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #e8920a; }
+    .section-num { width: 32px; height: 32px; border-radius: 8px; background: #e8920a; color: white; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .section-title { font-size: 1.15rem; font-weight: 700; color: #1e1a14; }
+    .section p { font-size: 0.87rem; color: #2a2015; line-height: 1.7; margin-bottom: 16px; }
 
-    .callout { border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 0.85rem; line-height: 1.6; }
-    .callout.info { background: #d0e8ff; color: #0c3a6e; border-left: 3px solid #5b8def; }
-    .callout.warn { background: #fff3cd; color: #7a4f00; border-left: 3px solid #e8920a; }
-    .callout.danger { background: #f8d7da; color: #5c1a1a; border-left: 3px solid #c0392b; }
-    .callout.success { background: #d4edda; color: #1a5c35; border-left: 3px solid #2ecc71; }
-    .callout strong { font-weight: 700; }
+    /* Cards */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .info-card { background: white; border-radius: 10px; padding: 16px 18px; border-left: 3px solid #e8920a; }
+    .info-card-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #8a8070; margin-bottom: 6px; }
+    .info-card-body { font-size: 0.86rem; color: #1e1a14; line-height: 1.5; }
+    .info-card-body code { font-family: 'Courier New', monospace; background: #f4f1eb; padding: 1px 5px; border-radius: 3px; font-size: 0.8rem; }
 
-    .step-list { list-style: none; counter-reset: steps; }
-    .step-list li { counter-increment: steps; display: flex; gap: 14px; margin-bottom: 12px; font-size: 0.87rem; color: #4a4235; line-height: 1.6; }
-    .step-list li::before { content: counter(steps); background: #1c1f26; color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .guide-step { display: flex; gap: 16px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #ede9e0; }
+    .guide-step:last-child { border-bottom: none; }
+    .guide-step-num { width: 28px; height: 28px; border-radius: 50%; background: #1c1f26; color: #f5b830; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .guide-step-body { flex: 1; }
+    .guide-step-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 3px; }
+    .guide-step-desc { font-size: 0.83rem; color: #4a4235; line-height: 1.55; }
+    .guide-step-desc code { font-family: 'Courier New', monospace; background: #f4f1eb; padding: 1px 5px; border-radius: 3px; font-size: 0.78rem; }
 
-    .key-box { background: #1c1f26; border-radius: 8px; padding: 14px 18px; margin: 12px 0; }
-    .key-label { font-size: 0.7rem; color: #8a8070; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
-    .key-value { font-family: 'Courier New', monospace; font-size: 0.9rem; color: #f5b830; word-break: break-all; }
+    /* Table */
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; background: white; border-radius: 10px; overflow: hidden; }
+    .ref-table th { text-align: left; padding: 10px 14px; background: #1c1f26; color: #ede9e0; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; }
+    .ref-table td { padding: 10px 14px; border-bottom: 1px solid #ede9e0; vertical-align: top; }
+    .ref-table tr:last-child td { border-bottom: none; }
+    .ref-table td code { font-family: 'Courier New', monospace; background: #f4f1eb; padding: 2px 6px; border-radius: 3px; font-size: 0.78rem; word-break: break-all; }
+    .ref-table tr:hover td { background: #faf8f4; }
 
-    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.85rem; }
-    th { background: #1c1f26; color: #ede9e0; font-weight: 600; padding: 10px 14px; text-align: left; font-size: 0.78rem; }
-    td { padding: 10px 14px; border-bottom: 1px solid #ede9e0; color: #4a4235; vertical-align: top; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #faf8f4; }
+    /* Support playbook */
+    .playbook-item { background: white; border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; }
+    .playbook-q { font-weight: 700; font-size: 0.92rem; color: #1e1a14; margin-bottom: 10px; display: flex; gap: 10px; align-items: flex-start; }
+    .playbook-q-badge { background: #fef3e2; color: #b06a00; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+    .playbook-a { font-size: 0.84rem; color: #4a4235; line-height: 1.6; }
+    .playbook-a ol, .playbook-a ul { padding-left: 18px; margin-top: 6px; }
+    .playbook-a li { margin-bottom: 4px; }
+    .playbook-a a { color: #e8920a; }
+    .playbook-a code { font-family: 'Courier New', monospace; background: #f4f1eb; padding: 1px 5px; border-radius: 3px; font-size: 0.78rem; }
 
-    .badge { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
-    .badge.green { background: #d4edda; color: #1a5c35; }
-    .badge.amber { background: #fff3cd; color: #7a4f00; }
-    .badge.red { background: #f8d7da; color: #5c1a1a; }
+    /* Tip/warn boxes */
+    .tip { background: #e8f5ee; border-left: 3px solid #4caf7d; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 14px 0; font-size: 0.84rem; color: #1a4030; line-height: 1.55; }
+    .warn { background: #fffbf0; border-left: 3px solid #e8920a; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 14px 0; font-size: 0.84rem; color: #5a3a00; line-height: 1.55; }
+    .tip strong, .warn strong { font-weight: 700; }
 
-    @media print {
-      body { background: white; padding: 16px; }
-      .hdr { background: #1c1f26 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .section { break-inside: avoid; box-shadow: none; border: 1px solid #ede9e0; }
-      .back { display: none; }
-    }
+    /* Going live checklist */
+    .checklist { display: flex; flex-direction: column; gap: 8px; }
+    .check-item { display: flex; gap: 12px; align-items: flex-start; background: white; border-radius: 8px; padding: 12px 16px; font-size: 0.85rem; }
+    .check-box { width: 20px; height: 20px; border: 2px solid #d4cfc6; border-radius: 4px; flex-shrink: 0; margin-top: 1px; }
+    .check-item-body { flex: 1; line-height: 1.5; }
+    .check-item strong { color: #1e1a14; display: block; margin-bottom: 2px; }
+    .check-item span { color: #6a6050; font-size: 0.8rem; }
+
+    @media (max-width: 600px) { .nav, .page-hdr { padding-left: 16px; padding-right: 16px; } .wrap { padding: 24px 16px 48px; } }
   </style>
 </head>
 <body>
-<div class="page">
+<nav class="nav">
+  <a href="index.html">ModelCollectr Ops</a><span class="nav-sep">/</span><span class="nav-cur">Operator Guide</span>
+</nav>
 
-  <div class="hdr">
-    <div class="hdr-top">
-      <div>
-        <div class="logo">ModelCollectr</div>
-        <div class="doc-title">Operator User Guide</div>
-        <div class="doc-sub">Plain English — how the system works and how to manage it &nbsp;·&nbsp; May 2026</div>
+<div class="page-hdr">
+  <div class="page-hdr-inner">
+    <div class="page-title">Operator User Guide</div>
+    <div class="page-desc">Plain English reference for managing ModelCollectr Pro — how the system works, what you see in the admin dashboard, and how to handle every common support situation.</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol class="toc-list">
+      <li><span class="toc-num">1</span><a href="#overview">System Overview</a></li>
+      <li><span class="toc-num">2</span><a href="#purchase">What Happens When Someone Buys</a></li>
+      <li><span class="toc-num">3</span><a href="#admin">Admin Dashboard</a></li>
+      <li><span class="toc-num">4</span><a href="#support">Support Playbook</a></li>
+      <li><span class="toc-num">5</span><a href="#stripe">Stripe Management</a></li>
+      <li><span class="toc-num">6</span><a href="#golive">Going Live Checklist</a></li>
+      <li><span class="toc-num">7</span><a href="#reference">Quick Reference — All Keys &amp; URLs</a></li>
+    </ol>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="section" id="overview">
+    <div class="section-hdr"><div class="section-num">1</div><div class="section-title">System Overview</div></div>
+    <p>ModelCollectr Pro is a desktop app that requires an annual subscription. The subscription system has four parts that talk to each other:</p>
+    <div class="info-grid">
+      <div class="info-card" style="border-left-color:#e8920a">
+        <div class="info-card-title">Cloudflare Worker (API)</div>
+        <div class="info-card-body">The brain. Handles checkout, licence verification, email, admin dashboard. Lives at <code>api.modelcollectr.co.uk</code>. Runs 24/7 for free on Cloudflare's edge.</div>
       </div>
-      <a href="index.html" class="back">← Back to Ops</a>
+      <div class="info-card" style="border-left-color:#635bff">
+        <div class="info-card-title">Stripe</div>
+        <div class="info-card-body">Handles payments, subscriptions, and billing. Customers never touch your server for payment — Stripe handles it. Sends payment events back to the Worker via webhooks.</div>
+      </div>
+      <div class="info-card" style="border-left-color:#4caf7d">
+        <div class="info-card-title">D1 Database (Cloudflare)</div>
+        <div class="info-card-body">Stores licence keys, Stripe IDs, status, and check-in stats. Does NOT store email addresses (GDPR — emails stay in Stripe and are fetched on demand).</div>
+      </div>
+      <div class="info-card" style="border-left-color:#e8734a">
+        <div class="info-card-title">Resend</div>
+        <div class="info-card-body">Transactional email service. Sends the licence key email from <code>hello@modelcollectr.co.uk</code>. Used for initial delivery and admin-triggered resends.</div>
+      </div>
+    </div>
+    <div class="tip"><strong>GDPR note:</strong> Email addresses are stored only in Stripe, never in your D1 database. The admin dashboard fetches them live from Stripe when you load it. This means you are not a "data processor" for personal data — Stripe is, and they have their own GDPR compliance. You hold only anonymous licence keys and subscription IDs.</div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="section" id="purchase">
+    <div class="section-hdr"><div class="section-num">2</div><div class="section-title">What Happens When Someone Buys</div></div>
+    <p>From the moment they click Buy Now to unlocking Pro in the app — all automated, no action from you needed.</p>
+    <div class="steps">
+      <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-body"><div class="guide-step-title">Customer clicks Buy Now on modelcollectr.co.uk</div><div class="guide-step-desc">JavaScript calls the Worker API to create a Stripe Checkout Session. Customer is redirected to Stripe's hosted payment page.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-body"><div class="guide-step-title">Customer enters card details on Stripe's page</div><div class="guide-step-desc">14-day free trial — no charge today. Stripe handles 3D Secure automatically. Card details go directly to Stripe, never to your server.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-body"><div class="guide-step-title">Stripe fires a webhook to the Worker</div><div class="guide-step-desc">A <code>customer.subscription.created</code> event is sent. The Worker verifies the signature, then processes it.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-body"><div class="guide-step-title">Worker generates a licence key and stores it</div><div class="guide-step-desc">A cryptographically random key in <code>MC-XXXX-XXXX-XXXX-XXXX</code> format is generated and written to D1. Only the key and Stripe IDs are stored — no email.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">5</div><div class="guide-step-body"><div class="guide-step-title">Licence key email is sent via Resend</div><div class="guide-step-desc">Email goes to the address the customer used on Stripe's checkout page. Contains the key, activation steps, and support contact.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">6</div><div class="guide-step-body"><div class="guide-step-title">Customer lands on the success page</div><div class="guide-step-desc">Stripe redirects to <code>modelcollectr.co.uk/success?session_id=...</code>. The page polls the Worker until the key is ready, then displays it on screen.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">7</div><div class="guide-step-body"><div class="guide-step-title">Customer activates in the desktop app</div><div class="guide-step-desc">Help → Enter Licence Key → paste key → Activate. App calls the Worker to verify the key and unlocks Pro features.</div></div></div>
+    </div>
+    <p style="margin-top:16px">For the full technical breakdown, see <a href="scenario-purchase.html" style="color:#e8920a">the Successful Purchase scenario</a>.</p>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="section" id="admin">
+    <div class="section-hdr"><div class="section-num">3</div><div class="section-title">Admin Dashboard</div></div>
+
+    <p><strong>URL:</strong> <code>https://api.modelcollectr.co.uk/admin</code> — requires the X-Admin-Secret header.</p>
+
+    <p><strong>How to access:</strong> Install the ModHeader extension (Chrome or Firefox). Add a header rule: Name = <code>X-Admin-Secret</code>, Value = <code>MC_ADMIN_3F21F96F91C4DFC7BED4B0E4FC829A36</code>. Enable the rule, then visit the URL. The dashboard will prompt for the secret the first time; it's cached in the tab session after that.</p>
+
+    <p>The dashboard shows:</p>
+    <div class="steps">
+      <div class="guide-step"><div class="guide-step-num">●</div><div class="guide-step-body"><div class="guide-step-title">Stats bar at the top</div><div class="guide-step-desc">Total keys, Active count, Revoked count, Suspended count.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">●</div><div class="guide-step-body"><div class="guide-step-title">Filter buttons</div><div class="guide-step-desc">All / Active / Revoked / Suspended — click to filter the table.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">●</div><div class="guide-step-body"><div class="guide-step-title">Licence table</div><div class="guide-step-desc">Key, Email (live from Stripe), Status badge, Created date, Last check-in date, Check-in count, Action buttons.</div></div></div>
+    </div>
+
+    <p style="margin-top:16px"><strong>Action buttons on each row:</strong></p>
+    <div class="info-grid">
+      <div class="info-card" style="border-left-color:#c0392b">
+        <div class="info-card-title">Revoke</div>
+        <div class="info-card-body">Sets status = revoked. Shows confirmation dialog first. Customer loses Pro on next check-in. Remember to also cancel in Stripe to stop billing.</div>
+      </div>
+      <div class="info-card" style="border-left-color:#4caf7d">
+        <div class="info-card-title">Restore</div>
+        <div class="info-card-body">Sets status = active on a revoked key. Customer regains Pro on next check-in. No new key needed. Check Stripe subscription is still active.</div>
+      </div>
+      <div class="info-card" style="border-left-color:#1c3a6e">
+        <div class="info-card-title">Resend</div>
+        <div class="info-card-body">Fetches customer email live from Stripe and sends a fresh copy of their key. Use when customer says they lost the email.</div>
+      </div>
+    </div>
+
+    <div class="warn"><strong>Important:</strong> The Revoke button only blocks the key in your database. It does not cancel the Stripe subscription. Always cancel in Stripe separately to stop future billing charges.</div>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="section" id="support">
+    <div class="section-hdr"><div class="section-num">4</div><div class="section-title">Support Playbook</div></div>
+    <p>Common support requests and exactly what to do for each one.</p>
+
+    <div class="playbook-item">
+      <div class="playbook-q"><span class="playbook-q-badge">Lost key</span>"I can't find my licence key email"</div>
+      <div class="playbook-a">
+        <ol>
+          <li>Open the admin dashboard</li>
+          <li>Find their row (match their email address to the Email column)</li>
+          <li>Click <strong>Resend</strong></li>
+          <li>Reply: "I've resent your key to [email]. Check spam if it doesn't arrive in a few minutes."</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="playbook-item">
+      <div class="playbook-q"><span class="playbook-q-badge">Invalid key</span>"I entered my key but it says invalid"</div>
+      <div class="playbook-a">
+        Check in admin dashboard: find their row and check the status badge.
+        <ul>
+          <li><strong>Active</strong> → They may have typed it wrong. Ask them to copy-paste from the email. Check they're using the current key (not an old one from re-subscription).</li>
+          <li><strong>Suspended</strong> → Payment failed. Tell them to update their card. Stripe should have emailed them.</li>
+          <li><strong>Revoked</strong> → Was it revoked by you? If in error, click Restore. If they cancelled, they need to resubscribe.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="playbook-item">
+      <div class="playbook-q"><span class="playbook-q-badge">Refund</span>"I want a refund"</div>
+      <div class="playbook-a">
+        <ol>
+          <li>In Stripe Dashboard → Payments, find their payment and issue a refund</li>
+          <li>In Stripe Dashboard → Subscriptions, cancel their subscription</li>
+          <li>In your admin dashboard, click <strong>Revoke</strong> on their key</li>
+        </ol>
+        Stripe handles the money. You handle blocking access.
+      </div>
+    </div>
+
+    <div class="playbook-item">
+      <div class="playbook-q"><span class="playbook-q-badge">New PC</span>"I got a new computer — does my key still work?"</div>
+      <div class="playbook-a">
+        Yes — the key is not machine-locked. They just need to install ModelCollectr on the new PC, go to Help → Enter Licence Key, and paste the same key. If they don't have the key, use the <strong>Resend</strong> action in the admin dashboard.
+      </div>
+    </div>
+
+    <div class="playbook-item">
+      <div class="playbook-q"><span class="playbook-q-badge">Cancelled</span>"I cancelled but want to come back"</div>
+      <div class="playbook-a">
+        Direct them to modelcollectr.co.uk to purchase again. They'll go through the standard checkout and receive a new licence key. Their old key will not be reactivated — they get a fresh one.
+      </div>
+    </div>
+
+    <div class="playbook-item">
+      <div class="playbook-q"><span class="playbook-q-badge">App locked</span>"My app suddenly says my licence is invalid and I'm paying"</div>
+      <div class="playbook-a">
+        <ol>
+          <li>Check admin dashboard — is status suspended or revoked?</li>
+          <li>Check Stripe — is the subscription past_due or cancelled?</li>
+          <li>If suspended (payment failed): tell them to update their card via Stripe's link in the failure email they received</li>
+          <li>If active in both places and still invalid: ask them to restart the app — sometimes the cache is stale</li>
+        </ol>
+      </div>
     </div>
   </div>
 
-  <div class="toc">
-    <h3>Contents</h3>
-    <ol>
-      <li><a href="#overview">How the system works — the big picture</a></li>
-      <li><a href="#purchase">What happens when someone buys</a></li>
-      <li><a href="#admin">The admin dashboard</a></li>
-      <li><a href="#support">Handling customer support</a></li>
-      <li><a href="#stripe">Managing Stripe</a></li>
-      <li><a href="#goingLive">Switching to live mode</a></li>
-      <li><a href="#keys">All important keys and URLs</a></li>
-    </ol>
-  </div>
-
-  <!-- SECTION 1 -->
-  <div class="section" id="overview">
-    <div class="section-num">Section 1</div>
-    <h2>How the system works — the big picture</h2>
-    <p>ModelCollectr Pro is a £19.99/year subscription sold on your website. When someone pays, the system automatically generates a unique licence key, emails it to them, and stores it in a database. The desktop app uses that key to unlock Pro features.</p>
-    <p>There are four main parts working together:</p>
-    <table>
-      <tr><th>Part</th><th>What it does</th><th>Where it lives</th></tr>
-      <tr><td><strong>Marketing site</strong></td><td>Where customers discover and buy the app</td><td>modelcollectr.co.uk</td></tr>
-      <tr><td><strong>Stripe</strong></td><td>Handles all payments, subscriptions, and renewals</td><td>dashboard.stripe.com</td></tr>
-      <tr><td><strong>API Worker</strong></td><td>The brain — generates keys, talks to Stripe, sends emails, runs the admin dashboard</td><td>api.modelcollectr.co.uk</td></tr>
-      <tr><td><strong>Desktop app</strong></td><td>Checks the key on every launch, enforces free/Pro limits</td><td>Customer's Windows PC</td></tr>
-    </table>
-    <p>You don't need to do anything manually for a normal purchase — the whole thing is automated. You only need to step in for refunds, abuse, or support queries.</p>
-  </div>
-
-  <!-- SECTION 2 -->
-  <div class="section" id="purchase">
-    <div class="section-num">Section 2</div>
-    <h2>What happens when someone buys</h2>
-    <p>Here's exactly what happens, step by step, from the customer's point of view and behind the scenes:</p>
-    <ol class="step-list">
-      <li>Customer clicks "Get Pro" on your site. They're taken to a Stripe-hosted checkout page with your logo and brand colours.</li>
-      <li>They enter their email and card details. There's a 14-day free trial — their card isn't charged immediately.</li>
-      <li>They click Subscribe. Stripe processes it and redirects them back to your success page.</li>
-      <li>The success page shows a spinner for 1–3 seconds while the system generates their key, then displays it.</li>
-      <li>At the same time, an email from hello@modelcollectr.co.uk arrives in their inbox with the same key.</li>
-      <li>They open the desktop app → Help → Enter Licence Key → paste the key → click Activate. Pro features unlock.</li>
-    </ol>
-    <div class="callout info"><strong>Key point:</strong> The key is tied to their email address and Stripe subscription. If their subscription lapses, the key stops working. If they resubscribe, they get a new key.</div>
-
-    <h3>The 14-day free trial</h3>
-    <p>Customers are not charged for 14 days. Their key is issued immediately and works straight away. After 14 days, Stripe charges their card. If the card fails and they don't fix it, the key gets suspended then eventually revoked.</p>
-
-    <h3>What if the success page times out?</h3>
-    <p>Occasionally the webhook from Stripe arrives slightly slowly. If the success page shows an error after 30 seconds, tell the customer: <em>"Your key has been emailed to you — please check your inbox including spam."</em> The email is sent regardless.</p>
-  </div>
-
-  <!-- SECTION 3 -->
-  <div class="section" id="admin">
-    <div class="section-num">Section 3</div>
-    <h2>The admin dashboard</h2>
-    <h3>How to access it</h3>
-    <p>The dashboard is at <strong>https://api.modelcollectr.co.uk/admin</strong> but it requires a secret header to open. The easiest way is to use the <strong>ModHeader</strong> browser extension (Chrome or Firefox).</p>
-    <ol class="step-list">
-      <li>Install ModHeader from the Chrome Web Store (search "ModHeader").</li>
-      <li>Click the ModHeader icon in your toolbar.</li>
-      <li>Add a header: Name = <code>X-Admin-Secret</code>, Value = your admin secret (see Section 7).</li>
-      <li>Make sure the toggle is ON (green).</li>
-      <li>Visit https://api.modelcollectr.co.uk/admin — the dashboard loads.</li>
-    </ol>
-    <div class="callout warn"><strong>Remember:</strong> Turn ModHeader off when you're done, or it will send the secret header to every website you visit (harmless but unnecessary).</div>
-
-    <h3>What you can see</h3>
-    <p>The dashboard shows all licence keys with: email address, status (active/suspended/revoked), date created, last check-in date, and how many times the app has checked in.</p>
-    <p>At the top, four stats boxes show totals for active, suspended, and revoked keys.</p>
-    <p>You can filter by status using the buttons above the table.</p>
-
-    <h3>Actions you can take</h3>
-    <table>
-      <tr><th>Button</th><th>What it does</th><th>When to use it</th></tr>
-      <tr><td><span class="badge red">Revoke</span></td><td>Immediately marks the key as revoked. App locks within 7 days (or immediately on next launch).</td><td>Refund issued. Chargeback. Abuse. Duplicate purchase.</td></tr>
-      <tr><td><span class="badge green">Restore</span></td><td>Sets a revoked key back to active. App unlocks on next launch.</td><td>Revoked by mistake. Refund reversed. Dispute resolved in your favour.</td></tr>
-      <tr><td><span class="badge" style="background:#d0e8ff;color:#0c3a6e">Resend</span></td><td>Resends the licence key email to the customer's address.</td><td>Customer can't find their email. Changed email address. Spam filtered it.</td></tr>
-    </table>
-    <div class="callout warn"><strong>Important:</strong> Revoking a key in the dashboard does NOT cancel their Stripe subscription — they could still be charged. Always cancel in Stripe as well if needed.</div>
-  </div>
-
-  <!-- SECTION 4 -->
-  <div class="section" id="support">
-    <div class="section-num">Section 4</div>
-    <h2>Handling customer support</h2>
-
-    <h3>"I didn't receive my licence key email"</h3>
-    <ol class="step-list">
-      <li>Ask them to check spam/junk folder for an email from hello@modelcollectr.co.uk.</li>
-      <li>If not there, open the admin dashboard and find their email in the table.</li>
-      <li>Click Resend — they'll get the email again within a minute.</li>
-      <li>If their email isn't in the table at all, check Stripe to confirm the payment went through.</li>
-    </ol>
-
-    <h3>"My key isn't working / says invalid"</h3>
-    <ol class="step-list">
-      <li>Check the admin dashboard — look up their email, check the status column.</li>
-      <li>If suspended: their payment likely failed. Check Stripe — if they've updated their card and Stripe recovered payment, click Restore in the dashboard.</li>
-      <li>If revoked: check why. If it was an error, click Restore.</li>
-      <li>If active: ask them to copy the key from their email exactly (no extra spaces). The format is MC-XXXX-XXXX-XXXX-XXXX.</li>
-    </ol>
-
-    <h3>"I want a refund"</h3>
-    <ol class="step-list">
-      <li>Process the refund in Stripe Dashboard → Payments → find the charge → Refund.</li>
-      <li>Then go to the admin dashboard → find their row → click Revoke.</li>
-      <li>Also cancel their subscription in Stripe so they're not charged again.</li>
-    </ol>
-    <div class="callout info">Stripe's standard trial policy means customers can cancel within 14 days with no charge. After the trial, refunds are at your discretion.</div>
-
-    <h3>"I've changed my email / PC"</h3>
-    <p>The key itself doesn't change — it's not locked to a specific machine. They can enter the same key on a new PC. Just resend the email if they don't have the key saved.</p>
-
-    <h3>"I cancelled but want to come back"</h3>
-    <p>They go through checkout again, get a new key, and enter it in the app. The old key stays revoked. The new key works independently.</p>
-  </div>
-
-  <!-- SECTION 5 -->
+  <!-- Section 5 -->
   <div class="section" id="stripe">
-    <div class="section-num">Section 5</div>
-    <h2>Managing Stripe</h2>
-    <h3>Viewing subscriptions and customers</h3>
-    <p>Stripe Dashboard → Customers — shows everyone who has subscribed. You can see their subscription status, payment history, and card details. You can also manually cancel, pause, or issue refunds from here.</p>
+    <div class="section-hdr"><div class="section-num">5</div><div class="section-title">Stripe Management</div></div>
 
-    <h3>Creating a promo code</h3>
-    <ol class="step-list">
-      <li>Stripe Dashboard → Product Catalogue → Coupons → + New coupon.</li>
-      <li>Set the discount (e.g. 50% off, or £10 off).</li>
-      <li>Then go to Promotion codes → + New code → link it to your coupon → give it a name (e.g. LAUNCH50).</li>
-      <li>That code can be entered on the Stripe checkout page — the field appears automatically.</li>
-    </ol>
-    <div class="callout success">You can limit promo codes to a number of uses, an expiry date, or first-time customers only — all in Stripe without any code changes.</div>
+    <p><strong>Test mode vs Live mode:</strong> Stripe has two environments. Test mode uses fake money and test cards. Live mode uses real money. Always make sure you're in the right mode for what you're doing. The toggle is top-left in the Stripe Dashboard.</p>
 
-    <h3>Stripe test vs live mode</h3>
-    <p>The system is currently in <strong>test mode</strong> — no real money changes hands. The site is using test Stripe keys. When you're ready to go live, see Section 6.</p>
-    <div class="callout warn">The toggle in the top-right of Stripe Dashboard switches between Test and Live mode. Always check which mode you're in before making changes.</div>
+    <p><strong>Viewing customers and subscriptions:</strong> Stripe Dashboard → Customers. Search by email to find a specific person. Click through to see their subscriptions, payment history, and invoices.</p>
+
+    <p><strong>Issuing a refund:</strong> Stripe Dashboard → Payments → find the charge → Refund. Stripe processes it automatically to the customer's card. Note: you still need to revoke the key in your admin dashboard.</p>
+
+    <p><strong>Cancelling a subscription:</strong> Stripe Dashboard → Subscriptions → find the subscription → Cancel. Choose "at period end" unless you're also issuing a full refund (then choose "immediately").</p>
+
+    <p><strong>Promotion codes:</strong> Stripe Dashboard → Products → Coupons → Create coupon. Then Products → Promotion codes → Create code. Codes are automatically accepted at checkout (the "Allow promotion codes" setting is enabled).</p>
+
+    <p><strong>Switching to Live mode:</strong> When ready to go live, you'll need to create a new Price in live mode, update the <code>STRIPE_PRICE_ID</code> environment variable in Cloudflare, create a new webhook endpoint in live mode Stripe, and update the <code>STRIPE_WEBHOOK_SECRET</code> and <code>STRIPE_SECRET_KEY</code> secrets. See the Going Live checklist.</p>
   </div>
 
-  <!-- SECTION 6 -->
-  <div class="section" id="goingLive">
-    <div class="section-num">Section 6</div>
-    <h2>Switching to live mode (when ready)</h2>
-    <div class="callout danger"><strong>Do this only when you're confident testing is complete.</strong> Switching to live mode means real cards will be charged.</div>
-    <ol class="step-list">
-      <li>In Stripe, switch to <strong>Live mode</strong> (top-right toggle).</li>
-      <li>Go to Product Catalogue → create the same product and price: ModelCollectr Pro, £19.99/year.</li>
-      <li>Go to Developers → Webhooks → Add endpoint: <code>https://api.modelcollectr.co.uk/webhooks/stripe</code> — select the same events as test mode.</li>
-      <li>Copy your live Secret key (starts sk_live_...) and live Webhook signing secret (starts whsec_...).</li>
-      <li>On your server/terminal, run these two commands to update the Worker secrets:
-        <div class="key-box">
-          <div class="key-label">Terminal commands</div>
-          <div class="key-value">cd ~/projects/modelcollectr-worker<br>npx wrangler secret put STRIPE_SECRET_KEY<br>npx wrangler secret put STRIPE_WEBHOOK_SECRET</div>
-        </div>
-      </li>
-      <li>Update <code>STRIPE_PRICE_ID</code> in <code>wrangler.toml</code> to the new live price ID.</li>
-      <li>Deploy: <code>npx wrangler deploy</code></li>
-      <li>Update Stripe branding in both Test and Live mode: Settings → Branding → upload logo, set colours.</li>
-    </ol>
+  <!-- Section 6 -->
+  <div class="section" id="golive">
+    <div class="section-hdr"><div class="section-num">6</div><div class="section-title">Going Live Checklist</div></div>
+    <div class="checklist">
+      <div class="check-item"><div class="check-box"></div><div class="check-item-body"><strong>Switch Stripe to Live mode</strong><span>In Stripe Dashboard → toggle to Live mode (top left)</span></div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-item-body"><strong>Create a live Stripe Price</strong><span>Products → Create product → Add price (£19.99/year). Copy the live price ID (price_live_...)</span></div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-item-body"><strong>Update STRIPE_PRICE_ID in Cloudflare</strong><span>Cloudflare Dashboard → Workers → modelcollectr-api → Settings → Variables → update STRIPE_PRICE_ID</span></div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-item-body"><strong>Get live Stripe secret key</strong><span>Stripe → Developers → API keys → Live secret key (sk_live_...)</span></div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-item-body"><strong>Update STRIPE_SECRET_KEY secret</strong><span>Run: <code>npx wrangler secret put STRIPE_SECRET_KEY</code> → paste live key</span></div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-item-body"><strong>Create live Stripe webhook</strong><span>Stripe → Developers → Webhooks → Add endpoint → https://api.modelcollectr.co.uk/webhooks/stripe → select: customer.subscription.created/updated/deleted, invoice.payment_succeeded/failed</span></div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-item-body"><strong>Update STRIPE_WEBHOOK_SECRET secret</strong><span>Copy signing secret from live webhook → <code>npx wrangler secret put STRIPE_WEBHOOK_SECRET</code></span></div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-item-body"><strong>Set Stripe branding</strong><span>Stripe → Settings → Branding → Upload logo-badge.png, primary colour #e8920a, secondary #1c1f26</span></div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-item-body"><strong>Run a live test purchase</strong><span>Buy with a real card, confirm key email arrives, activate in app, check admin dashboard shows the row</span></div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-item-body"><strong>Verify Resend sending domain</strong><span>Resend Dashboard → Domains → modelcollectr.co.uk → ensure status is Verified</span></div></div>
+    </div>
   </div>
 
-  <!-- SECTION 7 -->
-  <div class="section" id="keys">
-    <div class="section-num">Section 7</div>
-    <h2>All important keys and URLs</h2>
-    <div class="callout danger"><strong>Keep this section private.</strong> These are your operational secrets.</div>
-    <table>
-      <tr><th>Item</th><th>Value / Location</th></tr>
-      <tr><td>Admin dashboard URL</td><td>https://api.modelcollectr.co.uk/admin</td></tr>
-      <tr><td>Admin secret (ModHeader value)</td><td>MC_ADMIN_3F21F96F91C4DFC7BED4B0E4FC829A36</td></tr>
-      <tr><td>API base URL</td><td>https://api.modelcollectr.co.uk</td></tr>
-      <tr><td>Stripe Dashboard (Test)</td><td>dashboard.stripe.com — switch to Test mode</td></tr>
-      <tr><td>Stripe Dashboard (Live)</td><td>dashboard.stripe.com — switch to Live mode</td></tr>
-      <tr><td>Email from address</td><td>hello@modelcollectr.co.uk</td></tr>
-      <tr><td>Worker project (local)</td><td>~/projects/modelcollectr-worker</td></tr>
-      <tr><td>Marketing site (local)</td><td>~/projects/modelcollectr</td></tr>
-      <tr><td>Desktop app (local)</td><td>~/projects/modelcollectr-desktop</td></tr>
-      <tr><td>Worker deploy command</td><td>cd ~/projects/modelcollectr-worker &amp;&amp; npx wrangler deploy</td></tr>
-      <tr><td>Test Stripe product ID</td><td>prod_UWwPazcxIxsqgP</td></tr>
-      <tr><td>Test Stripe price ID</td><td>price_1TXsXDE8AmKiRjJbNQU0xGdu</td></tr>
-      <tr><td>Internal ops docs</td><td>modelcollectr.co.uk/ops/</td></tr>
+  <!-- Section 7 -->
+  <div class="section" id="reference">
+    <div class="section-hdr"><div class="section-num">7</div><div class="section-title">Quick Reference — Keys &amp; URLs</div></div>
+    <table class="ref-table">
+      <thead><tr><th>Item</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Admin dashboard URL</td><td><code>https://api.modelcollectr.co.uk/admin</code></td></tr>
+        <tr><td>Admin secret header</td><td><code>X-Admin-Secret: MC_ADMIN_3F21F96F91C4DFC7BED4B0E4FC829A36</code></td></tr>
+        <tr><td>Worker API base URL</td><td><code>https://api.modelcollectr.co.uk</code></td></tr>
+        <tr><td>Marketing site</td><td><code>https://modelcollectr.co.uk</code></td></tr>
+        <tr><td>Success page</td><td><code>https://modelcollectr.co.uk/success</code></td></tr>
+        <tr><td>Ops docs</td><td><code>https://modelcollectr.co.uk/ops/</code></td></tr>
+        <tr><td>Stripe Dashboard (test)</td><td>dashboard.stripe.com — switch to Test mode</td></tr>
+        <tr><td>Stripe Price ID (test)</td><td><code>price_1TXsXDE8AmKiRjJbNQU0xGdu</code></td></tr>
+        <tr><td>Resend Dashboard</td><td>resend.com — from: hello@modelcollectr.co.uk</td></tr>
+        <tr><td>Cloudflare Dashboard</td><td>dash.cloudflare.com — Worker: modelcollectr-api</td></tr>
+        <tr><td>D1 database</td><td>modelcollectr-licenses (Cloudflare → D1)</td></tr>
+        <tr><td>Deploy command</td><td><code>export CLOUDFLARE_API_TOKEN="cfut_O2Q..." && npx wrangler deploy</code></td></tr>
+        <tr><td>Webhook URL</td><td><code>https://api.modelcollectr.co.uk/webhooks/stripe</code></td></tr>
+        <tr><td>From email</td><td><code>hello@modelcollectr.co.uk</code></td></tr>
+      </tbody>
     </table>
   </div>
-
-  <p style="color:#8a8070;font-size:0.78rem;text-align:center;margin-top:32px;margin-bottom:8px;">
-    <a href="index.html" style="color:#e8920a">← Back to Ops</a> &nbsp;·&nbsp; modelcollectr.co.uk/ops/guide.html
-  </p>
 
 </div>
 </body>

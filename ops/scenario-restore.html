@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModelCollectr Ops — Restore Licence</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; }
+    .nav { background: #1c1f26; padding: 14px 32px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e8920a; flex-wrap: wrap; }
+    .nav a { color: #f5b830; font-weight: 700; font-size: 0.92rem; text-decoration: none; } .nav a:hover { color: #ffc93a; }
+    .nav-sep { color: #4a4235; } .nav-cur { color: #8a8070; font-size: 0.85rem; }
+    .page-hdr { background: #1c1f26; padding: 32px; border-bottom: 1px solid #252a34; }
+    .page-hdr-inner { max-width: 860px; margin: 0 auto; }
+    .page-cat { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 12px; background: #fef3e2; color: #b06a00; }
+    .page-title { font-size: 1.55rem; font-weight: 700; color: #ede9e0; margin-bottom: 10px; }
+    .page-desc { color: #8a8070; font-size: 0.88rem; line-height: 1.65; max-width: 620px; }
+    .actors { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .actor-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 60px; }
+    .flow-label { font-size: 1rem; font-weight: 700; color: #1e1a14; margin-bottom: 6px; }
+    .flow-hint { font-size: 0.8rem; color: #8a8070; margin-bottom: 28px; }
+    .flow { position: relative; padding-left: 58px; }
+    .flow::before { content: ''; position: absolute; left: 20px; top: 10px; bottom: 10px; width: 2px; background: linear-gradient(to bottom, #e8920a, #4caf7d, #5b8def); opacity: 0.4; border-radius: 2px; }
+    .step { position: relative; margin-bottom: 18px; }
+    .step-circle { position: absolute; left: -58px; top: 0; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 2px solid; background: #f4f1eb; z-index: 1; }
+    .step-card { background: white; border-radius: 10px; padding: 14px 18px; border-left: 4px solid; cursor: pointer; transition: box-shadow 0.15s; user-select: none; }
+    .step-card:hover { box-shadow: 0 3px 16px rgba(0,0,0,0.09); }
+    .actor-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 9px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.07em; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 7px; }
+    .step-title { font-weight: 600; color: #1e1a14; font-size: 0.93rem; margin-bottom: 3px; }
+    .step-desc { font-size: 0.84rem; color: #4a4235; line-height: 1.55; }
+    .expand-hint { float: right; font-size: 0.7rem; color: #b0a898; transition: color 0.15s; }
+    .step-card:hover .expand-hint { color: #e8920a; }
+    .step-detail { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
+    .step-detail-inner { margin-top: 12px; padding: 12px 16px; background: #f4f1eb; border-radius: 7px; font-size: 0.82rem; line-height: 1.65; color: #2a2015; }
+    .step-detail-inner code { font-family: 'Courier New', monospace; background: #1c1f26; color: #f5b830; padding: 1px 5px; border-radius: 3px; font-size: 0.78rem; }
+    .step-detail-inner pre { font-family: 'Courier New', monospace; background: #1c1f26; color: #ede9e0; padding: 12px 14px; border-radius: 7px; font-size: 0.76rem; line-height: 1.65; overflow-x: auto; margin-top: 8px; white-space: pre-wrap; }
+    .step-detail-inner ul { padding-left: 18px; margin-top: 6px; } .step-detail-inner li { margin-bottom: 4px; }
+    .actor-admin .step-circle { color: #e8920a; border-color: #e8920a; } .actor-admin .step-card { border-left-color: #e8920a; } .actor-admin .actor-badge { background: #fef3e2; color: #a06000; }
+    .actor-worker .step-circle { color: #635bff; border-color: #635bff; } .actor-worker .step-card { border-left-color: #635bff; } .actor-worker .actor-badge { background: #eeecff; color: #5050d0; }
+    .actor-db .step-circle { color: #4caf7d; border-color: #4caf7d; } .actor-db .step-card { border-left-color: #4caf7d; } .actor-db .actor-badge { background: #e8f5ee; color: #2a7a4a; }
+    .actor-customer .step-circle { color: #5b8def; border-color: #5b8def; } .actor-customer .step-card { border-left-color: #5b8def; } .actor-customer .actor-badge { background: #e8f0fd; color: #3a6abf; }
+    .state-card { background: white; border-radius: 12px; padding: 24px; margin-top: 44px; }
+    .state-title { font-size: 0.95rem; font-weight: 700; color: #1e1a14; margin-bottom: 16px; }
+    .state-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .state-table th { text-align: left; padding: 8px 12px; background: #f4f1eb; color: #4a4235; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .state-table td { padding: 10px 12px; border-bottom: 1px solid #ede9e0; vertical-align: top; }
+    .state-table tr:last-child td { border-bottom: none; }
+    .sys-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 0.74rem; font-weight: 600; }
+    .tip { background: #e8f5ee; border-left: 3px solid #4caf7d; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 12px; font-size: 0.84rem; color: #1a4030; line-height: 1.5; }
+    .warn { background: #fffbf0; border-left: 3px solid #e8920a; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 12px; font-size: 0.84rem; color: #5a3a00; line-height: 1.5; }
+    .tip strong, .warn strong { display: block; margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: #e8920a; font-weight: 600; font-size: 0.85rem; text-decoration: none; margin-top: 36px; }
+    .back-link svg { width: 16px; height: 16px; } .back-link:hover { color: #c07000; }
+    @media (max-width: 600px) { .nav, .page-hdr { padding-left: 16px; padding-right: 16px; } .wrap { padding: 24px 16px 48px; } .flow { padding-left: 48px; } .step-circle { left: -48px; width: 34px; height: 34px; font-size: 0.76rem; } .page-title { font-size: 1.25rem; } }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html">Ops Hub</a><span class="nav-sep">/</span><a href="workflow.html">Workflow</a><span class="nav-sep">/</span><span class="nav-cur">Restore Licence</span>
+</nav>
+<div class="page-hdr">
+  <div class="page-hdr-inner">
+    <span class="page-cat">Admin</span>
+    <div class="page-title">Restore a Revoked Licence</div>
+    <div class="page-desc">You accidentally revoked the wrong key, or a refund dispute was resolved in the customer's favour. The Restore action sets the key back to 'active' instantly. The customer's next check-in will succeed — no new key needed.</div>
+    <div class="actors">
+      <span class="actor-chip" style="background:#fef3e2;color:#a06000">● You (Admin)</span>
+      <span class="actor-chip" style="background:#eeecff;color:#5050d0">● Worker / Dashboard</span>
+      <span class="actor-chip" style="background:#e8f5ee;color:#2a7a4a">● D1 Database</span>
+      <span class="actor-chip" style="background:#e8f0fd;color:#3a6abf">● Customer App</span>
+    </div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="flow-label">Step-by-Step Flow</div>
+  <div class="flow-hint">5 steps. The quickest admin action available. Click any step for detail.</div>
+  <div class="flow">
+
+    <div class="step actor-admin">
+      <div class="step-circle">1</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Admin</div><span class="expand-hint"></span>
+        <div class="step-title">Open the admin dashboard and find the revoked key</div>
+        <div class="step-desc">Filter by "Revoked" using the status buttons at the top of the table to narrow down the list quickly.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          Navigate to <code>https://api.modelcollectr.co.uk/admin</code> with your admin header. Click the "Revoked" filter button to show only revoked licences. Find the correct row by email (fetched live from Stripe) or by the licence key.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-admin">
+      <div class="step-circle">2</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Admin</div><span class="expand-hint"></span>
+        <div class="step-title">Click the "Restore" button on that row</div>
+        <div class="step-desc">Unlike Revoke, Restore has no confirmation dialog — it's reversible so it's safe to action immediately.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The Restore button appears green on revoked rows (in place of the Revoke button). Clicking it immediately sends the restore request — no browser confirm dialog.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">3</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div><span class="expand-hint"></span>
+        <div class="step-title">Dashboard sends POST /admin/licenses/:key/restore</div>
+        <div class="step-desc">The Worker receives the restore request, validates the admin secret, and updates D1.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>POST /admin/licenses/MC-K8HN-4XRQ-BZTW-7YJP/restore
+X-Admin-Secret: MC_ADMIN_3F21F96F91C4DFC7BED4B0E4FC829A36
+
+Response: {"ok": true}</pre>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-db">
+      <div class="step-circle">4</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● D1 Database</div><span class="expand-hint"></span>
+        <div class="step-title">Worker sets status = 'active' and clears the notes</div>
+        <div class="step-desc">The licence row is updated instantly. Notes are cleared so the revocation reason doesn't linger on a restored key.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>UPDATE licenses
+SET status = 'active',
+    notes = NULL
+WHERE key = 'MC-K8HN-4XRQ-BZTW-7YJP'</pre>
+          The change is immediate — D1 is updated before the response is returned to the browser.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">5</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer App</div><span class="expand-hint"></span>
+        <div class="step-title">Customer's next check-in succeeds — Pro restored</div>
+        <div class="step-desc">The very next time the app calls /license/verify, it gets {valid: true, status: 'active'} back. No new key, no customer action needed.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>{"valid": true, "status": "active"}</pre>
+          If the customer had their app open during the revocation period, they might have seen a "key invalid" message. Tell them to restart the app — the next check-in will restore Pro access automatically.
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="state-card">
+    <div class="state-title">✅ State After This Scenario</div>
+    <table class="state-table">
+      <thead><tr><th>System</th><th>State</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sys-badge" style="background:#e8f5ee;color:#2a7a4a">D1 Database</span></td><td>Status: active. Notes: NULL (cleared).</td></tr>
+        <tr><td><span class="sys-badge" style="background:#e8f0fd;color:#3a6abf">Customer App</span></td><td>Pro restored on next app startup. Same key continues working.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="warn"><strong>Check Stripe too</strong>If you also cancelled the subscription in Stripe as part of the revocation, you'll need to create a new subscription in Stripe for the customer — otherwise the key will work until Stripe fires a subscription.deleted event again. If the Stripe subscription is still active, no Stripe action is needed.</div>
+
+  <a class="back-link" href="workflow.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Workflow Overview</a>
+</div>
+<script>
+  document.querySelectorAll('.step-card').forEach(card => {
+    card.addEventListener('click', () => { const o = card.classList.contains('open'); card.classList.toggle('open', !o); card.setAttribute('aria-expanded', !o); const d = card.querySelector('.step-detail'); d.style.maxHeight = !o ? d.scrollHeight + 'px' : '0'; });
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); } });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModelCollectr Ops — Successful Purchase</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; }
+    .nav { background: #1c1f26; padding: 14px 32px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e8920a; flex-wrap: wrap; }
+    .nav a { color: #f5b830; font-weight: 700; font-size: 0.92rem; text-decoration: none; }
+    .nav a:hover { color: #ffc93a; }
+    .nav-sep { color: #4a4235; }
+    .nav-cur { color: #8a8070; font-size: 0.85rem; }
+    .page-hdr { background: #1c1f26; padding: 32px; border-bottom: 1px solid #252a34; }
+    .page-hdr-inner { max-width: 860px; margin: 0 auto; }
+    .page-cat { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 12px; background: #e8f5ee; color: #2d8a57; }
+    .page-title { font-size: 1.55rem; font-weight: 700; color: #ede9e0; margin-bottom: 10px; line-height: 1.2; }
+    .page-desc { color: #8a8070; font-size: 0.88rem; line-height: 1.65; max-width: 620px; }
+    .actors { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .actor-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 60px; }
+    .flow-label { font-size: 1rem; font-weight: 700; color: #1e1a14; margin-bottom: 6px; }
+    .flow-hint { font-size: 0.8rem; color: #8a8070; margin-bottom: 28px; }
+    .flow { position: relative; padding-left: 58px; }
+    .flow::before { content: ''; position: absolute; left: 20px; top: 10px; bottom: 10px; width: 2px; background: linear-gradient(to bottom, #5b8def 0%, #e8920a 35%, #635bff 55%, #4caf7d 80%, #e8734a 100%); opacity: 0.4; border-radius: 2px; }
+    .step { position: relative; margin-bottom: 18px; }
+    .step-circle { position: absolute; left: -58px; top: 0; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 2px solid; background: #f4f1eb; z-index: 1; }
+    .step-card { background: white; border-radius: 10px; padding: 14px 18px; border-left: 4px solid; cursor: pointer; transition: box-shadow 0.15s; user-select: none; }
+    .step-card:hover { box-shadow: 0 3px 16px rgba(0,0,0,0.09); }
+    .step-card:focus-visible { outline: 3px solid #e8920a; outline-offset: 2px; }
+    .actor-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 9px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.07em; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 7px; }
+    .step-title { font-weight: 600; color: #1e1a14; font-size: 0.93rem; margin-bottom: 3px; }
+    .step-desc { font-size: 0.84rem; color: #4a4235; line-height: 1.55; }
+    .expand-hint { float: right; font-size: 0.7rem; color: #b0a898; margin-top: 1px; transition: color 0.15s; }
+    .step-card:hover .expand-hint { color: #e8920a; }
+    .step-detail { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
+    .step-detail-inner { margin-top: 12px; padding: 12px 16px; background: #f4f1eb; border-radius: 7px; font-size: 0.82rem; line-height: 1.65; color: #2a2015; }
+    .step-detail-inner code { font-family: 'Courier New', monospace; background: #1c1f26; color: #f5b830; padding: 1px 5px; border-radius: 3px; font-size: 0.78rem; }
+    .step-detail-inner pre { font-family: 'Courier New', monospace; background: #1c1f26; color: #ede9e0; padding: 12px 14px; border-radius: 7px; font-size: 0.76rem; line-height: 1.65; overflow-x: auto; margin-top: 8px; white-space: pre-wrap; }
+    .step-detail-inner ul { padding-left: 18px; margin-top: 6px; }
+    .step-detail-inner li { margin-bottom: 4px; }
+    .actor-customer .step-circle { color: #5b8def; border-color: #5b8def; }
+    .actor-customer .step-card { border-left-color: #5b8def; }
+    .actor-customer .actor-badge { background: #e8f0fd; color: #3a6abf; }
+    .actor-worker .step-circle { color: #e8920a; border-color: #e8920a; }
+    .actor-worker .step-card { border-left-color: #e8920a; }
+    .actor-worker .actor-badge { background: #fef3e2; color: #a06000; }
+    .actor-stripe .step-circle { color: #635bff; border-color: #635bff; }
+    .actor-stripe .step-card { border-left-color: #635bff; }
+    .actor-stripe .actor-badge { background: #eeecff; color: #5050d0; }
+    .actor-db .step-circle { color: #4caf7d; border-color: #4caf7d; }
+    .actor-db .step-card { border-left-color: #4caf7d; }
+    .actor-db .actor-badge { background: #e8f5ee; color: #2a7a4a; }
+    .actor-email .step-circle { color: #e8734a; border-color: #e8734a; }
+    .actor-email .step-card { border-left-color: #e8734a; }
+    .actor-email .actor-badge { background: #fdf0eb; color: #b04a20; }
+    .group-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8a8070; margin: 28px 0 12px; padding-left: 4px; border-left: 3px solid #e8920a; padding-left: 10px; }
+    .state-card { background: white; border-radius: 12px; padding: 24px; margin-top: 44px; }
+    .state-title { font-size: 0.95rem; font-weight: 700; color: #1e1a14; margin-bottom: 16px; }
+    .state-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .state-table th { text-align: left; padding: 8px 12px; background: #f4f1eb; color: #4a4235; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .state-table td { padding: 10px 12px; border-bottom: 1px solid #ede9e0; vertical-align: top; }
+    .state-table tr:last-child td { border-bottom: none; }
+    .sys-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 0.74rem; font-weight: 600; white-space: nowrap; }
+    .tip { background: #e8f5ee; border-left: 3px solid #4caf7d; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 12px; font-size: 0.84rem; color: #1a4030; line-height: 1.5; }
+    .warn { background: #fffbf0; border-left: 3px solid #e8920a; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 12px; font-size: 0.84rem; color: #5a3a00; line-height: 1.5; }
+    .tip strong, .warn strong { display: block; margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: #e8920a; font-weight: 600; font-size: 0.85rem; text-decoration: none; margin-top: 36px; }
+    .back-link svg { width: 16px; height: 16px; }
+    .back-link:hover { color: #c07000; }
+    @media (max-width: 600px) { .nav, .page-hdr { padding-left: 16px; padding-right: 16px; } .wrap { padding: 24px 16px 48px; } .flow { padding-left: 48px; } .step-circle { left: -48px; width: 34px; height: 34px; font-size: 0.76rem; } .page-title { font-size: 1.25rem; } }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html">Ops Hub</a><span class="nav-sep">/</span>
+  <a href="workflow.html">Workflow</a><span class="nav-sep">/</span>
+  <span class="nav-cur">Successful Purchase</span>
+</nav>
+
+<div class="page-hdr">
+  <div class="page-hdr-inner">
+    <span class="page-cat">Happy Path</span>
+    <div class="page-title">Successful Purchase &amp; Activation</div>
+    <div class="page-desc">The most important flow — customer buys Pro, receives their licence key by email, and activates it in the desktop app. Click any step to expand the technical detail behind it.</div>
+    <div class="actors">
+      <span class="actor-chip" style="background:#e8f0fd;color:#3a6abf">● Customer / Browser</span>
+      <span class="actor-chip" style="background:#fef3e2;color:#a06000">● Cloudflare Worker</span>
+      <span class="actor-chip" style="background:#eeecff;color:#5050d0">● Stripe</span>
+      <span class="actor-chip" style="background:#e8f5ee;color:#2a7a4a">● D1 Database</span>
+      <span class="actor-chip" style="background:#fdf0eb;color:#b04a20">● Resend Email</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="flow-label">Step-by-Step Flow</div>
+  <div class="flow-hint">All 23 steps from "Buy Now" click to Pro features unlocked. Click any step for technical detail.</div>
+
+  <div class="flow">
+
+    <div class="group-label">Phase 1 — Customer Initiates Checkout</div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">1</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Customer clicks "Buy Now" on modelcollectr.co.uk</div>
+        <div class="step-desc">The pricing page or nav CTA triggers a JavaScript function — no redirect to Stripe yet.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The button calls <code>startCheckout()</code>, a JS function in the page that makes a fetch request to the Worker API. The customer never gets a static Stripe Payment Link — everything goes through the Worker so the success page flow works correctly.
+          <pre>// modelcollectr.co.uk/index.html
+async function startCheckout() {
+  const res = await fetch('https://api.modelcollectr.co.uk/checkout', {
+    method: 'POST'
+  });
+  const { url } = await res.json();
+  window.location.href = url; // redirect to Stripe
+}</pre>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">2</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker receives POST /checkout request</div>
+        <div class="step-desc">CORS origin is validated — only modelcollectr.co.uk domains and localhost are permitted.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The Worker checks the <code>Origin</code> header against an allowlist:
+          <ul>
+            <li>https://modelcollectr.co.uk</li>
+            <li>https://www.modelcollectr.co.uk</li>
+            <li>https://test.modelcollectr.co.uk</li>
+            <li>http://localhost:8767</li>
+          </ul>
+          Any other origin gets a CORS error and no Stripe session is created.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">3</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker calls Stripe API to create a Checkout Session</div>
+        <div class="step-desc">A hosted payment page is created with the annual price, 14-day free trial, and promo codes enabled.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>POST https://api.stripe.com/v1/checkout/sessions
+
+mode:                 subscription
+line_items[0][price]: price_1TXsXDE8AmKiRjJbNQU0xGdu  (£19.99/yr)
+line_items[0][quantity]: 1
+success_url:          https://modelcollectr.co.uk/success?session_id={CHECKOUT_SESSION_ID}
+cancel_url:           https://modelcollectr.co.uk/#pricing
+allow_promotion_codes: true
+subscription_data[trial_period_days]: 14</pre>
+          The <code>{CHECKOUT_SESSION_ID}</code> placeholder is filled in by Stripe automatically.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">4</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Stripe creates the session and returns a hosted checkout URL</div>
+        <div class="step-desc">Stripe responds with a unique URL to its hosted payment page. This URL expires after 24 hours.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          Stripe returns a session object. The most important fields:
+          <pre>{
+  "id": "cs_test_...",
+  "url": "https://checkout.stripe.com/c/pay/cs_test_...",
+  "payment_status": "unpaid",
+  "status": "open"
+}</pre>
+          The Worker extracts <code>session.url</code> and returns it to the browser as <code>{"url": "https://checkout.stripe.com/..."}</code>.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">5</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Browser redirects customer to Stripe's hosted checkout page</div>
+        <div class="step-desc">Customer sees the Stripe payment form with ModelCollectr branding, the annual plan details, and a 14-day free trial.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The customer is now on checkout.stripe.com — fully handled by Stripe. Your server is not involved here. The customer sees:
+          <ul>
+            <li>Product: ModelCollectr Pro — £19.99/year</li>
+            <li>14-day free trial (no charge today)</li>
+            <li>Promotion code box (if they have a code)</li>
+            <li>Email, card number, expiry, CVC fields</li>
+          </ul>
+          Stripe handles 3D Secure authentication automatically if the card requires it.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">6</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Customer enters card details and clicks Subscribe</div>
+        <div class="step-desc">Stripe validates the card, handles 3D Secure if needed, and creates the subscription. The customer is not charged today (14-day trial).</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          Stripe collects and tokenises the card details server-side — the card number never touches your server. When Subscribe is clicked:
+          <ul>
+            <li>Stripe creates a Customer object (with the email they entered)</li>
+            <li>Stripe creates a Subscription object (status: <code>trialing</code>)</li>
+            <li>Stripe creates an Invoice for £0.00 (trial period)</li>
+          </ul>
+          For testing, use card <code>4242 4242 4242 4242</code> with any future date and any CVC.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="group-label">Phase 2 — Stripe Fires Webhook → Worker Processes</div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">7</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Stripe fires customer.subscription.created webhook</div>
+        <div class="step-desc">As soon as the subscription is created, Stripe sends an HTTP POST to the Worker's webhook endpoint. This happens in parallel with redirecting the customer.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          Stripe sends to <code>https://api.modelcollectr.co.uk/webhooks/stripe</code>:
+          <pre>POST /webhooks/stripe
+Stripe-Signature: t=1716000000,v1=abc123...,v0=...
+
+{
+  "type": "customer.subscription.created",
+  "data": {
+    "object": {
+      "id": "sub_1ABC...",
+      "customer": "cus_1XYZ...",
+      "status": "trialing",
+      "current_period_end": 1748649600
+    }
+  }
+}</pre>
+          The webhook may arrive before or after the customer lands on the success page.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">8</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker verifies the webhook signature (HMAC-SHA256)</div>
+        <div class="step-desc">Every webhook is verified using a secret shared with Stripe. Webhooks older than 5 minutes are rejected to prevent replay attacks.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The <code>Stripe-Signature</code> header contains a timestamp and HMAC-SHA256 hash. The Worker:
+          <ul>
+            <li>Extracts the timestamp <code>t=</code> from the header</li>
+            <li>Rejects if the timestamp is more than 300 seconds old</li>
+            <li>Computes HMAC-SHA256(<code>timestamp.rawBody</code>, <code>STRIPE_WEBHOOK_SECRET</code>)</li>
+            <li>Compares using constant-time string comparison (prevents timing attacks)</li>
+          </ul>
+          If verification fails, the Worker returns HTTP 400. Stripe will retry.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">9</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker checks idempotency — has this subscription already been processed?</div>
+        <div class="step-desc">Stripe can deliver the same webhook more than once. The Worker checks D1 to avoid issuing a second key for the same subscription.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>SELECT key FROM licenses
+WHERE stripe_subscription_id = 'sub_1ABC...'</pre>
+          If a row already exists → the Worker breaks out of the event handler immediately and returns HTTP 200 (telling Stripe not to retry). This means even if Stripe retries 3 times, the customer only ever gets one key.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">10</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker fetches the customer's email address from Stripe</div>
+        <div class="step-desc">The webhook contains the customer ID but not the email. The Worker makes a quick API call to get it. Email is never stored — only used to send the email, then discarded.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>GET https://api.stripe.com/v1/customers/cus_1XYZ...
+
+Response:
+{
+  "id": "cus_1XYZ...",
+  "email": "customer@example.com",
+  "name": "Jane Smith"
+}</pre>
+          The Worker uses <code>customer.email</code> only to (a) send the licence email and (b) that's it. The email is never written to D1. This is the GDPR-safe design — Stripe holds the personal data, we hold only the anonymous licence key and Stripe IDs.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">11</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker generates a cryptographically secure licence key</div>
+        <div class="step-desc">A 16-character key in MC-XXXX-XXXX-XXXX-XXXX format is generated using the browser's Crypto API — not Math.random().</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>function generateKey() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  // 32-char alphabet: excludes 0/O and 1/I to avoid confusion
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  let i = 0;
+  const group = () => Array.from(
+    { length: 4 },
+    () => chars[bytes[i++] % chars.length]
+  ).join('');
+  return `MC-${group()}-${group()}-${group()}-${group()}`;
+}
+// → "MC-K8HN-4XRQ-BZTW-7YJP"</pre>
+          <code>crypto.getRandomValues()</code> uses the OS's cryptographic random source — it is not predictable. The old <code>Math.random()</code> was replaced as a security fix.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-db">
+      <div class="step-circle">12</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● D1 Database</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker writes the new licence to D1</div>
+        <div class="step-desc">A row is inserted with the key, Stripe IDs, status 'active', and a timestamp. No email address is stored — it stays in Stripe.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>INSERT INTO licenses
+  (key, stripe_customer_id, stripe_subscription_id, status, created_at)
+VALUES
+  ('MC-K8HN-4XRQ-BZTW-7YJP',
+   'cus_1XYZ...',
+   'sub_1ABC...',
+   'active',
+   1716000000000)</pre>
+          D1 schema: key (PK), stripe_customer_id, stripe_subscription_id, status, created_at, last_check_in, check_in_count, notes. All are non-personal. The email address lives only in Stripe.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-email">
+      <div class="step-circle">13</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Resend Email</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker sends the licence key email via Resend</div>
+        <div class="step-desc">A branded HTML email is delivered to the customer's address with their key, step-by-step activation instructions, and support contact.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>POST https://api.resend.com/emails
+Authorization: Bearer re_hT9...
+
+{
+  "from": "ModelCollectr &lt;hello@modelcollectr.co.uk&gt;",
+  "to": ["customer@example.com"],
+  "subject": "Your ModelCollectr Pro Licence Key",
+  "html": "..."
+}</pre>
+          The email includes the key in a large monospace font box, and 4-step activation instructions (Help → Enter Licence Key → paste → Activate). Resend delivers from the verified domain modelcollectr.co.uk.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="group-label">Phase 3 — Success Page Polling</div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">14</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Stripe redirects customer to the success page</div>
+        <div class="step-desc">After payment, Stripe redirects to success.html with the session ID in the URL. This happens independently of the webhook.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          Stripe redirects to:
+          <pre>https://modelcollectr.co.uk/success?session_id=cs_test_abc123...</pre>
+          The session ID allows the success page to identify which purchase just happened and retrieve the correct licence key from the Worker.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">15</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Success page loads and begins polling the Worker</div>
+        <div class="step-desc">The page shows a loading spinner and polls every 2 seconds, waiting for the webhook to be processed and the key to appear in D1.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>// success.html polls this endpoint:
+GET /license/lookup?session_id=cs_test_abc123...
+
+// Success page polls every 2 seconds, up to 30 attempts (1 minute):
+async function poll() {
+  const res = await fetch(`/license/lookup?session_id=${sessionId}`);
+  const data = await res.json();
+  if (data.ready) showKey(data.key, data.email);
+  else setTimeout(poll, 2000);
+}</pre>
+          The webhook and the redirect happen in parallel. Usually the key is in D1 by the time the success page makes its first request.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-stripe">
+      <div class="step-circle">16</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Stripe</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker fetches the Checkout Session from Stripe to get the customer ID</div>
+        <div class="step-desc">The session ID from the URL is used to look up the Stripe session and retrieve the stripe_customer_id and the email (from customer_details).</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>GET https://api.stripe.com/v1/checkout/sessions/cs_test_abc123...
+
+Response:
+{
+  "customer": "cus_1XYZ...",
+  "customer_details": { "email": "customer@example.com" },
+  "payment_status": "paid"
+}</pre>
+          The email comes from <code>session.customer_details.email</code> — no extra Stripe API call needed. If <code>customer</code> is null, the webhook hasn't been processed yet → return <code>{ready: false}</code>.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-db">
+      <div class="step-circle">17</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● D1 Database</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker looks up the licence key by customer ID</div>
+        <div class="step-desc">D1 is queried for an active licence matching this Stripe customer. If found, the key is returned. If not (webhook not yet processed), returns {ready: false}.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>SELECT key FROM licenses
+WHERE stripe_customer_id = 'cus_1XYZ...'
+  AND status = 'active'
+
+→ { key: 'MC-K8HN-4XRQ-BZTW-7YJP' }</pre>
+          If no row is found yet, the Worker returns HTTP 202 with <code>{"ready": false}</code>. The success page waits 2 seconds and tries again.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">18</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Success page displays the licence key and confirmation message</div>
+        <div class="step-desc">The spinner is replaced by the licence key in a large box with a "Copy" button, plus a note that the key has been emailed to their address.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The Worker returns <code>{"ready": true, "key": "MC-K8HN-4XRQ-BZTW-7YJP", "email": "customer@example.com"}</code> and the success page:
+          <ul>
+            <li>Shows the key in a large monospace display</li>
+            <li>Shows "We've emailed a copy to customer@example.com"</li>
+            <li>Provides a one-click copy button</li>
+            <li>Shows 4-step activation instructions</li>
+          </ul>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="group-label">Phase 4 — App Activation</div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">19</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Customer opens ModelCollectr and navigates to Enter Licence Key</div>
+        <div class="step-desc">In the app: Help menu → Enter Licence Key. A dialog appears with a text field. The customer pastes or types the key.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The app should accept the key in any case (upper or lower — it normalises to uppercase before sending). Keys in the format <code>MC-XXXX-XXXX-XXXX-XXXX</code> where X is A-Z, 2-9 (excluding 0, O, 1, I to avoid ambiguity).
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-worker">
+      <div class="step-circle">20</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">App sends POST /license/verify to the Worker</div>
+        <div class="step-desc">The Worker validates the key format with a regex, looks it up in D1, updates the check-in stats, and returns the validity result.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>POST https://api.modelcollectr.co.uk/license/verify
+Content-Type: application/json
+
+{"key": "MC-K8HN-4XRQ-BZTW-7YJP"}
+
+// Worker validates format first:
+/^MC-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}$/</pre>
+          Invalid format → returns <code>{"valid": false, "reason": "invalid_format"}</code> immediately without touching D1.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-db">
+      <div class="step-circle">21</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● D1 Database</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker looks up the key and updates check-in stats</div>
+        <div class="step-desc">Two queries: a SELECT to get the key's status, then an UPDATE to record the check-in timestamp and increment the counter.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>SELECT key, status FROM licenses
+WHERE key = 'MC-K8HN-4XRQ-BZTW-7YJP'
+
+UPDATE licenses
+SET last_check_in = 1716000000000,
+    check_in_count = check_in_count + 1
+WHERE key = 'MC-K8HN-4XRQ-BZTW-7YJP'</pre>
+          The check-in count and last check-in date are visible in the admin dashboard — useful to see if a customer is actively using the software.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">22</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Worker → Customer</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Worker returns {valid: true, status: 'active'}</div>
+        <div class="step-desc">The response confirms the key is valid and active. The app receives this and unlocks all Pro features immediately.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          <pre>Response:
+{
+  "valid": true,
+  "status": "active"
+}</pre>
+          The app should cache this response locally (with a timestamp) to support the offline grace period. On every startup, the app checks in with the Worker — if it can't reach the API, it falls back to the cached result for up to 7 days.
+        </div></div>
+      </div>
+    </div>
+
+    <div class="step actor-customer">
+      <div class="step-circle">23</div>
+      <div class="step-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="actor-badge">● Customer</div>
+        <span class="expand-hint"></span>
+        <div class="step-title">Pro features are unlocked in ModelCollectr</div>
+        <div class="step-desc">The customer has full Pro access. The app will check in with the Worker on each startup to confirm the subscription remains active.</div>
+        <div class="step-detail"><div class="step-detail-inner">
+          The app should store the licence key and last-valid timestamp persistently (e.g. Windows Registry or local config file). The key is the only credential needed — all status is managed server-side via Stripe and D1.
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- End State -->
+  <div class="state-card">
+    <div class="state-title">✅ State After This Scenario</div>
+    <table class="state-table">
+      <thead><tr><th>System</th><th>What it contains</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="sys-badge" style="background:#eeecff;color:#5050d0">Stripe</span></td>
+          <td>Customer object (email, name), Subscription (status: trialing/active), Payment Method attached</td>
+        </tr>
+        <tr>
+          <td><span class="sys-badge" style="background:#e8f5ee;color:#2a7a4a">D1 Database</span></td>
+          <td>One row: key=MC-XXXX…, stripe_customer_id, stripe_subscription_id, status=active, check_in_count=1</td>
+        </tr>
+        <tr>
+          <td><span class="sys-badge" style="background:#fdf0eb;color:#b04a20">Email</span></td>
+          <td>One licence email delivered to customer's inbox with key and activation instructions</td>
+        </tr>
+        <tr>
+          <td><span class="sys-badge" style="background:#e8f0fd;color:#3a6abf">Customer App</span></td>
+          <td>Key stored locally, Pro features active, last_check_in cached</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip"><strong>Good to know</strong>The 14-day trial means the customer's card is NOT charged today. If they cancel within 14 days, no charge is made and you should revoke the key. After the trial, Stripe charges £19.99 and the <em>annual renewal</em> scenario begins.</div>
+
+  <a class="back-link" href="workflow.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Workflow Overview</a>
+</div>
+
+<script>
+  document.querySelectorAll('.step-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const isOpen = card.classList.contains('open');
+      card.classList.toggle('open', !isOpen);
+      card.setAttribute('aria-expanded', !isOpen);
+      const detail = card.querySelector('.step-detail');
+      detail.style.maxHeight = !isOpen ? detail.scrollHeight + 'px' : '0';
+    });
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+    });
+  });
+</script>
+</body>
+</html>
