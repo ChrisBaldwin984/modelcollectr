@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModelCollectr — Internal Ops</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f1eb; color: #1e1a14; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; }
+    .card { background: #1c1f26; border-radius: 16px; max-width: 560px; width: 100%; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+    .hdr { padding: 28px 36px 20px; border-bottom: 2px solid #e8920a; }
+    .logo { font-size: 1.3rem; font-weight: 700; color: #f5b830; }
+    .logo-sub { font-size: 0.72rem; color: #8a8070; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+    .body { padding: 32px 36px; }
+    h2 { color: #ede9e0; font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+    p { color: #8a8070; font-size: 0.85rem; line-height: 1.6; margin-bottom: 28px; }
+    .docs { display: flex; flex-direction: column; gap: 12px; }
+    .doc-link { display: flex; align-items: center; gap: 16px; background: #252a34; border: 1px solid #2e3340; border-radius: 10px; padding: 16px 20px; text-decoration: none; transition: border-color 0.15s, background 0.15s; }
+    .doc-link:hover { border-color: #e8920a; background: #2a2f3b; }
+    .doc-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .doc-icon.blue { background: #1c3a6e; }
+    .doc-icon.green { background: #1a3a1a; }
+    .doc-icon.amber { background: #3a2a00; }
+    .doc-icon svg { width: 20px; height: 20px; }
+    .doc-text-title { font-size: 0.92rem; font-weight: 600; color: #ede9e0; margin-bottom: 3px; }
+    .doc-text-sub { font-size: 0.78rem; color: #8a8070; }
+    .footer { margin-top: 24px; font-size: 0.75rem; color: #8a8070; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="hdr">
+      <div class="logo">ModelCollectr</div>
+      <div class="logo-sub">Internal Operations — Private</div>
+    </div>
+    <div class="body">
+      <h2>Operator Documents</h2>
+      <p>Private reference documents for managing the ModelCollectr Pro licence system. Not linked from anywhere public.</p>
+      <div class="docs">
+        <a href="workflow.html" class="doc-link">
+          <div class="doc-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v4M8.5 17.5 12 11l3.5 6.5"/></svg>
+          </div>
+          <div>
+            <div class="doc-text-title">Workflow Diagram</div>
+            <div class="doc-text-sub">Every scenario — purchase, renewal, cancellation, revocation, offline grace</div>
+          </div>
+        </a>
+        <a href="guide.html" class="doc-link">
+          <div class="doc-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4caf7d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <div>
+            <div class="doc-text-title">Operator User Guide</div>
+            <div class="doc-text-sub">Plain English — how the system works, admin dashboard, handling support</div>
+          </div>
+        </a>
+        <a href="testplan.html" class="doc-link">
+          <div class="doc-icon amber">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#e8920a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div>
+            <div class="doc-text-title">Test Plan</div>
+            <div class="doc-text-sub">Structured test cases for a tester — all scenarios, expected results, pass/fail</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer">modelcollectr.co.uk/ops — not indexed, not linked publicly</div>
+</body>
+</html>
