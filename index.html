@@ -762,7 +762,7 @@
           <li><span class="pcheck">&#10003;</span> CSV export</li>
           <li><span class="pcheck">&#10003;</span> Priority support</li>
         </ul>
-        <a href="https://buy.stripe.com/eVqbJ12kyfY37Nu2py7N604" class="price-cta solid" target="_blank" rel="noopener">Get Pro &rarr;</a>
+        <button class="price-cta solid" id="buy-btn" onclick="startCheckout()">Get Pro &rarr;</button>
         <p class="price-trial">14-day free trial &middot; No credit card required</p>
       </div>
 
@@ -991,6 +991,26 @@
       btn.disabled = false;
       btn.style.background = '#9a2020';
       btn.style.color = '#fff';
+    }
+  }
+
+  // ── Stripe Checkout ──────────────────────────────────────────────
+  async function startCheckout() {
+    const btn = document.getElementById('buy-btn');
+    btn.textContent = 'Redirecting…';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://api.modelcollectr.co.uk/checkout', { method: 'POST' });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        btn.textContent = 'Something went wrong — try again';
+        btn.disabled = false;
+      }
+    } catch (e) {
+      btn.textContent = 'Something went wrong — try again';
+      btn.disabled = false;
     }
   }
 
